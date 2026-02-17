@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+<title>Birthday Cake</title>
+<script type="text/javascript">
+    var gk_isXlsx = false;
+    var gk_xlsxFileLookup = {};
+    var gk_fileData = {};
+    function filledCell(cell) {
+      return cell !== '' && cell != null;
+    }
+    function loadFileData(filename) {
+    if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+        try {
+            var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+            var firstSheetName = workbook.SheetNames[0];
+            var worksheet = workbook.Sheets[firstSheetName];
+
+            // Convert sheet to JSON to filter blank rows
+            var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+            // Filter out blank rows (rows where all cells are empty, null, or undefined)
+            var filteredData = jsonData.filter(row => row.some(filledCell));
+
+            // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+            var headerRowIndex = filteredData.findIndex((row, index) =>
+              row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+            );
+            // Fallback
+            if (headerRowIndex === -1 || headerRowIndex > 25) {
+              headerRowIndex = 0;
+            }
+
+            // Convert filtered JSON back to CSV
+            var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+            csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+            return csv;
+        } catch (e) {
+            console.error(e);
+            return "";
+        }
+    }
+    return gk_fileData[filename] || "";
+    }
+</script>
+<style>
+    /* ফন্ট ইম্পোর্ট করা */
+    @import url('https://fonts.googleapis.com/css2?family=Arial+Rounded+MT+Bold&display=swap');
+
+    /* Global Styles */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Arial Rounded MT Bold', 'Helvetica Rounded', Arial, sans-serif;
+    }
+
+    body {
+        background: linear-gradient(135deg, #ff99cc, #66ccff, #ffcc99);
+        background-size: 400% 400%;
+        animation: gradientBackground 15s ease infinite;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        position: relative;
+    }
+
+    /* Tap Instruction */
+    .tap-instruction {
+        position: fixed;
+        top: 15px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #ff3366;
+        color: white;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 1.1rem;
+        font-weight: bold;
+        box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+        z-index: 100;
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+        0% { transform: translateX(-50%) scale(1); }
+        50% { transform: translateX(-50%) scale(1.1); }
+        100% { transform: translateX(-50%) scale(1); }
+    }
+
+    /* Falling Text */
+    .falling-text {
+        position: absolute;
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: #ff3366;
+        opacity: 0;
+        z-index: 5;
+        animation: fall 3s linear forwards;
+    }
+
+    @keyframes fall {
+        0% { transform: translateY(-100vh); opacity: 1; }
+        100% { transform: translateY(100vh); opacity: 0; }
+    }
+
+    /* Floating Balloons */
+    .balloon {
+        position: absolute;
+        width: 35px;
+        height: 45px;
+        border-radius: 50%;
+        animation: float 12s infinite ease-in-out;
+        z-index: 1;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .balloon.heart {
+        clip-path: polygon(50% 0%, 100% 20%, 100% 80%, 50% 100%, 0% 80%, 0% 20%);
+    }
+
+    @keyframes float {
+        0% { transform: translateY(100vh); opacity: 1; }
+        100% { transform: translateY(-100px); opacity: 0; }
+    }
+
+    /* Confetti */
+    .confetti {
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        background-color: #ffcc00;
+        opacity: 0;
+        animation: confettiFall 4s infinite ease-out;
+        z-index: 1;
+    }
+
+    @keyframes confettiFall {
+        0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+        100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+    }
+
+    /* Birthday Cake Container */
+    .cake-container {
+        position: relative;
+        width: 280px;
+        height: 280px;
+        margin: 15px auto;
+        z-index: 10;
+    }
+
+    /* Cake Plate */
+    .plate {
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 220px;
+        height: 18px;
+        background: #f0f0f0;
+        border-radius: 10px;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+        z-index: 8;
+    }
+
+    /* Cake Base */
+    .cake {
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 180px;
+        height: 100px;
+        background: #ff66b3;
+        border-radius: 12px 12px 0 0;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        z-index: 9;
+    }
+
+    .cake:before {
+        content: '';
+        position: absolute;
+        top: -35px;
+        left: 0;
+        width: 100%;
+        height: 35px;
+        background: #b28cff;
+        border-radius: 12px 12px 0 0;
+    }
+
+    .cake:after {
+        content: '';
+        position: absolute;
+        top: -60px;
+        left: 10%;
+        width: 80%;
+        height: 25px;
+        background: #9cecff;
+        border-radius: 12px 12px 0 0;
+    }
+
+    /* Frosting & Decorations */
+    .frosting {
+        position: absolute;
+        top: -65px;
+        left: 15%;
+        width: 70%;
+        height: 6px;
+        background: #ffffff;
+        border-radius: 4px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .decoration {
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #ff3366;
+        box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Candles */
+    .candle-container {
+        position: absolute;
+        top: -80px;
+        left: 0;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        gap: 18px;
+        z-index: 15;
+    }
+
+    .candle {
+        position: relative;
+        width: 8px;
+        height: 30px;
+        background: #ffcc00;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .flame {
+        position: absolute;
+        top: -18px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 10px;
+        height: 18px;
+        background: #ff3366;
+        border-radius: 50% 50% 20% 20%;
+        box-shadow: 0 0 8px #ff3366;
+        opacity: 1;
+        animation: flicker 0.5s infinite alternate;
+        z-index: 20;
+    }
+
+    @keyframes flicker {
+        0% { transform: translateX(-50%) scale(1); opacity: 1; }
+        100% { transform: translateX(-50%) scale(1.1); opacity: 0.8; }
+    }
+
+    .candle.blown .flame {
+        opacity: 0;
+        animation: none;
+        transition: opacity 0.2s ease-out;
+    }
+
+    .smoke {
+        position: absolute;
+        top: -22px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 6px;
+        height: 0;
+        background: rgba(200, 200, 200, 0.5);
+        border-radius: 8px;
+        opacity: 0;
+        transition: all 0.4s ease;
+    }
+
+    .candle.blown .smoke {
+        height: 25px;
+        opacity: 0.6;
+        animation: smokeRise 1.5s forwards;
+    }
+
+    @keyframes smokeRise {
+        0% { height: 0; opacity: 0; }
+        20% { height: 8px; opacity: 0.6; }
+        100% { height: 25px; opacity: 0; transform: translateX(-50%) translateY(-25px) scale(1.2); }
+    }
+
+    /* Sparkles */
+    .sparkle {
+        position: absolute;
+        width: 3px;
+        height: 3px;
+        background-color: #ffffff;
+        border-radius: 50%;
+        box-shadow: 0 0 3px #ffcc00;
+        opacity: 0;
+        z-index: 12;
+    }
+
+    @keyframes sparkle {
+        0% { transform: scale(0); opacity: 0; }
+        50% { opacity: 1; }
+        100% { transform: scale(1.2); opacity: 0; }
+    }
+
+    /* Wish Message */
+    .wish-message {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0);
+        background: rgba(255, 255, 255, 0.9);
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        text-align: center;
+        z-index: 100;
+        opacity: 0;
+        width: 85%;
+        max-width: 350px;
+        transition: all 0.4s ease;
+        border: 2px solid #ff3366;
+    }
+
+    .wish-message.show {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+        animation: popIn 0.5s;
+    }
+
+    @keyframes popIn {
+        0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+        100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    }
+
+    .wish-message h2 {
+        color: #ff3366;
+        font-size: 24px;
+        margin-bottom: 10px;
+        text-shadow: 0 0 3px rgba(255, 255, 255, 0.8);
+    }
+
+    .wish-message p {
+        color: #333;
+        font-size: 18px;
+        margin-bottom: 15px;
+        line-height: 1.4;
+    }
+
+    /* Fireworks */
+    .firework {
+        position: absolute;
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        opacity: 0;
+        z-index: 5;
+    }
+
+    @keyframes firework {
+        0% { transform: scale(0); opacity: 1; box-shadow: 0 0 0 0px rgba(255, 255, 255, 0.8); }
+        100% { transform: scale(1); opacity: 0; box-shadow: 0 0 0 40px rgba(255, 255, 255, 0); }
+    }
+
+    /* Navigation Buttons */
+    .nav-buttons {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        max-width: 350px;
+        padding: 0 20px;
+        margin-top: 20px;
+        z-index: 50;
+    }
+
+    .btn {
+        padding: 10px 20px;
+        background: #ff3366;
+        color: white;
+        border: none;
+        border-radius: 25px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 600;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+        transition: all 0.2s ease;
+    }
+
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .btn:active {
+        transform: translateY(0);
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Button Particle */
+    .button-particle {
+        position: absolute;
+        background: rgba(255, 51, 102, 0.6);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 1;
+        animation: floatParticle 1.5s ease-out forwards;
+    }
+
+    @keyframes floatParticle {
+        0% { transform: translate(0, 0) scale(1); opacity: 0.6; }
+        100% { transform: translateY(-40px) scale(0.5); opacity: 0; }
+    }
+
+    /* Animations */
+    @keyframes gradientBackground {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .cake-container {
+            width: 240px;
+            height: 240px;
+        }
+
+        .plate {
+            width: 180px;
+            height: 16px;
+        }
+
+        .cake {
+            width: 150px;
+            height: 80px;
+        }
+
+        .cake:before {
+            top: -30px;
+            height: 30px;
+        }
+
+        .cake:after {
+            top: -50px;
+            height: 20px;
+        }
+
+        .frosting {
+            top: -55px;
+            height: 5px;
+        }
+
+        .candle-container {
+            gap: 15px;
+            top: -70px;
+        }
+
+        .wish-message h2 {
+            font-size: 22px;
+        }
+
+        .wish-message p {
+            font-size: 16px;
+        }
+
+        .nav-buttons {
+            margin-top: 15px;
+            padding: 0 20px;
+            max-width: 300px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            font-size: 13px;
+        }
+
+        .tap-instruction {
+            font-size: 1rem;
+            padding: 6px 12px;
+        }
+
+        .falling-text {
+            font-size: 1.1rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .cake-container {
+            width: 200px;
+            height: 200px;
+            margin: 10px auto;
+        }
+
+        .plate {
+            width: 150px;
+            height: 14px;
+        }
+
+        .cake {
+            width: 120px;
+            height: 70px;
+        }
+
+        .cake:before {
+            top: -25px;
+            height: 25px;
+        }
+
+        .cake:after {
+            top: -40px;
+            height: 15px;
+        }
+
+        .frosting {
+            top: -45px;
+            height: 4px;
+        }
+
+        .candle-container {
+            gap: 12px;
+            top: -60px;
+        }
+
+        .candle {
+            width: 6px;
+            height: 25px;
+        }
+
+        .flame {
+            width: 8px;
+            height: 15px;
+            top: -15px;
+        }
+
+        .wish-message {
+            width: 80%;
+            padding: 15px;
+        }
+
+        .wish-message h2 {
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+
+        .wish-message p {
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .nav-buttons {
+            margin-top: 12px;
+            padding: 0 15px;
+            max-width: 250px;
+        }
+
+        .btn {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+
+        .tap-instruction {
+            font-size: 0.9rem;
+            padding: 5px 10px;
+        }
+
+        .falling-text {
+            font-size: 1rem;
+        }
+    }
+
+    @media (max-width: 360px) {
+        .cake-container {
+            width: 180px;
+            height: 180px;
+        }
+
+        .plate {
+            width: 130px;
+            height: 12px;
+        }
+
+        .cake {
+            width: 100px;
+            height: 60px;
+        }
+
+        .cake:before {
+            top: -20px;
+            height: 20px;
+        }
+
+        .cake:after {
+            top: -35px;
+            height: 15px;
+        }
+
+        .frosting {
+            top: -40px;
+            height: 4px;
+        }
+
+        .candle-container {
+            gap: 10px;
+            top: -50px;
+        }
+
+        .candle {
+            width: 5px;
+            height: 20px;
+        }
+
+        .flame {
+            width: 7px;
+            height: 12px;
+            top: -12px;
+        }
+
+        .wish-message {
+            width: 85%;
+            padding: 12px;
+        }
+
+        .wish-message h2 {
+            font-size: 18px;
+        }
+
+        .wish-message p {
+            font-size: 13px;
+        }
+
+        .nav-buttons {
+            margin-top: 10px;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            padding: 0 10px;
+            max-width: 200px;
+        }
+
+        .btn {
+            width: 80%;
+            text-align: center;
+            font-size: 11px;
+            padding: 6px 10px;
+        }
+
+        .tap-instruction {
+            font-size: 0.8rem;
+            padding: 4px 8px;
+        }
+
+        .falling-text {
+            font-size: 0.9rem;
+        }
+    }
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+<div class="tap-instruction">🎂 Tap The Candle 🎂</div>
+
+<div class="cake-container">
+    <div class="plate"></div>
+    <div class="cake">
+        <div class="candle-container" id="candleContainer"></div>
+        <div class="frosting"></div>
+    </div>
+</div>
+
+<div class="wish-message" id="wishMessage">
+    <h2>✨ Happy Birthday My Dear Girl! ✨</h2>
+    <p>Make a wish, Dear! May all your dreams come true! 🎂✨</p>
+    <button class="btn" onclick="closeWishMessage()">Thank you! ❤️</button>
+</div>
+
+<div class="nav-buttons">
+    <button class="btn" onclick="goBack()">◀ Back to Memory Lane</button>
+    <button class="btn" onclick="goNext()">Next Surprise ▶</button>
+</div>
+
+<script>
+    let candlesBlown = 0;
+    const totalCandles = 5;
+    let allCandlesBlown = false;
+
+    document.addEventListener('DOMContentLoaded', function() {
+        createCandles();
+        createBalloons();
+        createConfetti();
+        createDecorations();
+
+        document.querySelectorAll('.candle').forEach(candle => {
+            candle.addEventListener('click', blowOutCandle);
+            candle.addEventListener('touchstart', blowOutCandle);
+        });
+
+        document.addEventListener('touchmove', function(e) {
+            const touch = e.touches[0];
+            const element = document.elementFromPoint(touch.clientX, touch.clientY);
+            if (element && element.classList.contains('candle') && !element.classList.contains('blown')) {
+                blowOutCandle.call(element);
+            }
+        });
+
+        document.querySelectorAll('.btn').forEach(button => {
+            button.addEventListener('mouseover', function(e) {
+                for (let i = 0; i < 3; i++) {
+                    createButtonParticle(e);
+                }
+            });
+        });
+    });
+
+    function createCandles() {
+        const candleContainer = document.getElementById('candleContainer');
+        for (let i = 0; i < totalCandles; i++) {
+            const candle = document.createElement('div');
+            candle.className = 'candle';
+            const flame = document.createElement('div');
+            flame.className = 'flame';
+            const smoke = document.createElement('div');
+            smoke.className = 'smoke';
+            candle.appendChild(flame);
+            candle.appendChild(smoke);
+            candleContainer.appendChild(candle);
+        }
+    }
+
+    function createBalloons() {
+        const colors = ['#ff3366', '#b28cff', '#9cecff', '#ffcc00'];
+        const numBalloons = 10;
+        for (let i = 0; i < numBalloons; i++) {
+            const balloon = document.createElement('div');
+            balloon.className = `balloon ${i % 2 === 0 ? 'heart' : ''}`;
+            balloon.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            balloon.style.left = `${Math.random() * 100}%`;
+            balloon.style.animationDuration = `12s`;
+            balloon.style.animationDelay = `${Math.random() * 3}s`;
+            document.body.appendChild(balloon);
+        }
+    }
+
+    function createConfetti() {
+        const colors = ['#ff3366', '#b28cff', '#9cecff', '#ffcc00'];
+        const numConfetti = 30;
+        for (let i = 0; i < numConfetti; i++) {
+            const confetti = document.createElement('div');
+            confetti.className = 'confetti';
+            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.left = `${Math.random() * 100}%`;
+            confetti.style.width = `8px`;
+            confetti.style.height = `8px`;
+            confetti.style.animationDuration = `4s`;
+            confetti.style.animationDelay = `${Math.random() * 3}s`;
+            document.body.appendChild(confetti);
+        }
+    }
+
+    function createDecorations() {
+        const cake = document.querySelector('.cake');
+        const colors = ['#ff3366', '#ffcc00', '#9cecff'];
+        const numDecorations = 8;
+        for (let i = 0; i < numDecorations; i++) {
+            const decoration = document.createElement('div');
+            decoration.className = 'decoration';
+            decoration.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            decoration.style.top = `${-20 - Math.random() * 40}px`;
+            decoration.style.left = `${Math.random() * 100}%`;
+            cake.appendChild(decoration);
+        }
+    }
+
+    function createFallingText() {
+        const text = document.createElement('div');
+        text.className = 'falling-text';
+        text.textContent = 'Happy Birthday Madam';
+        text.style.left = `${Math.random() * 100}%`;
+        text.style.color = ['#ff3366', '#b28cff', '#9cecff'][Math.floor(Math.random() * 3)];
+        text.style.animationDuration = `3s`;
+        document.body.appendChild(text);
+        setTimeout(() => {
+            text.remove();
+        }, 3000);
+    }
+
+    function blowOutCandle() {
+        if (!this.classList.contains('blown')) {
+            this.classList.add('blown');
+            candlesBlown++;
+            createSparkleEffect(this);
+            for (let i = 0; i < 2; i++) {
+                createFallingText();
+            }
+            if (candlesBlown === totalCandles && !allCandlesBlown) {
+                allCandlesBlown = true;
+                setTimeout(showWishMessage, 800);
+            }
+        }
+    }
+
+    function createSparkleEffect(candle) {
+        const numSparkles = 6;
+        const candleRect = candle.getBoundingClientRect();
+        for (let i = 0; i < numSparkles; i++) {
+            const sparkle = document.createElement('div');
+            sparkle.className = 'sparkle';
+            sparkle.style.left = `${candleRect.left + Math.random() * candleRect.width}px`;
+            sparkle.style.top = `${candleRect.top + Math.random() * (candleRect.height / 2)}px`;
+            sparkle.style.animation = `sparkle 0.6s forwards`;
+            document.body.appendChild(sparkle);
+            setTimeout(() => {
+                sparkle.remove();
+            }, 600);
+        }
+    }
+
+    function showWishMessage() {
+        document.getElementById('wishMessage').classList.add('show');
+        createFireworks();
+    }
+
+    function closeWishMessage() {
+        document.getElementById('wishMessage').classList.remove('show');
+    }
+
+    function createFireworks() {
+        const numFireworks = 8;
+        const colors = ['#ff3366', '#b28cff', '#9cecff', '#ffcc00'];
+        for (let i = 0; i < numFireworks; i++) {
+            setTimeout(() => {
+                const firework = document.createElement('div');
+                firework.className = 'firework';
+                firework.style.left = `${20 + Math.random() * 60}%`;
+                firework.style.top = `${20 + Math.random() * 50}%`;
+                firework.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                firework.style.animation = `firework 1s forwards`;
+                document.body.appendChild(firework);
+                setTimeout(() => {
+                    firework.remove();
+                }, 1000);
+            }, i * 200);
+        }
+    }
+
+    function createButtonParticle(e) {
+        const particle = document.createElement('div');
+        particle.classList.add('button-particle');
+        particle.style.left = `${e.offsetX}px`;
+        particle.style.top = `${e.offsetY}px`;
+        particle.style.width = `${Math.random() * 4 + 2}px`;
+        particle.style.height = particle.style.width;
+        e.target.appendChild(particle);
+        setTimeout(() => {
+            particle.remove();
+        }, 1500);
+    }
+
+    function goBack() {
+        window.location.href = 'memory.html';
+    }
+
+    function goNext() {
+        window.location.href = 'letter.html';
+    }
+</script>
+</body>
+</html>

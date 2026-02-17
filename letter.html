@@ -1,0 +1,612 @@
+<script type="text/javascript">
+    var gk_isXlsx = false;
+    var gk_xlsxFileLookup = {};
+    var gk_fileData = {};
+    function filledCell(cell) {
+      return cell !== '' && cell != null;
+    }
+    function loadFileData(filename) {
+    if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+        try {
+            var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+            var firstSheetName = workbook.SheetNames[0];
+            var worksheet = workbook.Sheets[firstSheetName];
+
+            // Convert sheet to JSON to filter blank rows
+            var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+            // Filter out blank rows (rows where all cells are empty, null, or undefined)
+            var filteredData = jsonData.filter(row => row.some(filledCell));
+
+            // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+            var headerRowIndex = filteredData.findIndex((row, index) =>
+              row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+            );
+            // Fallback
+            if (headerRowIndex === -1 || headerRowIndex > 25) {
+              headerRowIndex = 0;
+            }
+
+            // Convert filtered JSON back to CSV
+            var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+            csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+            return csv;
+        } catch (e) {
+            console.error(e);
+            return "";
+        }
+    }
+    return gk_fileData[filename] || "";
+    }
+    </script><!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>আপনার জন্য একটি বিশেষ সারপ্রাইজ ✨</title>
+<style>
+/* ফন্ট ইম্পোর্ট করা */
+@import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;700&display=swap');
+
+/* Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Hind Siliguri', sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #f8e1f4, #ffccf9, #c2e6ff, #9cecff);
+    background-size: 400% 400%;
+    animation: gradientBackground 12s ease infinite;
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    position: relative;
+    z-index: 10;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeIn 3s forwards 0.5s;
+}
+
+/* Header Styles */
+header {
+    text-align: center;
+    margin-bottom: 40px;
+    position: relative;
+}
+
+h1 {
+    font-size: 2.5rem;
+    color: #6a4c93;
+    margin-bottom: 15px;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 15px rgba(255, 107, 107, 0.5);
+    animation: glowText 2s ease-in-out infinite;
+}
+
+@keyframes glowText {
+    0%, 100% { text-shadow: 0 0 10px rgba(255, 255, 255, 0.8); }
+    50% { text-shadow: 0 0 20px rgba(255, 107, 107, 0.8), 0 0 25px rgba(161, 140, 209, 0.8); }
+}
+
+/* Letter Section */
+.letter-container {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 0 20px rgba(106, 76, 147, 0.3), 0 0 30px rgba(255, 215, 232, 0.5);
+    margin-bottom: 40px;
+    position: relative;
+    overflow: hidden;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+}
+
+.letter-container::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    border-radius: 20px;
+    background: linear-gradient(45deg, #ff6b8a, #f48fb1, #b28cff);
+    z-index: -1;
+    animation: gradientBorder 5s ease infinite;
+}
+
+.letter {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    color: #333;
+    position: relative;
+    z-index: 2;
+    min-height: 200px;
+    font-family: 'Hind Siliguri', sans-serif;
+}
+
+.video-container {
+    display: none;
+    position: relative;
+    width: 100%;
+    padding-top: 56.25%;
+    margin-bottom: 40px;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(106, 76, 147, 0.3), 0 0 30px rgba(255, 215, 232, 0.5);
+}
+
+.video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+/* Button Container */
+.button-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    margin: 30px 0;
+    position: relative;
+}
+
+/* Surprise Button */
+.surprise-button {
+    background: linear-gradient(45deg, #ff6b8a, #f48fb1, #b28cff);
+    background-size: 300% 300%;
+    animation: gradientButton 5s ease infinite;
+    color: white;
+    font-size: 1.5rem;
+    font-weight: bold;
+    padding: 15px 40px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 5px 20px rgba(161, 140, 209, 0.5), 0 0 15px rgba(255, 107, 107, 0.3);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    z-index: 2;
+}
+
+.surprise-button::before {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+    border-radius: 55px;
+    background: linear-gradient(45deg, #ff6b8a, #f48fb1, #b28cff);
+    background-size: 300% 300%;
+    animation: gradientButton 5s ease infinite;
+    z-index: -1;
+    opacity: 0.6;
+    filter: blur(10px);
+}
+
+.surprise-button:hover {
+    transform: translateY(-3px) scale(1.08);
+    box-shadow: 0 10px 30px rgba(161, 140, 209, 0.7), 0 0 20px rgba(255, 107, 107, 0.5);
+}
+
+.surprise-button:active {
+    transform: translateY(1px);
+}
+
+/* Back Button */
+.back-button {
+    background: linear-gradient(45deg, #ff6b8a, #f48fb1, #b28cff);
+    background-size: 300% 300%;
+    animation: gradientButton 5s ease infinite;
+    color: white;
+    font-size: 1.3rem;
+    font-weight: bold;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 5px 20px rgba(161, 140, 209, 0.5), 0 0 15px rgba(255, 107, 107, 0.3);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    z-index: 2;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.back-button::before {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+    border-radius: 55px;
+    background: linear-gradient(45deg, #ff6b8a, #f48fb1, #b28cff);
+    background-size: 300% 300%;
+    animation: gradientButton 5s ease infinite;
+    z-index: -1;
+    opacity: 0.6;
+    filter: blur(10px);
+}
+
+.back-button:hover {
+    transform: translateY(-3px) scale(1.08);
+    box-shadow: 0 10px 30px rgba(161, 140, 209, 0.7), 0 0 20px rgba(255, 107, 107, 0.5);
+}
+
+.back-button:active {
+    transform: translateY(1px);
+}
+
+/* Particle Effect for Buttons */
+.button-particle {
+    position: absolute;
+    background: rgba(255, 107, 107, 0.7);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 1;
+    animation: floatParticle 2s ease-out forwards;
+}
+
+@keyframes floatParticle {
+    0% { transform: translate(0, 0) scale(1); opacity: 0.7; }
+    100% { transform: translateY(-50px) scale(0.5); opacity: 0; }
+}
+
+/* Music Controls */
+.music-controls {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 100;
+    background: linear-gradient(45deg, #ff6b8a, #b28cff);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 10px rgba(106, 76, 147, 0.3), 0 0 15px rgba(255, 107, 107, 0.3);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.music-controls:hover {
+    transform: scale(1.15);
+    box-shadow: 0 0 15px rgba(106, 76, 147, 0.5), 0 0 20px rgba(255, 107, 107, 0.5);
+}
+
+.music-controls i {
+    color: white;
+    font-size: 24px;
+}
+
+/* Floating Elements */
+.floating-element {
+    position: absolute;
+    pointer-events: none;
+    opacity: 0.7;
+    z-index: 1;
+    animation: float 5s ease-in-out infinite alternate;
+    filter: drop-shadow(0 0 5px rgba(255, 107, 107, 0.5));
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes gradientBackground {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes gradientButton {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes gradientBorder {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes float {
+    0% { transform: translateY(0) rotate(0deg); }
+    100% { transform: translateY(-20px) rotate(5deg); }
+}
+
+/* Cursor Effect */
+.cursor-effect {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: linear-gradient(45deg, #ff6b8a, #b28cff);
+    pointer-events: none;
+    z-index: 1000;
+    transform: translate(-50%, -50%);
+    transition: opacity 0.5s ease;
+    opacity: 0;
+    box-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2rem;
+    }
+
+    .container {
+        padding: 15px;
+    }
+
+    .letter-container {
+        padding: 20px;
+    }
+
+    .letter {
+        font-size: 1rem;
+    }
+
+    .surprise-button, .back-button {
+        font-size: 1.2rem;
+        padding: 12px 30px;
+    }
+
+    .floating-element {
+        max-width: 40px;
+        max-height: 40px;
+    }
+}
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+<div class="container">
+<header>
+    <h1>আমার প্রিয় বন্ধুর জন্য ❤️</h1>
+</header>
+
+<div class="letter-container">
+    <div class="letter" id="typed-text"></div>
+</div>
+
+<div class="video-container" id="video-message">
+    <iframe src="about:blank" frameborder="0" allowfullscreen></iframe>
+</div>
+
+<div class="button-container">
+    <button class="surprise-button" id="surprise-button">
+        সারপ্রাইজের জন্য ক্লিক করুন! 🎁
+    </button>
+    <a href="cake.html" class="back-button">
+        <i class="fas fa-heart"></i> জন্মদিনের কেকে ফিরে যান
+    </a>
+</div>
+</div>
+
+<!-- Music Controls -->
+<div class="music-controls" id="music-toggle">
+<i class="fas fa-volume-mute" id="music-icon"></i>
+</div>
+
+<!-- Audio Elements -->
+<audio id="click-sound" preload="auto">
+<source src="https://cdn.pixabay.com/download/audio/2021/08/04/audio_bb630cc098.mp3?filename=cute-notification-ringtone-1-173850.mp3" type="audio/mpeg">
+</audio>
+<audio id="background-music" loop>
+<source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a73467.mp3?filename=relaxing-145038.mp3" type="audio/mpeg">
+</audio>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.12/typed.min.js"></script>
+
+<script>
+var gk_isXlsx = false;
+var gk_xlsxFileLookup = {};
+var gk_fileData = {};
+function filledCell(cell) {
+  return cell !== '' && cell != null;
+}
+function loadFileData(filename) {
+    if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+        try {
+            var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+            var firstSheetName = workbook.SheetNames[0];
+            var worksheet = workbook.Sheets[firstSheetName];
+            var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+            var filteredData = jsonData.filter(row => row.some(filledCell));
+            var headerRowIndex = filteredData.findIndex((row, index) =>
+                row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+            );
+            if (headerRowIndex === -1 || headerRowIndex > 25) {
+                headerRowIndex = 0;
+            }
+            var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex));
+            csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+            return csv;
+        } catch (e) {
+            console.error(e);
+            return "";
+        }
+    }
+    return gk_fileData[filename] || "";
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Fade in animation
+    setTimeout(() => {
+        document.querySelector('.container').style.opacity = 1;
+    }, 500);
+
+    // Typewriter effect for letter
+    const letterContent = "আমার প্রিয় বন্ধু,\n\nআমাদের একসাথে কাটানো স্মৃতিগুলোর কথা ভাবতে গিয়ে আমি হাসি ছাড়া থাকতে পারি না। গভীর রাতের আড্ডা থেকে শুরু করে আমাদের অপ্রত্যাশিত অ্যাডভেঞ্চার, তুমি আমার জীবনকে আনন্দ আর হাসিতে ভরিয়ে দিয়েছ। তুমি আমার কাঁদার জন্য কাঁধ, আমার সঙ্গী এবং আমার সবচেয়ে বড় সমর্থক ছিলে।\n\nতোমার এই বিশেষ দিনে, আমি তোমাকে জানাতে চাই যে তোমাকে আমার জীবনে পেয়ে আমি কতটা কৃতজ্ঞ। তুমি শুধু তোমার স্বভাব দিয়ে প্রতিদিনকে আরও উজ্জ্বল করে তুলেছ - দয়ালু, মজার এবং অসাধারণভাবে চিন্তাশীল।\n\nবিশ্বের আমার প্রিয় মানুষটির জন্মদিনের শুভেচ্ছা! আরও অনেক বছরের বন্ধুত্ব, হাসি এবং স্মৃতি তৈরির জন্য এগিয়ে যাই।\n\nসব ভালোবাসা সহ,\n[আপনার নাম]";
+    
+    new Typed('#typed-text', {
+        strings: [letterContent],
+        typeSpeed: 30,
+        showCursor: true,
+        cursorChar: '|',
+        onComplete: function() {
+            setTimeout(() => {
+                document.querySelector('.surprise-button').classList.add('animate__animated', 'animate__pulse', 'animate__infinite');
+            }, 1000);
+        }
+    });
+
+    // Create floating elements
+    const floatingElements = [
+        { type: 'heart', color: '#ff6b8a', size: '20px' },
+        { type: 'heart', color: '#f48fb1', size: '30px' },
+        { type: 'star', color: '#ffd54f', size: '25px' },
+        { type: 'star', color: '#ffecb3', size: '15px' },
+        { type: 'teddy', emoji: '🧸', size: '30px' },
+        { type: 'sparkle', emoji: '✨', size: '25px' },
+        { type: 'sparkle', emoji: '✨', size: '20px' },
+        { type: 'heart', color: '#ff6b8a', size: '25px' },
+        { type: 'star', color: '#ffd54f', size: '20px' },
+        { type: 'teddy', emoji: '🧸', size: '25px' }
+    ];
+
+    floatingElements.forEach((element, index) => {
+        createFloatingElement(element, index);
+    });
+
+    // Cursor effect
+    document.addEventListener('mousemove', createCursorEffect);
+
+    // Surprise button functionality
+    const surpriseButton = document.getElementById('surprise-button');
+    const backButton = document.querySelector('.back-button');
+    const clickSound = document.getElementById('click-sound');
+
+    surpriseButton.addEventListener('click', function() {
+        clickSound.play();
+        setTimeout(() => {
+            window.location.href = 'gallery.html';
+        }, 500);
+    });
+
+    backButton.addEventListener('click', function() {
+        clickSound.play();
+    });
+
+    // Button particle effect
+    [surpriseButton, backButton].forEach(button => {
+        button.addEventListener('mouseover', function(e) {
+            for (let i = 0; i < 5; i++) {
+                createButtonParticle(e);
+            }
+        });
+    });
+
+    // Music controls
+    const musicToggle = document.getElementById('music-toggle');
+    const musicIcon = document.getElementById('music-icon');
+    const backgroundMusic = document.getElementById('background-music');
+    let isMusicPlaying = false;
+
+    musicToggle.addEventListener('click', function() {
+        if (isMusicPlaying) {
+            backgroundMusic.pause();
+            musicIcon.classList.remove('fa-volume-up');
+            musicIcon.classList.add('fa-volume-mute');
+        } else {
+            backgroundMusic.play().catch(e => console.log('Audio play error:', e));
+            musicIcon.classList.remove('fa-volume-mute');
+            musicIcon.classList.add('fa-volume-up');
+        }
+        isMusicPlaying = !isMusicPlaying;
+    });
+
+    // Helper Functions
+    function createFloatingElement(element, index) {
+        const floatingElement = document.createElement('div');
+        floatingElement.classList.add('floating-element');
+        
+        if (element.emoji) {
+            floatingElement.textContent = element.emoji;
+            floatingElement.style.fontSize = element.size;
+        } else if (element.type === 'heart') {
+            floatingElement.innerHTML = '<i class="fas fa-heart"></i>';
+            floatingElement.style.color = element.color;
+            floatingElement.style.fontSize = element.size;
+        } else if (element.type === 'star') {
+            floatingElement.innerHTML = '<i class="fas fa-star"></i>';
+            floatingElement.style.color = element.color;
+            floatingElement.style.fontSize = element.size;
+        }
+        
+        const randomX = Math.random() * window.innerWidth;
+        const randomY = Math.random() * window.innerHeight;
+        floatingElement.style.left = `${randomX}px`;
+        floatingElement.style.top = `${randomY}px`;
+        
+        const duration = 5 + Math.random() * 5;
+        const delay = Math.random() * 3;
+        floatingElement.style.animationDuration = `${duration}s`;
+        floatingElement.style.animationDelay = `${delay}s`;
+        
+        document.body.appendChild(floatingElement);
+    }
+
+    function createCursorEffect(e) {
+        const cursorEffect = document.createElement('div');
+        cursorEffect.classList.add('cursor-effect');
+        cursorEffect.style.left = `${e.pageX}px`;
+        cursorEffect.style.top = `${e.pageY}px`;
+        document.body.appendChild(cursorEffect);
+        
+        setTimeout(() => {
+            cursorEffect.style.opacity = 1;
+            cursorEffect.style.transform = `translate(-50%, -50%) scale(${Math.random() * 0.5 + 0.5})`;
+            
+            setTimeout(() => {
+                cursorEffect.style.opacity = 0;
+                setTimeout(() => {
+                    cursorEffect.remove();
+                }, 500);
+            }, 300);
+        }, 10);
+    }
+
+    function createButtonParticle(e) {
+        const particle = document.createElement('div');
+        particle.classList.add('button-particle');
+        particle.style.left = `${e.offsetX}px`;
+        particle.style.top = `${e.offsetY}px`;
+        particle.style.width = `${Math.random() * 5 + 3}px`;
+        particle.style.height = particle.style.width;
+        e.target.appendChild(particle);
+        
+        setTimeout(() => {
+            particle.remove();
+        }, 2000);
+    }
+});
+</script>
+
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'938f79444d9a7b96',t:'MTc0NjEwNDU1MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'938fb2d47d7dbf66',t:'MTc0NjEwNjkwOC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+</body>
+</html>

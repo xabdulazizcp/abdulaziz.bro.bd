@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>গোপন গ্যালারি | পাসওয়ার্ড সুরক্ষিত</title>
+    <script>
+        document.addEventListener("contextmenu", function(event){
+            event.preventDefault();
+        });
+        
+        document.addEventListener("keydown", function(event) {
+            if (event.ctrlKey && (event.key === "U" || event.key === "I" || event.key === "J" || event.key === "S" || event.key === "H")) {
+                event.preventDefault();
+            }
+        });
+    </script>
+    <style>
+        /* ফন্ট ইম্পোর্ট করা */
+        @import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;700&display=swap');
+
+        /* Base styles and reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Hind Siliguri', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a1a3a, #2e1a47, #0f0f1a);
+            background-size: 400% 400%;
+            animation: gradientBackground 15s ease infinite;
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* Particle Animation for Login Screen */
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            animation: floatParticle 10s infinite linear;
+        }
+
+        @keyframes floatParticle {
+            0% { transform: translateY(0) scale(1); opacity: 0.5; }
+            50% { opacity: 0.8; }
+            100% { transform: translateY(-100vh) scale(0.5); opacity: 0; }
+        }
+        
+        /* Login container styling */
+        .login-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(15, 15, 26, 0.9), rgba(26, 26, 58, 0.9));
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: transform 0.8s cubic-bezier(0.86, 0, 0.07, 1);
+        }
+        
+        .login-container.hidden {
+            transform: translateY(-100%);
+        }
+        
+        .login-box {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            border-radius: 20px;
+            padding: 40px;
+            width: 90%;
+            max-width: 450px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 107, 107, 0.3);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .login-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent,
+                rgba(255, 255, 255, 0.05),
+                transparent
+            );
+            transform: rotate(45deg);
+            animation: shine 6s infinite;
+        }
+        
+        @keyframes shine {
+            0% { top: -50%; left: -50%; }
+            100% { top: 150%; left: 150%; }
+        }
+        
+        .login-title {
+            font-size: 28px;
+            margin-bottom: 25px;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            animation: glowText 2s ease-in-out infinite;
+        }
+        
+        @keyframes glowText {
+            0%, 100% { text-shadow: 0 0 5px rgba(255, 255, 255, 0.5); }
+            50% { text-shadow: 0 0 15px rgba(255, 107, 107, 0.8), 0 0 20px rgba(160, 94, 255, 0.8); }
+        }
+        
+        .login-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, #ff6b6b, #a05eff);
+        }
+        
+        .password-form {
+            position: relative;
+            margin-top: 30px;
+        }
+        
+        .password-input {
+            width: 100%;
+            padding: 15px 20px;
+            font-size: 16px;
+            border: none;
+            background: rgba(255, 255, 255, 0.07);
+            border-radius: 10px;
+            color: #fff;
+            letter-spacing: 1px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .password-input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3), 0 0 10px rgba(255, 107, 107, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .submit-btn {
+            padding: 15px 30px;
+            background: linear-gradient(45deg, #ff6b6b, #ff2e63, #a05eff);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3), 0 0 10px rgba(255, 107, 107, 0.3);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            margin: 10px;
+        }
+        
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 100%;
+            background: linear-gradient(45deg, #a05eff, #ff2e63, #ff6b6b);
+            transition: all 0.5s;
+            z-index: -1;
+        }
+        
+        .submit-btn:hover::before {
+            width: 100%;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4), 0 0 15px rgba(255, 107, 107, 0.5);
+        }
+        
+        .error-msg {
+            color: #ff6b6b;
+            font-size: 14px;
+            margin-top: 15px;
+            display: none;
+            animation: shake 0.5s;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-10px); }
+            40%, 80% { transform: translateX(10px); }
+        }
+        
+        /* Gallery styling */
+        .gallery-container {
+            padding: 80px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .gallery-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 50px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .gallery-title {
+            font-size: 36px;
+            background: linear-gradient(45deg, #ff6b6b, #ff2e63, #a05eff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: glowText 2s ease-in-out infinite;
+        }
+        
+        .logout-btn {
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            font-size: 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 0 10px rgba(255, 107, 107, 0.2);
+        }
+        
+        .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+            box-shadow: 0 0 15px rgba(255, 107, 107, 0.4);
+        }
+        
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s ease-out;
+        }
+        
+        .gallery-grid.loaded {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .gallery-item {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3), 0 0 10px rgba(255, 107, 107, 0.2);
+            height: 300px;
+            transition: all 0.4s;
+            transform-origin: center;
+            cursor: pointer;
+        }
+        
+        .gallery-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), 0 0 20px rgba(255, 107, 107, 0.5);
+        }
+        
+        .gallery-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: all 0.5s;
+        }
+        
+        .gallery-item:hover .gallery-img {
+            transform: scale(1.1);
+        }
+        
+        .gallery-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
+            padding: 20px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s;
+        }
+        
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .gallery-caption {
+            color: white;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        
+        .download-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 1;
+            transition: all 0.3s;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            z-index: 100;
+        }
+        
+        .gallery-item:hover .download-btn {
+            background: rgba(255, 255, 255, 0.7);
+        }
+        
+        .download-btn:hover {
+            background: rgba(255, 255, 255, 0.9);
+            transform: scale(1.1);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+        }
+        
+        .download-btn i {
+            color: #333;
+            font-size: 20px;
+        }
+        
+        /* Modal styling */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+        
+        .modal.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        
+        .modal-content {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 107, 107, 0.3);
+            transform: scale(0.8);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .modal.active .modal-content {
+            transform: scale(1);
+        }
+        
+        .modal-img {
+            display: block;
+            max-width: 100%;
+            max-height: 80vh;
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 44px;
+            height: 44px;
+            background: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 2100;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            opacity: 1;
+        }
+        
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.9);
+            transform: rotate(90deg);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+        }
+        
+        .modal-close::before,
+        .modal-close::after {
+            content: '';
+            position: absolute;
+            width: 22px;
+            height: 2px;
+            background: #333;
+        }
+        
+        .modal-close::before {
+            transform: rotate(45deg);
+        }
+        
+        .modal-close::after {
+            transform: rotate(-45deg);
+        }
+        
+        .modal-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
+            padding: 16px;
+            color: white;
+            font-size: 18px;
+        }
+        
+        .modal-download {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            background: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            opacity: 1;
+            z-index: 2100;
+        }
+        
+        .modal-download:hover {
+            background: rgba(255, 255, 255, 0.9);
+            transform: scale(1.1);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+        }
+        
+        .modal-download i {
+            color: #333;
+            font-size: 20px;
+        }
+        
+        /* Modal carousel navigation */
+        .modal-nav {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            transform: translateY(-50%);
+            z-index: 2100;
+        }
+        
+        .modal-arrow {
+            background: rgba(255, 255, 255, 0.5);
+            border: none;
+            color: white;
+            font-size: 24px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-arrow:hover {
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+            transform: scale(1.1);
+        }
+        
+        .modal-arrow i {
+            font-size: 24px;
+            color: #333;
+        }
+        
+        /* Loader styling */
+        .loader {
+            width: 48px;
+            height: 48px;
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            border-top-color: #a05eff;
+            animation: spin 1s linear infinite;
+            margin: 16px auto;
+            display: none;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Gradient Background Animation */
+        @keyframes gradientBackground {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* Responsive styling */
+        @media (max-width: 768px) {
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+            
+            .gallery-item {
+                height: 320px;
+                width: 100%;
+            }
+            
+            .gallery-img {
+                object-fit: cover;
+                object-position: center;
+            }
+            
+            .gallery-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .login-box {
+                padding: 32px;
+            }
+            
+            .modal-content {
+                max-width: 95%;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+            
+            .gallery-item {
+                height: 320px;
+                width: 100%;
+            }
+            
+            .gallery-title {
+                font-size: 32px;
+            }
+            
+            .login-title {
+                font-size: 24px;
+            }
+            
+            .modal-arrow {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .modal-arrow i {
+                font-size: 20px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Password protection login screen -->
+    <div class="login-container">
+        <div class="particles" id="particles"></div>
+        <div class="login-box">
+            <h1 class="login-title">গোপন গ্যালারি</h1>
+            <p>এক্সক্লুসিভ কন্টেন্ট অ্যাক্সেস করতে পাসওয়ার্ড লিখুন</p>
+            <p style="margin-top: 10px; font-size: 14px; color: #ccc; font-style: normal;">
+                পাসওয়ার্ড: 1234✨
+            </p>
+            <form class="password-form" id="passwordForm">
+                <input type="password" class="password-input" id="passwordInput" placeholder="পাসওয়ার্ড লিখুন" required>
+                <button type="submit" class="submit-btn">গ্যালারি আনলক করুন</button>
+                <button type="button" class="submit-btn" onclick="window.location.href='letter.html'">সারপ্রাইজে ফিরে যান</button>
+                <div class="loader" id="loginLoader"></div>
+                <p class="error-msg" id="errorMsg">ভুল পাসওয়ার্ড। অনুগ্রহ করে আবার চেষ্টা করুন।</p>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Gallery container -->
+    <div class="gallery-container">
+        <div class="gallery-header">
+            <h1 class="gallery-title">আমার কাছে থাকা কিছু সংগ্রহ</h1>
+            <button class="logout-btn" id="logoutBtn">গ্যালারি লক করুন</button>
+        </div>
+        
+        <div class="gallery-grid" id="galleryGrid">
+            <!-- Gallery items will be loaded dynamically -->
+        </div>
+    </div>
+    
+    <!-- Modal for enlarged images -->
+    <div class="modal" id="imageModal">
+        <div class="modal-content">
+            <img src="" alt="" class="modal-img" id="modalImg">
+            <div class="modal-close" id="modalClose"></div>
+            <div class="modal-download" id="modalDownload"><i class="fas fa-download"></i></div>
+            <div class="modal-caption" id="modalCaption"></div>
+            <div class="modal-nav">
+                <button class="modal-arrow" id="modalPrevArrow"><i class="fas fa-chevron-left"></i></button>
+                <button class="modal-arrow" id="modalNextArrow"><i class="fas fa-chevron-right"></i></button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Password verification and gallery management
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elements
+            const loginContainer = document.querySelector('.login-container');
+            const passwordForm = document.getElementById('passwordForm');
+            const passwordInput = document.getElementById('passwordInput');
+            const errorMsg = document.getElementById('errorMsg');
+            const loginLoader = document.getElementById('loginLoader');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const galleryGrid = document.getElementById('galleryGrid');
+            const imageModal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImg');
+            const modalClose = document.getElementById('modalClose');
+            const modalCaption = document.getElementById('modalCaption');
+            const modalDownload = document.getElementById('modalDownload');
+            const modalPrevArrow = document.getElementById('modalPrevArrow');
+            const modalNextArrow = document.getElementById('modalNextArrow');
+            
+            // Set password
+            const correctPassword = '1234';
+            
+            // Clear authentication on page load to ensure lock on refresh
+            sessionStorage.removeItem('galleryAuthenticated');
+            
+            // Gallery data
+            const galleryData = [
+            { "src": "imagelock/min.jpeg", "caption": "নরম আলোয় হাসিমুখ" },
+            { "src": "imagelock/min.jpeg", "caption": "নরম আলোয় হাসিমুখ" },
+            { "src": "imagelock/min.jpeg", "caption": "নরম আলোয় হাসিমুখ" },
+            { "src": "imagelock/min.jpeg", "caption": "নরম আলোয় হাসিমুখ" },
+            { "src": "imagelock/min.jpeg", "caption": "নরম আলোয় হাসিমুখ" },
+            { "src": "imagelock/min.jpeg", "caption": "নরম আলোয় হাসিমুখ" },
+            { "src": "imagelock/min.jpeg", "caption": "নরম আলোয় হাসিমুখ" },
+            { "src": "imagelock/min.jpeg", "caption": "নরম আলোয় হাসিমুখ" },
+            { "src": "imagelock/min.jpeg", "caption": "নরম আলোয় হাসিমুখ" },
+            { "src": "imagelock/min.jpeg", "caption": "নরম আলোয় হাসিমুখ" },
+            { "src": "imagelock/min.jpeg", "caption": "নরম আলোয় হাসিমুখ" },
+            { "src": "imagelock/min.jpeg", "caption": "নরম আলোয় হাসিমুখ" },
+            { "src": "imagelock/min.jpeg", "caption": "নরম আলোয় হাসিমুখ" },
+            { "src": "imagelock/min.jpeg", "caption": "নরম আলোয় হাসিমুখ" },
+            { "src": "imagelock/min.jpeg", "caption": "নরম আলোয় হাসিমুখ" },
+            { "src": "imagelock/min.jpeg", "caption": "নরম আলোয় হাসিমুখ" },
+            { "src": "imagelock/min.jpeg", "caption": "নরম আলোয় হাসিমুখ" },
+            { "src": "imagelock/min.jpeg", "caption": "নরম আলোয় হাসিমুখ" },
+            { "src": "imagelock/min.jpeg", "caption": "নরম আলোয় হাসিমুখ" },
+            { "src": "imagelock/min.jpeg", "caption": "নরম আলোয় হাসিমুখ" },
+            { "src": "imagelock/min.jpeg", "caption": "নরম আলোয় হাসিমুখ" },
+            { "src": "imagelock/min.jpeg", "caption": "নরম আলোয় হাসিমুখ" },
+            { "src": "imagelock/min.jpeg", "caption": "নরম আলোয় হাসিমুখ" },
+            { "src": "imagelock/min.jpeg", "caption": "নরম আলোয় হাসিমুখ" },
+            { "src": "imagelock/min.jpeg", "caption": "নরম আলোয় হাসিমুখ" },
+            { "src": "imagelock/min.jpeg", "caption": "নরম আলোয় হাসিমুখ" },
+            { "src": "imagelock/min.jpeg", "caption": "নরম আলোয় হাসিমুখ" },
+            { "src": "imagelock/min.jpeg", "caption": "নরম আলোয় হাসিমুখ" },
+            { "src": "imagelock/min.jpeg", "caption": "নরম আলোয় হাসিমুখ" },
+            { "src": "imagelock/min.jpeg", "caption": "নরম আলোয় হাসিমুখ" },
+            { "src": "imagelock/min.jpeg", "caption": "নরম আলোয় হাসিমুখ" },
+            { "src": "imagelock/min.jpeg", "caption": "নরম আলোয় হাসিমুখ" },
+            { "src": "imagelock/min.jpeg", "caption": "নরম আলোয় হাসিমুখ" },
+            { "src": "imagelock/min.jpeg", "caption": "নরম আলোয় হাসিমুখ" },
+            { "src": "imagelock/min.jpeg", "caption": "নরম আলোয় হাসিমুখ" },
+            { "src": "imagelock/min.jpeg", "caption": "নরম আলোয় হাসিমুখ" },
+            { "src": "imagelock/min.jpeg", "caption": "নরম আলোয় হাসিমুখ" },
+            { "src": "imagelock/min.jpeg", "caption": "নরম আলোয় হাসিমুখ" },
+            { "src": "imagelock/min.jpeg", "caption": "নরম আলোয় হাসিমুখ" },
+            { "src": "imagelock/min.jpeg", "caption": "নরম আলোয় হাসিমুখ" },
+            { "src": "imagelock/min.jpeg", "caption": "নরম আলোয় হাসিমুখ" },
+            { "src": "imagelock/min.jpeg", "caption": "নরম আলোয় হাসিমুখ" },
+            { "src": "imagelock/min.jpeg", "caption": "নরম আলোয় হাসিমুখ" },
+            { "src": "imagelock/min.jpeg", "caption": "নরম আলোয় হাসিমুখ" },
+            { "src": "imagelock/min.jpeg", "caption": "নরম আলোয় হাসিমুখ" },
+            { "src": "imagelock/min.jpeg", "caption": "নরম আলোয় হাসিমুখ" },
+            { "src": "imagelock/min.jpeg", "caption": "নরম আলোয় হাসিমুখ" },
+            { "src": "imagelock/min.jpeg", "caption": "নরম আলোয় হাসিমুখ" },
+            { "src": "imagelock/min.jpeg", "caption": "নরম আলোয় হাসিমুখ" },
+            { "src": "imagelock/min.jpeg", "caption": "নরম আলোয় হাসিমুখ" },
+            
+            
+
+            ];
+            
+            // Create particles for login screen
+            const particlesContainer = document.getElementById('particles');
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.width = `${Math.random() * 3 + 1}px`;
+                particle.style.height = particle.style.width;
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100}%`;
+                particle.style.animationDelay = `${Math.random() * 5}s`;
+                particlesContainer.appendChild(particle);
+            }
+            
+            // Handle password form submission
+            passwordForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                loginLoader.style.display = 'block';
+                
+                setTimeout(function() {
+                    if (passwordInput.value === correctPassword) {
+                        sessionStorage.setItem('galleryAuthenticated', 'true');
+                        unlockGallery();
+                    } else {
+                        errorMsg.style.display = 'block';
+                        errorMsg.style.animation = 'none';
+                        void errorMsg.offsetWidth;
+                        errorMsg.style.animation = 'shake 0.5s';
+                    }
+                    
+                    loginLoader.style.display = 'none';
+                    passwordInput.value = '';
+                }, 1200);
+            });
+            
+            // Handle logout
+            logoutBtn.addEventListener('click', function() {
+                sessionStorage.removeItem('galleryAuthenticated');
+                loginContainer.classList.remove('hidden');
+                galleryGrid.classList.remove('loaded');
+                galleryGrid.innerHTML = '';
+            });
+            
+            // Function to unlock gallery
+            function unlockGallery() {
+                loginContainer.classList.add('hidden');
+                
+                if (galleryGrid.children.length === 0) {
+                    loadGalleryImages();
+                }
+                
+                setTimeout(function() {
+                    galleryGrid.classList.add('loaded');
+                }, 300);
+            }
+            
+            // Download image function
+            function downloadImage(src, caption) {
+                if (!src) {
+                    console.error('Invalid image source');
+                    return;
+                }
+                
+                fetch(src, { method: 'GET', mode: 'cors' })
+                    .then(response => response.blob())
+                    .then(blob => {
+                        const url = window.URL.createObjectURL(blob);
+                        const link = document.createElement('a');
+                        link.href = url;
+                        link.download = caption ? `${caption}.jpg` : 'image.jpg';
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                        window.URL.revokeObjectURL(url);
+                    })
+                    .catch(err => {
+                        console.error('Download failed:', err);
+                        alert('ছবি ডাউনলোড করতে সমস্যা হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।');
+                    });
+            }
+            
+            // Load gallery images
+            function loadGalleryImages() {
+                galleryData.forEach(item => {
+                    const galleryItem = document.createElement('div');
+                    galleryItem.className = 'gallery-item';
+                    
+                    galleryItem.innerHTML = `
+                        <img src="${item.src}" alt="${item.caption}" class="gallery-img">
+                        <div class="gallery-overlay">
+                            <div class="gallery-caption">${item.caption}</div>
+                        </div>
+                        <div class="download-btn" title="ডাউনলোড করুন"><i class="fas fa-download"></i></div>
+                    `;
+                    
+                    galleryItem.querySelector('.gallery-img').addEventListener('click', function() {
+                        openImageModal(item.src, item.caption, galleryData.indexOf(item));
+                    });
+                    
+                    galleryItem.querySelector('.download-btn').addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        downloadImage(item.src, item.caption);
+                    });
+                    
+                    galleryGrid.appendChild(galleryItem);
+                });
+            }
+            
+            // Open image modal with carousel functionality
+            let currentModalIndex = 0;
+            
+            function openImageModal(src, caption, index) {
+                currentModalIndex = index;
+                modalImg.src = src;
+                modalCaption.textContent = caption;
+                modalDownload.setAttribute('data-src', src);
+                modalDownload.setAttribute('data-caption', caption);
+                imageModal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+            
+            // Close image modal
+            function closeImageModal() {
+                imageModal.classList.remove('active');
+                document.body.style.overflow = '';
+                setTimeout(() => {
+                    modalImg.src = '';
+                    modalCaption.textContent = '';
+                }, 400);
+            }
+            
+            modalClose.addEventListener('click', closeImageModal);
+            imageModal.addEventListener('click', function(e) {
+                if (e.target === imageModal) {
+                    closeImageModal();
+                }
+            });
+            
+            // Modal download functionality
+            modalDownload.addEventListener('click', function() {
+                downloadImage(modalDownload.getAttribute('data-src'), modalDownload.getAttribute('data-caption'));
+            });
+            
+            // Modal carousel navigation
+            modalPrevArrow.addEventListener('click', function() {
+                if (currentModalIndex > 0) {
+                    currentModalIndex--;
+                    const item = galleryData[currentModalIndex];
+                    openImageModal(item.src, item.caption, currentModalIndex);
+                }
+            });
+            
+            modalNextArrow.addEventListener('click', function() {
+                if (currentModalIndex < galleryData.length - 1) {
+                    currentModalIndex++;
+                    const item = galleryData[currentModalIndex];
+                    openImageModal(item.src, item.caption, currentModalIndex);
+                }
+            });
+            
+            // Escape key to close modal
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && imageModal.classList.contains('active')) {
+                    closeImageModal();
+                }
+            });
+            
+            // Arrow key navigation for modal
+            document.addEventListener('keydown', function(e) {
+                if (imageModal.classList.contains('active')) {
+                    if (e.key === 'ArrowLeft' && currentModalIndex > 0) {
+                        currentModalIndex--;
+                        const item = galleryData[currentModalIndex];
+                        openImageModal(item.src, item.caption, currentModalIndex);
+                    } else if (e.key === 'ArrowRight' && currentModalIndex < galleryData.length - 1) {
+                        currentModalIndex++;
+                        const item = galleryData[currentModalIndex];
+                        openImageModal(item.src, item.caption, currentModalIndex);
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
