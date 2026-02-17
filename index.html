@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Cartoon Chor-Police Game</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Comic Sans MS', sans-serif;
+      background: linear-gradient(to bottom, #87ceeb, #f0f8ff);
+      overflow: hidden;
+      text-align: center;
+    }
+
+    h1 {
+      margin-top: 10px;
+      color: #333;
+      text-shadow: 2px 2px #fff;
+    }
+
+    #gameArea {
+      position: relative;
+      width: 100vw;
+      height: 80vh;
+      border: 3px dashed #555;
+      background: #a2d5f2;
+      overflow: hidden;
+      margin: auto;
+      border-radius: 20px;
+    }
+
+    .player {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      transition: 0.1s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+      cursor: pointer;
+    }
+
+    #police {
+      background: #00ccff;
+    }
+
+    #thief {
+      background: #ff3333;
+    }
+
+    #scoreBoard {
+      font-size: 22px;
+      margin: 10px;
+      color: #222;
+      text-shadow: 1px 1px #fff;
+    }
+  </style>
+</head>
+<body>
+
+<h1>🚓 Cartoon Chor–Police Game 🏃‍♂️</h1>
+<div id="scoreBoard">Score: 0</div>
+<div id="gameArea">
+  <div id="police" class="player">👮</div>
+  <div id="thief" class="player">🦹</div>
+</div>
+
+<script>
+  const gameArea = document.getElementById("gameArea");
+  const police = document.getElementById("police");
+  const thief = document.getElementById("thief");
+  const scoreBoard = document.getElementById("scoreBoard");
+
+  let policeX = 100, policeY = 100;
+  let thiefX = Math.random() * (window.innerWidth - 60);
+  let thiefY = Math.random() * (window.innerHeight - 60);
+
+  police.style.left = policeX + "px";
+  police.style.top = policeY + "px";
+  thief.style.left = thiefX + "px";
+  thief.style.top = thiefY + "px";
+
+  let score = 0;
+  const speed = 20;
+  const thiefSpeed = 3;
+
+  // Police movement
+  document.addEventListener("keydown", function(e) {
+    if(e.key === "ArrowUp") policeY -= speed;
+    if(e.key === "ArrowDown") policeY += speed;
+    if(e.key === "ArrowLeft") policeX -= speed;
+    if(e.key === "ArrowRight") policeX += speed;
+
+    policeX = Math.max(0, Math.min(policeX, window.innerWidth - 50));
+    policeY = Math.max(0, Math.min(policeY, window.innerHeight - 50));
+
+    police.style.left = policeX + "px";
+    police.style.top = policeY + "px";
+
+    checkCatch();
+  });
+
+  // Thief random movement
+  function moveThief() {
+    let dirX = (Math.random() - 0.5) * thiefSpeed * 2;
+    let dirY = (Math.random() - 0.5) * thiefSpeed * 2;
+
+    thiefX += dirX;
+    thiefY += dirY;
+
+    thiefX = Math.max(0, Math.min(thiefX, window.innerWidth - 50));
+    thiefY = Math.max(0, Math.min(thiefY, window.innerHeight - 50));
+
+    thief.style.left = thiefX + "px";
+    thief.style.top = thiefY + "px";
+
+    requestAnimationFrame(moveThief);
+  }
+
+  moveThief();
+
+  function checkCatch() {
+    let distance = Math.sqrt(Math.pow(policeX - thiefX, 2) + Math.pow(policeY - thiefY, 2));
+    if(distance < 50) {
+      score++;
+      scoreBoard.innerText = "Score: " + score;
+      // Thief jumps to random position
+      thiefX = Math.random() * (window.innerWidth - 50);
+      thiefY = Math.random() * (window.innerHeight - 50);
+      thief.style.left = thiefX + "px";
+      thief.style.top = thiefY + "px";
+    }
+  }
+</script>
+
+</body>
+</html>
