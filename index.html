@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hacked by Zayan Faris</title>
+<style>
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Courier New', monospace;
+    overflow-x: hidden;
+    color: #00ff00;
+    height: 100%;
+}
+
+#bg-video {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+    filter: brightness(0.2);
+}
+
+.content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 20px;
+}
+
+.profile-img {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    border: 4px solid #00ff00;
+    margin: 30px auto;
+    display: block;
+}
+
+.main-title {
+    font-size: 3em;
+    font-weight: bold;
+    color: #ff0000;
+    animation: flicker 1.5s infinite;
+    margin: 20px 0;
+}
+
+@keyframes flicker {
+    0%,19%,21%,23%,25%,54%,56%,100% { text-shadow: 0 0 5px #00ff00, 0 0 10px #00ff00; }
+    20%,22%,24%,55% { text-shadow: 0 0 5px #ff00ff, 0 0 10px #ff00ff; }
+}
+
+.subtext {
+    font-size: 1em;
+    color: #00ffff;
+    margin: 20px auto;
+    max-width: 600px;
+    line-height: 1.6;
+    white-space: pre-line;
+    opacity: 0;
+    animation: fadeIn 3s forwards 1s;
+}
+
+@keyframes fadeIn { to {opacity: 1;} }
+
+.terminal {
+    font-family: 'Courier New', monospace;
+    font-size: 1em;
+    color: #00ff00;
+    margin-top: 20px;
+    text-align: left;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    min-height: 150px;
+}
+
+.footer {
+    margin-top: 50px;
+    padding: 10px 0;
+    border-top: 1px solid #00ff00;
+    font-size: 0.9em;
+    color: #00ff00;
+}
+</style>
+</head>
+<body>
+
+<!-- Background Video -->
+<video autoplay loop muted id="bg-video" playsinline>
+    <source src="myvideo.mp4" type="video/mp4">
+</video>
+
+<!-- Optional Background Music -->
+<audio autoplay loop>
+    <source src="background.mp3" type="audio/mpeg">
+</audio>
+
+<div class="content">
+    <img src="zayan.jpg" alt="Zayan Faris" class="profile-img">
+    <h1 class="main-title">HACKED BY ZAYAN FARIS</h1>
+
+    <div class="subtext">
+ভুলে গেছেন তো? ভুলেই যান। কিসের বিচার? যে দেশের জন্য মরলেও কেউ বিচার দাবি করে না, সে দেশের জন্য আর কোনো ওসমান হাদি জন্ম না নিক।  
+রাস্তায় নামতে পারবেন না? সোশ্যাল মিডিয়ায় একটা ফলো, একটা হ্যাশট্যাগ, একটা শেয়ার— এটুকুও করতে পারবেন না? তাহলে ভুলেই যান।  
+
+#WeAreOsmanHadই #JusticeForOsmanHadi #JusticeHadi  
+
+"মাতৃভূমি অথবা মৃত্যু"  
+ওসমান হাদি।  
+
+You will always be remembered, Hadi Bhai!❤️
+    </div>
+
+    <div class="terminal" id="terminal"></div>
+
+    <div class="footer">
+        © 2026 Hacked by Zayan Faris. All Rights Reserved.
+    </div>
+</div>
+
+<script>
+const terminal = document.getElementById('terminal');
+const lines = [
+    "Initializing system...",
+    "Loading security protocols...",
+    "Checking vulnerabilities...",
+    "Access granted!",
+    "Welcome to the Cyber Realm...",
+    "Anonymous 71 active...",
+    "Ethical Hacking Mode: ONLINE"
+];
+let i = 0, j = 0;
+
+function typeLine() {
+    if(i < lines.length) {
+        if(j < lines[i].length) {
+            terminal.innerHTML += lines[i][j];
+            j++;
+            setTimeout(typeLine, 50);
+        } else {
+            terminal.innerHTML += "<br>";
+            i++;
+            j = 0;
+            setTimeout(typeLine, 300);
+        }
+    }
+}
+window.onload = typeLine;
+</script>
+
+</body>
+</html>
