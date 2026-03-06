@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Cyber Security Scanner</title>
+
+<style>
+
+body{
+background:#0a0a0a;
+color:#00ff9d;
+font-family:monospace;
+text-align:center;
+padding-top:60px;
+}
+
+/* Headline */
+
+h1{
+font-size:34px;
+text-shadow:0 0 15px #00ff9d;
+}
+
+/* Input */
+
+input{
+padding:12px;
+width:280px;
+font-size:16px;
+border:1px solid #00ff9d;
+background:black;
+color:#00ff9d;
+}
+
+/* Button */
+
+button{
+padding:10px 20px;
+margin-top:10px;
+font-size:16px;
+cursor:pointer;
+background:black;
+border:1px solid #00ff9d;
+color:#00ff9d;
+}
+
+button:hover{
+background:#00ff9d;
+color:black;
+}
+
+/* Sections */
+
+#process,#result{
+display:none;
+}
+
+/* Terminal */
+
+.terminal{
+width:380px;
+margin:auto;
+border:1px solid #00ff9d;
+padding:20px;
+margin-top:20px;
+box-shadow:0 0 20px #00ff9d;
+text-align:left;
+}
+
+/* Progress */
+
+.progress{
+width:100%;
+height:20px;
+border:1px solid #00ff9d;
+margin-top:15px;
+}
+
+.bar{
+height:100%;
+width:0%;
+background:#00ff9d;
+}
+
+/* Result Box */
+
+.box{
+margin-top:10px;
+}
+
+footer{
+margin-top:60px;
+color:gray;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>FACEBOOK ID HACKE PANEL</h1>
+
+<div id="page1">
+
+<input type="text" id="link" placeholder="Enter Target Link">
+
+<br>
+
+<button onclick="startScan()">Start Scan</button>
+
+</div>
+
+<div id="process">
+
+<div class="terminal">
+
+<div id="log">Initializing security scanner...</div>
+
+<div class="progress">
+<div class="bar" id="bar"></div>
+</div>
+
+</div>
+
+</div>
+
+<div id="result">
+
+<h2>SCAN REPORT</h2>
+
+<div class="terminal">
+
+<div class="box">
+Target Link :
+<span id="acc"></span>
+<button onclick="copy('acc')">Copy</button>
+</div>
+
+<div class="box">
+Email :
+<span id="email"></span>
+<button onclick="copy('email')">Copy</button>
+</div>
+
+<div class="box">
+Number :
+<span id="number"></span>
+<button onclick="copy('number')">Copy</button>
+</div>
+
+<div class="box">
+Password :
+<span id="token"></span>
+<button onclick="copy('token')">Copy</button>
+</div>
+
+</div>
+
+</div>
+
+<footer>
+Copyright by Abdul Aziz
+</footer>
+
+<script>
+
+function startScan(){
+
+let link=document.getElementById("link").value;
+
+if(link==""){
+alert("Enter Target Link");
+return;
+}
+
+document.getElementById("page1").style.display="none";
+document.getElementById("process").style.display="block";
+
+let logs=[
+"Connecting to analysis server...",
+"Checking public metadata...",
+"Scanning digital footprint...",
+"Analyzing security pattern...",
+"Generating scan report..."
+]
+
+let i=0;
+
+let bar=document.getElementById("bar");
+
+let run=setInterval(function(){
+
+document.getElementById("log").innerText=logs[i];
+
+bar.style.width=((i+1)/logs.length*100)+"%";
+
+i++;
+
+if(i==logs.length){
+
+clearInterval(run);
+
+setTimeout(showResult,1000);
+
+}
+
+},1500)
+
+}
+
+function random(len){
+
+let chars="abcdefghijklmnopqrstuvwxyz0123456789";
+
+let text="";
+
+for(let i=0;i<len;i++){
+
+text+=chars.charAt(Math.floor(Math.random()*chars.length));
+
+}
+
+return text;
+
+}
+
+function randomNumber(){
+
+let num="+8801";
+
+for(let i=0;i<8;i++){
+
+num+=Math.floor(Math.random()*10);
+
+}
+
+return num;
+
+}
+
+function showResult(){
+
+document.getElementById("process").style.display="none";
+document.getElementById("result").style.display="block";
+
+document.getElementById("acc").innerText=document.getElementById("link").value;
+
+document.getElementById("email").innerText=random(8)+"@gmail.com";
+
+document.getElementById("number").innerText=randomNumber();
+
+let firstNames=[
+"rahat","hasan","rakib","fahim","tanvir","sohan","arif","shuvo","mahdi","naim"
+];
+
+let lastNames=[
+"islam","rahman","khan","ahmed","hossain","karim","alam","chowdhury","uddin","sheikh"
+];
+
+let first=firstNames[Math.floor(Math.random()*firstNames.length)];
+let last=lastNames[Math.floor(Math.random()*lastNames.length)];
+
+let passwords=[
+
+"#@"+first+"@"+last+"#",
+"@"+first+"+"+last+"@@",
+"%৳#@"+first+"@@@",
+"##"+first+"@"+last+"12",
+"@"+last+"@"+first+"@"
+
+];
+
+let pass=passwords[Math.floor(Math.random()*passwords.length)];
+
+document.getElementById("token").innerText=pass;
+
+}
+
+function copy(id){
+
+let text=document.getElementById(id).innerText;
+
+navigator.clipboard.writeText(text);
+
+alert("Copied");
+
+}
+
+</script>
+
+</body>
+</html>
