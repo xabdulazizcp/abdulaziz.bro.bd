@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enchanted Love Memory Lane</title>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Dancing+Script:wght@400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Playfair Display', serif;
+            background: linear-gradient(135deg, #0f0617, #1a0638, #2c0b1a);
+            color: #f5e1fd;
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+        }
+        
+        /* Navigation - Floating Crystal Buttons */
+        nav {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            z-index: 1000;
+            display: flex;
+            gap: 15px;
+            backdrop-filter: blur(15px);
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 50px;
+            padding: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            animation: floatNav 8s infinite ease-in-out;
+        }
+        
+        .nav-link {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 22px;
+            color: #ffd1e6;
+            background: linear-gradient(145deg, rgba(149, 76, 233, 0.3), rgba(255, 107, 158, 0.2));
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 182, 193, 0.2);
+        }
+        
+        .nav-link:hover {
+            transform: translateY(-8px) scale(1.1);
+            box-shadow: 0 8px 25px rgba(255, 107, 158, 0.4);
+            background: linear-gradient(145deg, rgba(149, 76, 233, 0.5), rgba(255, 107, 158, 0.4));
+            color: #fff;
+        }
+        
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(255, 255, 255, 0.4), transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .nav-link:hover::before {
+            opacity: 1;
+        }
+        
+        .nav-link.active {
+            background: linear-gradient(145deg, #ff6b9e, #9d4edd);
+            box-shadow: 0 0 25px rgba(255, 107, 158, 0.6);
+            color: #fff;
+            transform: scale(1.1);
+        }
+        
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 140px 30px 100px;
+            position: relative;
+            z-index: 20;
+        }
+        
+        /* Header with Animated Typography */
+        .header {
+            text-align: center;
+            margin-bottom: 80px;
+            position: relative;
+            padding: 0 20px;
+        }
+        
+        .header h1 {
+            font-family: 'Great Vibes', cursive;
+            font-size: 7rem;
+            color: #ffd1e6;
+            margin-bottom: 25px;
+            text-shadow: 0 0 30px rgba(255, 107, 158, 0.5);
+            position: relative;
+            display: inline-block;
+            background: linear-gradient(45deg, #ff6b9e, #c084fc, #9d4edd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            opacity: 0;
+            transform: translateY(-50px);
+        }
+        
+        .header p {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.8rem;
+            color: #e2b0ff;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.6;
+            opacity: 0;
+            transform: translateY(30px);
+            text-shadow: 0 2px 15px rgba(0, 0, 0, 0.4);
+        }
+        
+        /* Timeline Container */
+        .timeline-container {
+            position: relative;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 50px 0;
+        }
+        
+        /* Timeline Center Line - Glowing */
+        .timeline-line {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            height: 100%;
+            width: 6px;
+            background: linear-gradient(to bottom, #ff6b9e, #c084fc, #9d4edd);
+            z-index: 5;
+            box-shadow: 0 0 20px rgba(255, 107, 158, 0.5);
+            border-radius: 3px;
+        }
+        
+        /* Memory Cards - Elegant Design */
+        .memories-container {
+            position: relative;
+            z-index: 10;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 100px;
+        }
+        
+        .memory-card {
+            display: flex;
+            position: relative;
+            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            opacity: 0;
+            transform: translateY(80px) rotate(5deg);
+            perspective: 1500px;
+        }
+        
+        .memory-card:nth-child(even) {
+            flex-direction: row-reverse;
+            transform: translateY(80px) rotate(-5deg);
+        }
+        
+        /* Timeline Dot - Animated Crystal */
+        .memory-dot {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #ff6b9e, #9d4edd);
+            border: 4px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 0 0 8px rgba(157, 78, 221, 0.4), 0 0 30px rgba(255, 107, 158, 0.8);
+            z-index: 15;
+            animation: pulseDot 3s infinite ease-in-out;
+        }
+        
+        /* Memory Content - Glass Morphism */
+        .memory-content {
+            width: 46%;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            padding: 40px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 182, 193, 0.2);
+            transform-style: preserve-3d;
+            transition: all 0.6s ease;
+        }
+        
+        .memory-card:hover .memory-content {
+            transform: translateY(-20px) rotateY(5deg);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+            background: rgba(255, 255, 255, 0.12);
+        }
+        
+        .memory-card:nth-child(even):hover .memory-content {
+            transform: translateY(-20px) rotateY(-5deg);
+        }
+        
+        .memory-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        
+        .memory-card:hover .memory-content::before {
+            opacity: 1;
+            animation: shimmer 4s infinite linear;
+        }
+        
+        .memory-content h2 {
+            font-size: 2.5rem;
+            color: #ffd1e6;
+            margin-bottom: 15px;
+            font-weight: 700;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .memory-content h2::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(to right, #ff6b9e, #9d4edd);
+            border-radius: 2px;
+        }
+        
+        .memory-date {
+            font-size: 1.4rem;
+            color: #c084fc;
+            margin-bottom: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .memory-date i {
+            color: #ff6b9e;
+        }
+        
+        .memory-quote {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.2rem;
+            color: #e2b0ff;
+            margin-bottom: 25px;
+            line-height: 1.6;
+            font-weight: 600;
+            position: relative;
+            padding-left: 30px;
+        }
+        
+        .memory-quote::before {
+            content: '"';
+            position: absolute;
+            top: -25px;
+            left: 0;
+            font-size: 5rem;
+            color: rgba(255, 107, 158, 0.3);
+        }
+        
+        .memory-description {
+            font-size: 1.5rem;
+            color: #d1b3e6;
+            line-height: 1.7;
+            opacity: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform: translateY(20px);
+        }
+        
+        .memory-card:hover .memory-description {
+            opacity: 1;
+            max-height: 500px;
+            transform: translateY(0);
+        }
+        
+        /* Memory Image - Elegant Frame */
+        .memory-image {
+            width: 46%;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+            transform: rotate(5deg);
+            transition: all 0.6s ease;
+            position: relative;
+            z-index: 8;
+        }
+        
+        .memory-card:nth-child(even) .memory-image {
+            transform: rotate(-5deg);
+        }
+        
+        .memory-card:hover .memory-image {
+            transform: rotate(0) scale(1.05);
+            box-shadow: 0 35px 70px rgba(0, 0, 0, 0.5);
+        }
+        
+        .memory-image img {
+            width: 100%;
+            height: 100%;
+            min-height: 350px;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.8s ease;
+        }
+        
+        .memory-card:hover .memory-image img {
+            transform: scale(1.1);
+        }
+        
+        .memory-image::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            right: 15px;
+            bottom: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            pointer-events: none;
+            z-index: 2;
+        }
+        
+        /* Footer - Floating Love Note */
+        .footer {
+            position: relative;
+            text-align: center;
+            margin-top: 100px;
+            padding: 40px 0;
+            z-index: 20;
+        }
+        
+        .footer p {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3.5rem;
+            color: #ffd1e6;
+            margin-bottom: 40px;
+            text-shadow: 0 0 20px rgba(255, 107, 158, 0.5);
+            background: linear-gradient(45deg, #ff6b9e, #c084fc, #9d4edd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .emoji-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .emoji-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            background: linear-gradient(145deg, rgba(255, 107, 158, 0.3), rgba(157, 78, 221, 0.3));
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 182, 193, 0.3);
+            transition: all 0.5s ease;
+        }
+        
+        .emoji-circle:hover {
+            transform: translateY(-10px) scale(1.1);
+            box-shadow: 0 15px 35px rgba(255, 107, 158, 0.4);
+        }
+        
+        /* Background Elements - Floating Hearts & Sparkles */
+        .hearts-container, .sparkles-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .heart {
+            position: absolute;
+            font-size: 28px;
+            opacity: 0;
+            z-index: 1;
+            animation: float 18s linear infinite;
+            color: #ff6b9e;
+            text-shadow: 0 0 15px rgba(255, 107, 158, 0.7);
+        }
+        
+        .sparkle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #f0abfc;
+            box-shadow: 0 0 15px 3px #f0abfc;
+            opacity: 0;
+            z-index: 1;
+            animation: sparkleFloat 12s linear infinite;
+        }
+        
+        /* Decor Elements - Floating Crystals */
+        .decor-crystal {
+            position: fixed;
+            z-index: 2;
+            font-size: 36px;
+            opacity: 0.1;
+            animation: floatCrystal 40s infinite linear;
+            color: #c084fc;
+            filter: drop-shadow(0 0 10px rgba(192, 132, 252, 0.4));
+        }
+        
+        /* Animations */
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg) scale(0.8);
+                opacity: 0.7;
+            }
+            50% {
+                opacity: 1;
+                transform: translateY(50vh) rotate(180deg) scale(1.1);
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg) scale(0.8);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes sparkleFloat {
+            0% {
+                transform: translateY(100vh) translateX(0) scale(1);
+                opacity: 0.8;
+            }
+            50% {
+                opacity: 1;
+                transform: translateY(50vh) translateX(100px) scale(1.2);
+            }
+            100% {
+                transform: translateY(-100vh) translateX(200px) scale(0);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes floatCrystal {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0.1;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(720deg);
+                opacity: 0.08;
+            }
+        }
+        
+        @keyframes pulseDot {
+            0%, 100% {
+                transform: translate(-50%, -50%) scale(1);
+                box-shadow: 0 0 0 8px rgba(157, 78, 221, 0.4), 0 0 30px rgba(255, 107, 158, 0.8);
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.1);
+                box-shadow: 0 0 0 12px rgba(157, 78, 221, 0.3), 0 0 40px rgba(255, 107, 158, 1);
+            }
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-150%) skewX(-30deg); }
+            100% { transform: translateX(150%) skewX(-30deg); }
+        }
+        
+        @keyframes floatNav {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1100px) {
+            .memory-card, .memory-card:nth-child(even) {
+                flex-direction: column;
+                align-items: center;
+                gap: 40px;
+            }
+            
+            .memory-content, .memory-image {
+                width: 90%;
+            }
+            
+            .memory-dot {
+                display: none;
+            }
+            
+            .timeline-line {
+                left: 50px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 5rem;
+            }
+            
+            .header p {
+                font-size: 2.2rem;
+            }
+            
+            .memory-content {
+                padding: 30px;
+            }
+            
+            .memory-content h2 {
+                font-size: 2rem;
+            }
+            
+            .memory-quote {
+                font-size: 1.8rem;
+            }
+            
+            .memory-description {
+                font-size: 1.3rem;
+            }
+            
+            nav {
+                top: 20px;
+                right: 20px;
+                gap: 10px;
+            }
+            
+            .nav-link {
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+            }
+            
+            .footer p {
+                font-size: 2.8rem;
+            }
+            
+            .emoji-circle {
+                width: 70px;
+                height: 70px;
+                font-size: 2.2rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 3.8rem;
+            }
+            
+            .header p {
+                font-size: 1.8rem;
+            }
+            
+            .memory-content {
+                padding: 25px;
+            }
+            
+            .memory-content h2 {
+                font-size: 1.8rem;
+            }
+            
+            .memory-quote {
+                font-size: 1.6rem;
+                padding-left: 25px;
+            }
+            
+            .memory-quote::before {
+                font-size: 4rem;
+                top: -20px;
+            }
+            
+            .footer p {
+                font-size: 2.2rem;
+            }
+            
+            .emoji-circle {
+                width: 60px;
+                height: 60px;
+                font-size: 2rem;
+            }
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(26, 6, 56, 0.5);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(#ff6b9e, #9d4edd);
+            border-radius: 10px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(#ff4b91, #8a2be2);
+        }
+    </style>
+</head>
+<body>
+    <!-- Background elements -->
+    <div class="hearts-container" id="hearts-container"></div>
+    <div class="sparkles-container" id="sparkles-container"></div>
+    
+    <!-- Decor crystals -->
+    <div class="decor-crystal" style="top: 10%; left: 5%;">◆</div>
+    <div class="decor-crystal" style="top: 20%; right: 8%;">◆</div>
+    <div class="decor-crystal" style="bottom: 15%; left: 7%;">◆</div>
+    <div class="decor-crystal" style="bottom: 25%; right: 6%;">◆</div>
+    
+    <!-- Navigation -->
+    <nav>
+        <a href="index.html" class="nav-link active"><i class="fas fa-home"></i></a>
+        <a href="memories.html" class="nav-link"><i class="fas fa-images"></i></a>
+        <a href="reasons.html" class="nav-link"><i class="fas fa-heart"></i></a>
+        <a href="heartbeat.html" class="nav-link"><i class="fas fa-heartbeat"></i></a>
+        <a href="forever.html" class="nav-link"><i class="fas fa-infinity"></i></a>
+    </nav>
+    
+    <!-- Main content -->
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1 id="main-title">Our Enchanted Journey</h1>
+            <p id="subtitle">A timeless story of love, written in the stars and cherished in our hearts</p>
+        </div>
+        
+        <!-- Timeline Container -->
+        <div class="timeline-container">
+            <div class="timeline-line"></div>
+            
+            <!-- Memories Container -->
+            <div class="memories-container">
+                <!-- Memory 1 -->
+                <div class="memory-card">
+                    <div class="memory-dot"></div>
+                    
+                    <div class="memory-content">
+                        <h2>First Meeting</h2>
+                        <div class="memory-date"><i class="fas fa-calendar-alt"></i> June 12, 2020</div>
+                        <p class="memory-quote">The moment our eyes met, I knew my search was over...</p>
+                        <p class="memory-description">It was a warm summer evening at the cafe. You spilled coffee on my shirt and offered to buy me a new one. We talked for hours until they closed the place, and in that moment, I knew I had found someone special.</p>
+                    </div>
+                    
+                    <div class="memory-image">
+                        <img src="https://images.unsplash.com/photo-1533158307587-828f0a76ef46?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=600&w=800" alt="First Meeting">
+                    </div>
+                </div>
+                
+                <!-- Memory 2 -->
+                <div class="memory-card">
+                    <div class="memory-dot"></div>
+                    
+                    <div class="memory-content">
+                        <h2>First Date</h2>
+                        <div class="memory-date"><i class="fas fa-calendar-alt"></i> June 26, 2020</div>
+                        <p class="memory-quote">Your laughter became my favorite melody...</p>
+                        <p class="memory-description">We went to that little Italian place downtown. You made me laugh so hard I almost choked on my pasta. I knew then I wanted to hear that laugh every day for the rest of my life.</p>
+                    </div>
+                    
+                    <div class="memory-image">
+                        <img src="https://images.unsplash.com/photo-1584515933487-779824d29309?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=600&w=800" alt="First Date">
+                    </div>
+                </div>
+                
+                <!-- Memory 3 -->
+                <div class="memory-card">
+                    <div class="memory-dot"></div>
+                    
+                    <div class="memory-content">
+                        <h2>First Vacation</h2>
+                        <div class="memory-date"><i class="fas fa-calendar-alt"></i> October 17, 2020</div>
+                        <p class="memory-quote">In your arms, I found my home...</p>
+                        <p class="memory-description">That weekend at the cabin by the lake. We stayed up all night talking by the fireplace. Watching the sunrise over the water with you is my favorite memory - the moment I realized I was home.</p>
+                    </div>
+                    
+                    <div class="memory-image">
+                        <img src="https://images.unsplash.com/photo-1516483638261-f4dbaf036963?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=600&w=800" alt="First Vacation">
+                    </div>
+                </div>
+                
+                <!-- Memory 4 -->
+                <div class="memory-card">
+                    <div class="memory-dot"></div>
+                    
+                    <div class="memory-content">
+                        <h2>Beach Sunset</h2>
+                        <div class="memory-date"><i class="fas fa-calendar-alt"></i> January 22, 2021</div>
+                        <p class="memory-quote">Every sunset with you is more beautiful than the last...</p>
+                        <p class="memory-description">You planned the perfect beach picnic. As the sun set, you held my hand and whispered that you loved me for the first time. That moment is forever etched in my heart.</p>
+                    </div>
+                    
+                    <div class="memory-image">
+                        <img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=600&w=800" alt="Beach Sunset">
+                    </div>
+                </div>
+                
+                <!-- Memory 5 -->
+                <div class="memory-card">
+                    <div class="memory-dot"></div>
+                    
+                    <div class="memory-content">
+                        <h2>Mountain Hike</h2>
+                        <div class="memory-date"><i class="fas fa-calendar-alt"></i> March 8, 2021</div>
+                        <p class="memory-quote">Your love is the greatest adventure of my life...</p>
+                        <p class="memory-description">That challenging hike where we got lost for hours. Instead of panicking, we laughed and explored until we found our way. You make every challenge an adventure worth taking.</p>
+                    </div>
+                    
+                    <div class="memory-image">
+                        <img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=600&w=800" alt="Mountain Hike">
+                    </div>
+                </div>
+                
+                <!-- Memory 6 -->
+                <div class="memory-card">
+                    <div class="memory-dot"></div>
+                    
+                    <div class="memory-content">
+                        <h2>Our Engagement</h2>
+                        <div class="memory-date"><i class="fas fa-calendar-alt"></i> May 14, 2022</div>
+                        <p class="memory-quote">With you, every moment feels like a dream...</p>
+                        <p class="memory-description">You took me back to the cafe where we first met. As we sat at our old table, you got down on one knee. My 'yes' was the easiest and most joyful decision I've ever made.</p>
+                    </div>
+                    
+                    <div class="memory-image">
+                        <img src="https://www.koimoi.com/wp-content/new-galleries/2023/09/blackpinks-lisa-to-sign-new-contract-with-us-record-label-instead-of-yg-entertainment-amid-the-k-pop-girl-groups-uncertain-future-01.jpg" alt="Our Engagement">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <p id="footer-text">Forever and Always</p>
+            <div class="emoji-container" id="emoji-container">
+                <div class="emoji-circle">❤️</div>
+                <div class="emoji-circle">💕</div>
+                <div class="emoji-circle">💍</div>
+                <div class="emoji-circle">💑</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize GSAP
+            gsap.registerPlugin(ScrollTrigger);
+            
+            // Create background elements
+            const heartsContainer = document.getElementById('hearts-container');
+            const sparklesContainer = document.getElementById('sparkles-container');
+            
+            function createHeart() {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.innerHTML = '❤️';
+                heart.style.left = `${Math.random() * 100}vw`;
+                heart.style.fontSize = `${15 + Math.random() * 25}px`;
+                heart.style.opacity = `${0.4 + Math.random() * 0.6}`;
+                heart.style.animationDuration = `${18 + Math.random() * 20}s`;
+                heartsContainer.appendChild(heart);
+                
+                setTimeout(() => heart.remove(), 38000);
+            }
+            
+            function createSparkle() {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                sparkle.style.left = `${Math.random() * 100}vw`;
+                sparkle.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 75%)`;
+                sparkle.style.boxShadow = `0 0 15px 3px hsl(${Math.random() * 360}, 100%, 75%)`;
+                sparkle.style.animationDuration = `${15 + Math.random() * 20}s`;
+                sparklesContainer.appendChild(sparkle);
+                
+                setTimeout(() => sparkle.remove(), 35000);
+            }
+            
+            setInterval(createHeart, 500);
+            setInterval(createSparkle, 400);
+            
+            // Animate header elements
+            gsap.to('#main-title', {
+                opacity: 1,
+                y: 0,
+                duration: 1.8,
+                ease: 'elastic.out(1, 0.7)',
+                delay: 0.5
+            });
+            
+            gsap.to('#subtitle', {
+                opacity: 1,
+                y: 0,
+                duration: 1.5,
+                delay: 1
+            });
+            
+            // Animate memory cards
+            const memoryCards = document.querySelectorAll('.memory-card');
+            memoryCards.forEach((card, index) => {
+                gsap.fromTo(card, 
+                    { opacity: 0, y: 80, rotation: index % 2 === 0 ? 5 : -5 },
+                    {
+                        opacity: 1,
+                        y: 0,
+                        rotation: 0,
+                        duration: 1.2,
+                        ease: 'back.out(1.7)',
+                        scrollTrigger: {
+                            trigger: card,
+                            start: 'top 90%',
+                            toggleActions: 'play none none none'
+                        },
+                        delay: index * 0.2
+                    }
+                );
+            });
+            
+            // Animate footer elements
+            gsap.to('#footer-text', {
+                opacity: 1,
+                y: 0,
+                duration: 1.5,
+                delay: 1.8,
+                scrollTrigger: {
+                    trigger: '.footer',
+                    start: 'top 90%',
+                    toggleActions: 'play none none none'
+                }
+            });
+            
+            gsap.to('#emoji-container', {
+                opacity: 1,
+                y: 0,
+                duration: 1.2,
+                delay: 2,
+                scrollTrigger: {
+                    trigger: '.footer',
+                    start: 'top 90%',
+                    toggleActions: 'play none none none'
+                }
+            });
+            
+            // Add hover effect to memory cards
+            memoryCards.forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    gsap.to(card, {
+                        scale: 1.02,
+                        duration: 0.5
+                    });
+                });
+                
+                card.addEventListener('mouseleave', () => {
+                    gsap.to(card, {
+                        scale: 1,
+                        duration: 0.5
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>

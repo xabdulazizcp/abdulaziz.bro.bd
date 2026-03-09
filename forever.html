@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forever Us</title>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Dancing Script', cursive;
+            background: linear-gradient(135deg, #1a0638, #4a044e, #8a0841);
+            color: #ffd1e6;
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+        }
+        
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(15px);
+            border-radius: 50px;
+            padding: 10px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            animation: floatNav 8s infinite ease-in-out;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .nav-link {
+            padding: 10px 18px;
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.3);
+            color: #f9a8d4;
+            text-decoration: none;
+            font-size: 16px;
+            transition: all 0.4s ease;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav-link:hover {
+            background: linear-gradient(45deg, #ec4899, #d946ef);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(236, 72, 153, 0.4);
+        }
+        
+        .nav-link.active {
+            background: linear-gradient(45deg, #ec4899, #d946ef);
+            color: white;
+            box-shadow: 0 0 20px rgba(236, 72, 153, 0.6);
+        }
+        
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 140px 20px 100px;
+            position: relative;
+            z-index: 20;
+            text-align: center;
+        }
+        
+        /* Title */
+        .title {
+            font-family: 'Great Vibes', cursive;
+            font-size: 6rem;
+            color: #f0abfc;
+            margin-bottom: 40px;
+            text-shadow: 0 0 30px rgba(240, 171, 252, 0.6);
+            opacity: 0;
+            transform: translateY(-30px);
+            position: relative;
+        }
+        
+        .title::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 250px;
+            height: 3px;
+            background: linear-gradient(to right, transparent, #f0abfc, transparent);
+            border-radius: 2px;
+            opacity: 0.7;
+        }
+        
+        /* Proposal Button */
+        .proposal-btn-container {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 60px;
+            z-index: 30;
+        }
+        
+        .proposal-btn {
+            position: relative;
+            padding: 25px 70px;
+            font-size: 2.5rem;
+            font-family: 'Dancing Script', cursive;
+            background: linear-gradient(45deg, #ec4899, #d946ef);
+            border: none;
+            border-radius: 50px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 0 10px 30px rgba(236, 72, 153, 0.5);
+            overflow: hidden;
+            z-index: 10;
+            letter-spacing: 2px;
+        }
+        
+        .proposal-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(236, 72, 153, 0.8);
+        }
+        
+        .btn-glow {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #ec4899, #d946ef);
+            border-radius: 50px;
+            filter: blur(20px);
+            opacity: 0.5;
+            animation: pulseGlow 3s infinite alternate;
+            z-index: -1;
+        }
+        
+        /* Acceptance Message */
+        .acceptance-message {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            z-index: 30;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border-radius: 30px;
+            padding: 50px 40px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            max-width: 800px;
+            margin: 0 auto;
+            border: 1px solid rgba(255, 182, 193, 0.2);
+            transform: scale(0.8);
+            opacity: 0;
+        }
+        
+        .acceptance-title {
+            font-family: 'Great Vibes', cursive;
+            font-size: 5rem;
+            color: #f0abfc;
+            margin-bottom: 40px;
+            text-shadow: 0 0 20px rgba(240, 171, 252, 0.8);
+            position: relative;
+        }
+        
+        .emoji-container {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .emoji {
+            font-size: 4.5rem;
+            animation: bounce 2s infinite;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
+        }
+        
+        .continue-btn {
+            padding: 18px 50px;
+            background: linear-gradient(45deg, #c084fc, #8b5cf6);
+            border: none;
+            border-radius: 50px;
+            color: white;
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.8rem;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 0 8px 20px rgba(139, 92, 246, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .continue-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(139, 92, 246, 0.6);
+        }
+        
+        .continue-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        
+        .continue-btn:hover::before {
+            opacity: 1;
+            animation: shimmer 2s infinite linear;
+        }
+        
+        /* Footer */
+        .footer {
+            position: fixed;
+            bottom: 40px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 1.8rem;
+            color: #f9a8d4;
+            z-index: 100;
+            opacity: 0;
+            text-shadow: 0 0 10px rgba(249, 168, 212, 0.5);
+        }
+        
+        /* Background elements */
+        .floating-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .heart {
+            position: absolute;
+            font-size: 28px;
+            opacity: 0;
+            z-index: 2;
+            animation: float 18s linear infinite;
+            color: #f0abfc;
+            text-shadow: 0 0 15px rgba(240, 171, 252, 0.7);
+        }
+        
+        .petal {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50% 0 50% 50%;
+            transform: rotate(45deg);
+            background: linear-gradient(to bottom right, #f9a8d4, #f0abfc);
+            box-shadow: 0 0 10px rgba(249, 168, 212, 0.7);
+            z-index: 2;
+            opacity: 0;
+            animation: floatPetal 20s linear infinite;
+        }
+        
+        .bubble {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.2));
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            z-index: 2;
+            opacity: 0;
+            animation: floatBubble 15s linear infinite;
+        }
+        
+        .sparkle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #f0abfc;
+            box-shadow: 0 0 10px 2px #f0abfc;
+            z-index: 2;
+            opacity: 0;
+            animation: floatSparkle 12s linear infinite;
+        }
+        
+        /* Decor elements */
+        .decor-circle {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(60px);
+            z-index: 0;
+            animation: floatCircle 25s infinite ease-in-out;
+        }
+        
+        .circle-1 {
+            width: 400px;
+            height: 400px;
+            background: rgba(236, 72, 153, 0.25);
+            top: 15%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+        
+        .circle-2 {
+            width: 500px;
+            height: 500px;
+            background: rgba(216, 45, 112, 0.2);
+            bottom: 15%;
+            right: 10%;
+            animation-delay: 5s;
+        }
+        
+        .circle-3 {
+            width: 350px;
+            height: 350px;
+            background: rgba(139, 92, 246, 0.2);
+            top: 40%;
+            right: 15%;
+            animation-delay: 10s;
+        }
+        
+        .floating-ring {
+            position: absolute;
+            font-size: 48px;
+            opacity: 0.1;
+            z-index: 2;
+            animation: floatRing 40s infinite linear;
+            color: #f0abfc;
+        }
+        
+        /* Animations */
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg) scale(0.8);
+                opacity: 0.7;
+            }
+            50% {
+                opacity: 1;
+                transform: translateY(50vh) rotate(180deg) scale(1.1);
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg) scale(0.8);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes floatPetal {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0.7;
+            }
+            50% {
+                opacity: 1;
+                transform: translateY(50vh) rotate(180deg);
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes floatBubble {
+            0% {
+                transform: translateY(100vh) scale(0.5);
+                opacity: 0.5;
+            }
+            50% {
+                opacity: 0.8;
+                transform: translateY(50vh) scale(1);
+            }
+            100% {
+                transform: translateY(-100vh) scale(0.5);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes floatSparkle {
+            0% {
+                transform: translateY(100vh) translateX(0) scale(1);
+                opacity: 0.8;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(100px) scale(0);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes floatCircle {
+            0%, 100% {
+                transform: translate(0, 0);
+            }
+            25% {
+                transform: translate(20px, 30px);
+            }
+            50% {
+                transform: translate(0, 50px);
+            }
+            75% {
+                transform: translate(-20px, 30px);
+            }
+        }
+        
+        @keyframes floatRing {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0.1;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0.05;
+            }
+        }
+        
+        @keyframes pulseGlow {
+            0% { opacity: 0.4; }
+            100% { opacity: 0.7; }
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-25px) scale(1.1); }
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-150%) skewX(-30deg); }
+            100% { transform: translateX(150%) skewX(-30deg); }
+        }
+        
+        @keyframes floatText {
+            0% { transform: translateY(0) rotate(0); }
+            25% { transform: translateY(-15px) rotate(2deg); }
+            50% { transform: translateY(0) rotate(0); }
+            75% { transform: translateY(-10px) rotate(-2deg); }
+            100% { transform: translateY(0) rotate(0); }
+        }
+        
+        @keyframes floatNav {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .animate-float {
+            animation: floatText 6s infinite ease-in-out;
+        }
+        
+        /* Responsive */
+        @media (max-width: 1000px) {
+            .title {
+                font-size: 5rem;
+            }
+            
+            .proposal-btn {
+                font-size: 2rem;
+                padding: 20px 60px;
+            }
+            
+            .acceptance-title {
+                font-size: 4rem;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .title {
+                font-size: 3.5rem;
+            }
+            
+            .proposal-btn {
+                font-size: 1.6rem;
+                padding: 18px 50px;
+            }
+            
+            .acceptance-title {
+                font-size: 3rem;
+            }
+            
+            .emoji {
+                font-size: 3.5rem;
+            }
+            
+            nav {
+                top: 15px;
+                right: 15px;
+                padding: 8px;
+            }
+            
+            .nav-links {
+                gap: 4px;
+            }
+            
+            .nav-link {
+                padding: 8px 14px;
+                font-size: 14px;
+            }
+            
+            .container {
+                padding: 120px 15px 80px;
+            }
+        }
+        
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(74, 4, 78, 0.3);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(#ec4899, #d946ef);
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(#d946ef, #c084fc);
+        }
+    </style>
+</head>
+<body>
+    <!-- Background elements -->
+    <div class="floating-container" id="floating-container"></div>
+    
+    <!-- Decor circles -->
+    <div class="decor-circle circle-1"></div>
+    <div class="decor-circle circle-2"></div>
+    <div class="decor-circle circle-3"></div>
+    
+    <!-- Floating rings -->
+    <div class="floating-ring" style="top: 10%; left: 5%;">💍</div>
+    <div class="floating-ring" style="top: 20%; right: 8%;">💎</div>
+    <div class="floating-ring" style="bottom: 15%; left: 7%;">💎</div>
+    <div class="floating-ring" style="bottom: 25%; right: 6%;">💍</div>
+    
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="memories.html" class="nav-link">Memories</a>
+            <a href="reasons.html" class="nav-link">Reasons</a>
+            <a href="heartbeat.html" class="nav-link">Heartbeat</a>
+            <a href="forever.html" class="nav-link active">Forever</a>
+        </div>
+    </nav>
+    
+    <!-- Main content -->
+    <div class="container">
+        <h1 class="title" id="main-title">Forever Us</h1>
+        
+        <div class="proposal-btn-container">
+            <button id="proposal-btn" class="proposal-btn">
+                <div class="btn-glow"></div>
+                <span>Will You Be Mine Forever?</span>
+            </button>
+        </div>
+        
+        <div id="acceptance-message" class="acceptance-message">
+            <h2 class="acceptance-title">Yes! Forever and Always</h2>
+            <div class="emoji-container">
+                <div class="emoji" style="animation-delay: 0.1s">❤️</div>
+                <div class="emoji" style="animation-delay: 0.3s">💍</div>
+                <div class="emoji" style="animation-delay: 0.5s">💕</div>
+            </div>
+            <button id="continue-btn" class="continue-btn">Continue Our Love Story</button>
+        </div>
+        
+        <div class="footer" id="footer">
+            <p class="animate-float">Made with ❤️ By Shobhit</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const floatingContainer = document.getElementById('floating-container');
+            const proposalBtn = document.getElementById('proposal-btn');
+            const acceptanceMessage = document.getElementById('acceptance-message');
+            const continueBtn = document.getElementById('continue-btn');
+            
+            // Create floating hearts
+            function createHeart() {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.innerHTML = '❤️';
+                heart.style.left = `${Math.random() * 100}vw`;
+                heart.style.fontSize = `${15 + Math.random() * 25}px`;
+                heart.style.opacity = `${0.4 + Math.random() * 0.6}`;
+                heart.style.animationDuration = `${15 + Math.random() * 20}s`;
+                floatingContainer.appendChild(heart);
+                
+                // Remove heart after animation completes
+                setTimeout(() => {
+                    heart.remove();
+                }, 35000);
+            }
+            
+            // Create floating petals
+            function createPetal() {
+                const petal = document.createElement('div');
+                petal.className = 'petal';
+                petal.style.left = `${Math.random() * 100}vw`;
+                petal.style.backgroundColor = `hsl(${Math.random() * 30 + 330}, 70%, 70%)`;
+                petal.style.opacity = `${0.5 + Math.random() * 0.5}`;
+                petal.style.animationDuration = `${20 + Math.random() * 25}s`;
+                floatingContainer.appendChild(petal);
+                
+                // Remove petal after animation completes
+                setTimeout(() => {
+                    petal.remove();
+                }, 45000);
+            }
+            
+            // Create floating bubbles
+            function createBubble() {
+                const bubble = document.createElement('div');
+                bubble.className = 'bubble';
+                bubble.style.left = `${Math.random() * 100}vw`;
+                const size = 10 + Math.random() * 25;
+                bubble.style.width = `${size}px`;
+                bubble.style.height = `${size}px`;
+                bubble.style.opacity = `${0.3 + Math.random() * 0.5}`;
+                bubble.style.animationDuration = `${15 + Math.random() * 20}s`;
+                floatingContainer.appendChild(bubble);
+                
+                // Remove bubble after animation completes
+                setTimeout(() => {
+                    bubble.remove();
+                }, 35000);
+            }
+            
+            // Create floating sparkles
+            function createSparkle() {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                sparkle.style.left = `${Math.random() * 100}vw`;
+                sparkle.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 75%)`;
+                sparkle.style.boxShadow = `0 0 10px 2px hsl(${Math.random() * 360}, 100%, 75%)`;
+                sparkle.style.opacity = `${0.5 + Math.random() * 0.5}`;
+                sparkle.style.animationDuration = `${12 + Math.random() * 15}s`;
+                floatingContainer.appendChild(sparkle);
+                
+                // Remove sparkle after animation completes
+                setTimeout(() => {
+                    sparkle.remove();
+                }, 30000);
+            }
+            
+            // Start creating background elements
+            setInterval(createHeart, 600);
+            setInterval(createPetal, 700);
+            setInterval(createBubble, 500);
+            setInterval(createSparkle, 400);
+            
+            // Initialize GSAP
+            gsap.registerPlugin();
+            
+            // Animate title
+            gsap.to('#main-title', {
+                opacity: 1,
+                y: 0,
+                duration: 1.8,
+                ease: 'elastic.out(1, 0.7)',
+                delay: 0.5
+            });
+            
+            // Animate footer
+            gsap.to('#footer', {
+                opacity: 1,
+                duration: 1.5,
+                delay: 1.5
+            });
+            
+            // Handle proposal button click
+            proposalBtn.addEventListener('click', function() {
+                // Create particle explosion
+                const rect = proposalBtn.getBoundingClientRect();
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
+                
+                for (let i = 0; i < 50; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'sparkle';
+                    particle.style.left = `${centerX}px`;
+                    particle.style.top = `${centerY}px`;
+                    particle.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 75%)`;
+                    particle.style.boxShadow = `0 0 10px 2px hsl(${Math.random() * 360}, 100%, 75%)`;
+                    particle.style.width = '10px';
+                    particle.style.height = '10px';
+                    floatingContainer.appendChild(particle);
+                    
+                    const angle = Math.random() * Math.PI * 2;
+                    const distance = 100 + Math.random() * 200;
+                    const size = 5 + Math.random() * 15;
+                    
+                    gsap.to(particle, {
+                        x: Math.cos(angle) * distance,
+                        y: Math.sin(angle) * distance,
+                        width: size,
+                        height: size,
+                        opacity: 0,
+                        duration: 1.5,
+                        ease: 'power2.out',
+                        onComplete: () => particle.remove()
+                    });
+                }
+                
+                // Hide button and show acceptance message
+                gsap.to(proposalBtn, {
+                    opacity: 0,
+                    scale: 0,
+                    duration: 0.5,
+                    onComplete: () => {
+                        proposalBtn.style.display = 'none';
+                        acceptanceMessage.style.display = 'flex';
+                        
+                        // Animate in the acceptance message
+                        gsap.to(acceptanceMessage, {
+                            opacity: 1,
+                            scale: 1,
+                            duration: 1.5,
+                            ease: 'elastic.out(1, 0.7)'
+                        });
+                    }
+                });
+            });
+            
+            // Continue button functionality
+            continueBtn.addEventListener('click', function() {
+                // Create a nice transition effect
+                document.body.style.overflow = 'hidden';
+                
+                gsap.to('.container', {
+                    opacity: 0,
+                    y: -50,
+                    duration: 1,
+                    onComplete: function() {
+                        alert('Continuing to our love story...');
+                        document.body.style.overflow = '';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cosmic Love | Eternal Romance</title>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0d0221, #17002e, #260047, #3a0066);
+            font-family: 'Dancing Script', cursive;
+            color: #ffffff;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border-radius: 50px;
+            padding: 12px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            animation: floatNav 8s infinite ease-in-out;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .nav-link {
+            padding: 12px 20px;
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.15);
+            color: #e6c6ff;
+            text-decoration: none;
+            font-size: 16px;
+            transition: all 0.4s ease;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .nav-link:hover {
+            background: linear-gradient(45deg, #ff6b9e, #c084fc);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(192, 132, 252, 0.5);
+        }
+        
+        .nav-link.active {
+            background: linear-gradient(45deg, #ff4b91, #8b5cf6);
+            color: white;
+            box-shadow: 0 0 25px rgba(139, 92, 246, 0.7);
+        }
+        
+        /* Main container */
+        .container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            z-index: 20;
+            overflow: hidden;
+        }
+        
+        /* Title styling */
+        .title-container {
+            position: relative;
+            margin-bottom: 60px;
+            text-align: center;
+            perspective: 1000px;
+        }
+        
+        .title-glow {
+            position: absolute;
+            top: -30px;
+            left: -30px;
+            right: -30px;
+            bottom: -30px;
+            background: radial-gradient(circle, #8b5cf6, #ec4899, transparent 70%);
+            border-radius: 50%;
+            filter: blur(40px);
+            opacity: 0.5;
+            z-index: -1;
+            animation: pulseGlow 8s infinite alternate;
+        }
+        
+        .title {
+            font-family: 'Great Vibes', cursive;
+            font-size: 8rem;
+            background: linear-gradient(to right, #ffd6ff, #c8b6ff, #bbd0ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 40px;
+            text-shadow: 0 0 20px rgba(187, 208, 255, 0.3);
+            position: relative;
+            opacity: 0;
+            transform: translateY(-50px) rotateX(20deg);
+        }
+        
+        .title span {
+            display: inline-block;
+            position: relative;
+            transform-origin: center bottom;
+        }
+        
+        /* Quote styling */
+        .quotes {
+            max-width: 800px;
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+            perspective: 1000px;
+        }
+        
+        .quote {
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            opacity: 0;
+            transform: translateY(30px);
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            position: relative;
+            z-index: 2;
+            padding: 20px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .quote:nth-child(1) {
+            color: #ffd6ff;
+        }
+        
+        .quote:nth-child(2) {
+            color: #c8b6ff;
+        }
+        
+        /* Button styling */
+        .love-button-container {
+            position: relative;
+            margin-top: 20px;
+            perspective: 1000px;
+        }
+        
+        .love-button {
+            position: relative;
+            padding: 25px 60px;
+            font-size: 2.5rem;
+            font-family: 'Dancing Script', cursive;
+            background: linear-gradient(45deg, #ff6b9e, #c084fc, #8b5cf6);
+            border: none;
+            border-radius: 60px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 15px 35px rgba(139, 92, 246, 0.5);
+            overflow: hidden;
+            transform: translateY(50px) rotateX(15deg);
+            opacity: 0;
+            z-index: 10;
+        }
+        
+        .love-button:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(139, 92, 246, 0.7);
+        }
+        
+        .button-glow {
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            background: linear-gradient(45deg, #ff6b9e, #c084fc, #8b5cf6);
+            border-radius: 70px;
+            filter: blur(20px);
+            opacity: 0.4;
+            animation: pulseGlow 4s infinite alternate;
+            z-index: -1;
+        }
+        
+        /* Footer styling */
+        .footer {
+            position: fixed;
+            bottom: 40px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 1.8rem;
+            color: #e6c6ff;
+            z-index: 100;
+            opacity: 0;
+        }
+        
+        /* Background elements */
+        .stars-container, 
+        .hearts-container, 
+        .emojis-container, 
+        .particles-container, 
+        .bubbles-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .star {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background-color: white;
+            border-radius: 50%;
+            opacity: 0;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+        }
+        
+        .heart {
+            position: absolute;
+            font-size: 28px;
+            opacity: 0;
+            z-index: 1;
+            animation: floatHeart 25s linear infinite;
+            color: #ff6b9e;
+            text-shadow: 0 0 15px rgba(255, 107, 158, 0.7);
+        }
+        
+        .emoji {
+            position: absolute;
+            font-size: 32px;
+            opacity: 0;
+            z-index: 1;
+            animation: floatEmoji 30s linear infinite;
+            filter: drop-shadow(0 0 10px rgba(192, 132, 252, 0.8));
+        }
+        
+        .particle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            opacity: 0.8;
+            box-shadow: 0 0 15px currentColor;
+        }
+        
+        .bubble {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255,255,255,0.6), transparent 70%);
+            opacity: 0.6;
+            animation: floatBubble 20s linear infinite;
+        }
+        
+        /* Decor elements */
+        .decor-planet {
+            position: fixed;
+            border-radius: 50%;
+            z-index: 2;
+            filter: blur(1px);
+            animation: floatPlanet 40s infinite linear;
+            box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.8), 0 0 50px rgba(255, 255, 255, 0.2);
+        }
+        
+        .planet-1 {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle at 30% 30%, #8a2be2, #4b0082);
+            top: 15%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+        
+        .planet-2 {
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle at 30% 30%, #ff6b6b, #d1005d);
+            bottom: 20%;
+            right: 15%;
+            animation-delay: 10s;
+        }
+        
+        .planet-3 {
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle at 30% 30%, #5ce1e6, #0099cc);
+            top: 30%;
+            right: 25%;
+            animation-delay: 20s;
+        }
+        
+        .galaxy {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: 0;
+            opacity: 0.4;
+        }
+        
+        .galaxy-1 {
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, #8a2be2, transparent 70%);
+            top: -400px;
+            right: -400px;
+        }
+        
+        .galaxy-2 {
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, #ff6b6b, transparent 70%);
+            bottom: -300px;
+            left: -300px;
+        }
+        
+        /* Animations */
+        @keyframes pulseGlow {
+            0% { opacity: 0.3; transform: scale(0.95); }
+            100% { opacity: 0.6; transform: scale(1.05); }
+        }
+        
+        @keyframes floatHeart {
+            0% {
+                transform: translateY(100vh) rotate(0deg) scale(0.8);
+                opacity: 0.7;
+            }
+            50% {
+                opacity: 1;
+                transform: translateY(50vh) rotate(180deg) scale(1.1);
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg) scale(0.8);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes floatEmoji {
+            0% {
+                transform: translateY(100vh) rotate(0deg) scale(0.8);
+                opacity: 0.7;
+            }
+            50% {
+                opacity: 1;
+                transform: translateY(50vh) rotate(180deg) scale(1.1);
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg) scale(0.8);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes floatBubble {
+            0% {
+                transform: translateY(100vh) scale(0.5);
+                opacity: 0.7;
+            }
+            50% {
+                opacity: 0.8;
+                transform: translateY(50vh) scale(1);
+            }
+            100% {
+                transform: translateY(-100vh) scale(0.5);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes floatPlanet {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+        
+        @keyframes floatText {
+            0% { transform: translateY(0) rotate(0); }
+            25% { transform: translateY(-15px) rotate(2deg); }
+            50% { transform: translateY(0) rotate(0); }
+            75% { transform: translateY(-10px) rotate(-2deg); }
+            100% { transform: translateY(0) rotate(0); }
+        }
+        
+        @keyframes floatNav {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .animate-float {
+            animation: floatText 6s infinite ease-in-out;
+        }
+        
+        /* Responsive */
+        @media (max-width: 1000px) {
+            .title {
+                font-size: 6rem;
+            }
+            
+            .quote {
+                font-size: 2rem;
+            }
+            
+            .love-button {
+                font-size: 2rem;
+                padding: 20px 50px;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .title {
+                font-size: 4rem;
+            }
+            
+            .quote {
+                font-size: 1.6rem;
+            }
+            
+            .love-button {
+                font-size: 1.8rem;
+                padding: 18px 40px;
+            }
+            
+            nav {
+                top: 15px;
+                right: 15px;
+                padding: 10px;
+            }
+            
+            .nav-links {
+                gap: 5px;
+            }
+            
+            .nav-link {
+                padding: 10px 16px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background effect containers -->
+    <div class="stars-container"></div>
+    <div class="hearts-container"></div>
+    <div class="emojis-container"></div>
+    <div class="particles-container"></div>
+    <div class="bubbles-container"></div>
+    
+    <!-- Decor planets and galaxies -->
+    <div class="decor-planet planet-1"></div>
+    <div class="decor-planet planet-2"></div>
+    <div class="decor-planet planet-3"></div>
+    <div class="galaxy galaxy-1"></div>
+    <div class="galaxy galaxy-2"></div>
+    
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link active"><i class="fas fa-home"></i> Home</a>
+            <a href="memories.html" class="nav-link"><i class="fas fa-images"></i> Memories</a>
+            <a href="reasons.html" class="nav-link"><i class="fas fa-heart"></i> Reasons</a>
+            <a href="heartbeat.html" class="nav-link"><i class="fas fa-heartbeat"></i> Heartbeat</a>
+            <a href="forever.html" class="nav-link"><i class="fas fa-infinity"></i> Forever</a>
+        </div>
+    </nav>
+    
+    <!-- Main content -->
+    <div class="container">
+        <div class="title-container">
+            <div class="title-glow"></div>
+            <h1 class="title" id="cosmic-title">
+                <span>O</span>
+                <span>u</span>
+                <span>r</span>
+                <span>&nbsp;</span>
+                <span>E</span>
+                <span>t</span>
+                <span>e</span>
+                <span>r</span>
+                <span>n</span>
+                <span>a</span>
+                <span>l</span>
+                <span>&nbsp;</span>
+                <span>L</span>
+                <span>o</span>
+                <span>v</span>
+                <span>e</span>
+            </h1>
+        </div>
+        
+        <div class="quotes">
+            <p class="quote">"In your eyes, I found my home. In your heart, I found my love."</p>
+            <p class="quote">"With every beat of my heart, I love you more."</p>
+        </div>
+        
+        <div class="love-button-container">
+            <button class="love-button" id="love-button">
+                <div class="button-glow"></div>
+                <span>Enter Our Love Story</span>
+            </button>
+        </div>
+        
+        <div class="footer" id="footer">
+            <p class="animate-float">Made with ❤️ By Shobhit</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Create twinkling stars
+            function createStar() {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = `${Math.random() * 100}vw`;
+                star.style.top = `${Math.random() * 100}vh`;
+                document.querySelector('.stars-container').appendChild(star);
+                
+                gsap.to(star, {
+                    opacity: Math.random() * 0.8 + 0.2,
+                    duration: 1 + Math.random() * 3,
+                    repeat: -1,
+                    yoyo: true
+                });
+                
+                setTimeout(() => star.remove(), 8000);
+            }
+            
+            // Create floating hearts
+            function createHeart() {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.innerHTML = '❤️';
+                heart.style.left = `${Math.random() * 100}vw`;
+                heart.style.fontSize = `${15 + Math.random() * 30}px`;
+                heart.style.opacity = `${0.4 + Math.random() * 0.6}`;
+                heart.style.animationDuration = `${15 + Math.random() * 20}s`;
+                document.querySelector('.hearts-container').appendChild(heart);
+                
+                setTimeout(() => heart.remove(), 30000);
+            }
+            
+            // Create floating emojis
+            function createEmoji() {
+                const emojis = ['💖', '💕', '💓', '💗', '💘', '💞', '💝', '😍', '🥰', '😘', '💑', '👩‍❤️‍👨', '💏'];
+                const emoji = document.createElement('div');
+                emoji.className = 'emoji';
+                emoji.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
+                emoji.style.left = `${Math.random() * 100}vw`;
+                emoji.style.fontSize = `${25 + Math.random() * 30}px`;
+                emoji.style.opacity = `${0.5 + Math.random() * 0.5}`;
+                emoji.style.animationDuration = `${20 + Math.random() * 25}s`;
+                document.querySelector('.emojis-container').appendChild(emoji);
+                
+                setTimeout(() => emoji.remove(), 40000);
+            }
+            
+            // Create floating particles
+            function createParticle() {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = `${Math.random() * 100}vw`;
+                particle.style.top = `${Math.random() * 100}vh`;
+                particle.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 75%)`;
+                document.querySelector('.particles-container').appendChild(particle);
+                
+                gsap.to(particle, {
+                    y: '-=100',
+                    x: Math.random() * 100 - 50,
+                    opacity: 0,
+                    scale: 0,
+                    duration: 3 + Math.random() * 5,
+                    ease: 'power1.out',
+                    onComplete: () => particle.remove()
+                });
+            }
+            
+            // Create floating bubbles
+            function createBubble() {
+                const bubble = document.createElement('div');
+                bubble.className = 'bubble';
+                bubble.style.left = `${Math.random() * 100}vw`;
+                const size = 10 + Math.random() * 40;
+                bubble.style.width = `${size}px`;
+                bubble.style.height = `${size}px`;
+                document.querySelector('.bubbles-container').appendChild(bubble);
+                
+                gsap.to(bubble, {
+                    y: '-100vh',
+                    opacity: 0,
+                    duration: 15 + Math.random() * 25,
+                    ease: 'power1.in',
+                    onComplete: () => bubble.remove()
+                });
+            }
+            
+            // Start background effects
+            const starInterval = setInterval(createStar, 100);
+            const heartInterval = setInterval(createHeart, 400);
+            const emojiInterval = setInterval(createEmoji, 600);
+            const particleInterval = setInterval(createParticle, 150);
+            const bubbleInterval = setInterval(createBubble, 500);
+            
+            // Animate title letters
+            const title = document.getElementById('cosmic-title');
+            const titleLetters = title.querySelectorAll('span');
+            
+            gsap.set(titleLetters, { opacity: 0, y: 50, rotationX: 30 });
+            
+            gsap.to(titleLetters, {
+                opacity: 1,
+                y: 0,
+                rotationX: 0,
+                stagger: 0.1,
+                duration: 1.2,
+                ease: 'back.out(1.7)',
+                delay: 0.5
+            });
+            
+            // Animate button
+            const button = document.getElementById('love-button');
+            
+            gsap.to(button, {
+                y: 0,
+                opacity: 1,
+                rotationX: 0,
+                duration: 1.5,
+                delay: 2,
+                ease: 'elastic.out(1, 0.7)'
+            });
+            
+            // Add pulsing effect to button
+            gsap.to(button, {
+                scale: 1.05,
+                duration: 1.8,
+                repeat: -1,
+                yoyo: true,
+                ease: 'power1.inOut'
+            });
+            
+            // Animate quotes
+            const quotes = document.querySelectorAll('.quote');
+            quotes.forEach((quote, index) => {
+                gsap.to(quote, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 1.2,
+                    delay: 1 + (index * 0.7),
+                    ease: 'back.out(1.7)'
+                });
+            });
+            
+            // Animate footer
+            const footer = document.getElementById('footer');
+            gsap.to(footer, {
+                opacity: 1,
+                duration: 1.5,
+                delay: 3.5
+            });
+            
+            // Button click event
+            button.addEventListener('click', function() {
+                // Create a burst of hearts on click
+                for(let i = 0; i < 30; i++) {
+                    setTimeout(() => {
+                        const heart = document.createElement('div');
+                        heart.className = 'heart';
+                        heart.innerHTML = '❤️';
+                        heart.style.left = '50%';
+                        heart.style.top = '50%';
+                        heart.style.position = 'fixed';
+                        heart.style.fontSize = '24px';
+                        heart.style.transform = 'translate(-50%, -50%)';
+                        document.querySelector('.hearts-container').appendChild(heart);
+                        
+                        gsap.to(heart, {
+                            x: (Math.random() - 0.5) * 800,
+                            y: (Math.random() - 1) * 800,
+                            opacity: 0,
+                            scale: 0,
+                            rotation: Math.random() * 360,
+                            duration: 2,
+                            ease: 'power2.out',
+                            onComplete: () => heart.remove()
+                        });
+                    }, i * 50);
+                }
+                
+                // Add pulse effect
+                gsap.to(button, {
+                    scale: 1.2,
+                    duration: 0.3,
+                    yoyo: true,
+                    repeat: 1,
+                    ease: 'power2.out'
+                });
+            });
+            
+            // Create interactive background particles on mousemove
+            document.addEventListener('mousemove', (e) => {
+                if (Math.random() > 0.7) {
+                    const particle = document.createElement('div');
+                    particle.className = 'particle';
+                    particle.style.left = `${e.clientX}px`;
+                    particle.style.top = `${e.clientY}px`;
+                    particle.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 75%)`;
+                    document.querySelector('.particles-container').appendChild(particle);
+                    
+                    gsap.to(particle, {
+                        x: (Math.random() - 0.5) * 200,
+                        y: (Math.random() - 0.5) * 200,
+                        opacity: 0,
+                        scale: 0,
+                        duration: 1.5,
+                        ease: 'power1.out',
+                        onComplete: () => particle.remove()
+                    });
+                }
+            });
+            
+            // Cleanup on page unload
+            window.addEventListener('beforeunload', function() {
+                clearInterval(starInterval);
+                clearInterval(heartInterval);
+                clearInterval(emojiInterval);
+                clearInterval(particleInterval);
+                clearInterval(bubbleInterval);
+            });
+        });
+    </script>
+</body>
+</html>
