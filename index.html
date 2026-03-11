@@ -1,0 +1,40 @@
+
+<!DOCTYPE html>
+<html>
+<meta charset='UTF-8' />
+<meta content='width=device-width, initial-scale=1, user-scalable=1, minimum-scale=1, maximum-scale=5' name='viewport' />
+<meta content='IE=edge' http-equiv='X-UA-Compatible' />
+<script src="https://unpkg.com/typeit@8.7.0/dist/index.umd.js"></script>
+<head>
+  <title>Surprisseeee - I have something here..</title>
+</head>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Caveat&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Inter&family=Itim&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Shippori+Antique:wght@400;700&display=swap');
+  body{background:#000;color:#fff;font-family:'Shippori Antique',sans-serif;padding:20px;text-align:center}
+  #loveBtn{font-size:40px;cursor:pointer;margin-top:100px}
+  #msg{display:none;margin-top:40px;font-size:20px}
+</style>
+<body>
+
+<div id="loveBtn">❤️</div>
+<p>Touch the LOVE!</p>
+
+<div id="msg">
+<p>Wait a moment 😋</p>
+<p>Now I want to say...</p>
+<p><b>I love youuuu 😚</b></p>
+</div>
+
+<script>
+document.getElementById("loveBtn").onclick=function(){
+  document.getElementById("msg").style.display="block";
+}
+</script>
+
+</body>
+</html>
