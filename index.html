@@ -1,508 +1,438 @@
-
 <!DOCTYPE html>
-<html>
-<meta charset='UTF-8' />
-<meta content='width=device-width, initial-scale=1, user-scalable=1, minimum-scale=1, maximum-scale=5' name='viewport' />
-<meta content='IE=edge' http-equiv='X-UA-Compatible' />
-
-<script src="https://unpkg.com/typeit@8.7.0/dist/index.umd.js"></script>
-
+<html lang="bn">
 <head>
-  <title> I have something for you..</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>আব্দুল আজিজ | CEO - Cyber Protect</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-main: #050505;
+            --card-bg: #121212;
+            --accent-gold: #ffcc00;
+            --text-dim: #b3b3b3;
+            --border-soft: #222;
+            --cyber-blue: #00d2ff;
+            --xiaomi-orange: #ff6700;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: white;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            margin: 0;
+            display: flex;
+            overflow: hidden;
+        }
+
+        .sidebar {
+            width: 80px;
+            height: 100vh;
+            background: var(--card-bg);
+            border-right: 1px solid var(--border-soft);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 30px;
+            gap: 20px;
+            position: fixed;
+            z-index: 100;
+        }
+
+        .menu-btn {
+            width: 50px;
+            height: 50px;
+            background: #1a1a1a;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-dim);
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 20px;
+        }
+
+        .menu-btn:hover, .menu-btn.active {
+            background: var(--accent-gold);
+            color: black;
+            box-shadow: 0 0 15px rgba(255, 204, 0, 0.4);
+        }
+
+        .content-area {
+            margin-left: 80px;
+            padding: 40px;
+            width: calc(100% - 80px);
+            height: 100vh;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+        }
+
+        .tab-content { display: none; animation: fadeIn 0.5s ease-in-out; }
+        .tab-content.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 40px;
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid var(--border-soft);
+        }
+
+        .profile-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 4px solid var(--accent-gold);
+            object-fit: cover;
+        }
+
+        .info-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-soft);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            transition: 0.3s;
+        }
+
+        .info-card:hover { border-color: var(--accent-gold); }
+
+        .personal-info-grid, .cyber-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .info-item {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid var(--border-soft);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .info-item i { color: var(--accent-gold); width: 20px; text-align: center; }
+        .info-label { font-size: 11px; color: var(--text-dim); display: block; }
+        .info-value { font-size: 14px; font-weight: 500; }
+
+        /* Social Media Grid (1 1 1 1) */
+        .account-grid-30 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        .acc-link {
+            text-decoration: none;
+            color: white;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 15px 5px;
+            border-radius: 12px;
+            border: 1px solid var(--border-soft);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            transition: 0.3s;
+            text-align: center;
+        }
+
+        .acc-link i { font-size: 22px; }
+        .acc-link:hover {
+            border-color: var(--accent-gold);
+            transform: translateY(-3px);
+            background: rgba(255, 204, 0, 0.05);
+        }
+
+        .service-list { list-style: none; padding: 0; margin: 0; }
+        .service-list li {
+            font-size: 13px;
+            padding: 6px 0;
+            color: var(--text-dim);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid #1a1a1a;
+        }
+
+        .service-list li i { color: var(--cyber-blue); font-size: 10px; }
+
+        .contact-box { display: flex; gap: 15px; margin-top: 20px; flex-wrap: wrap; }
+        .contact-link { padding: 10px 20px; border-radius: 8px; text-decoration: none; color: white; font-size: 14px; display: flex; align-items: center; gap: 10px; }
+        .fb-page { background: #1877F2; }
+        .fb-group { background: #00A400; }
+        .gmail { background: #EA4335; }
+
+        .gold-text { color: var(--accent-gold); }
+        .cyber-text { color: var(--cyber-blue); }
+        .xiaomi-text { color: var(--xiaomi-orange); }
+
+        @media (max-width: 900px) {
+            .personal-info-grid, .cyber-grid { grid-template-columns: 1fr; }
+            .profile-header { flex-direction: column; text-align: center; }
+            .account-grid-30 { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
 </head>
-
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&display=swap');
-  @import url('https://fonts.googleapis.com/css2?family=Caveat&display=swap');
-  @import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;700&display=swap');
-  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap');
-  @import url('https://fonts.googleapis.com/css2?family=Inter&family=Itim&display=swap');
-  @import url('https://fonts.googleapis.com/css2?family=Shippori+Antique:wght@400;700&display=swap');
-
-  :root {
-    --tombol-bg: rgba(0, 0, 0, .3); 
-    --tombol-teks: #fff;
-    --tombol-bingkai: #fff;
-    --bingkai: 8px;
-    --bingkai-kiri: 1.3px solid var(--tombol-bingkai);
-    --bingkai-kanan: 1.3px solid var(--tombol-bingkai);
-    --gaya-font: 'Shippori Antique', sans-serif;
-    --gaya-font2: 'Itim', cursive;
-  }
-  @keyframes fanim {0% {background-position: 0% 0%;}25% {background-position: 100% 100%;} 50% {background-position: 0% 100%;} 75% {background-position: 50% 50%;} 100% {background-position: 0% 0%;}}
-  body{background-color:#000;font-family:var(--gaya-font);padding: 20px 25px;-webkit-user-select: none; -ms-user-select: none; user-select: none;} a{text-decoration:none;}
-  body::before{content:"\00A9  Abdul Aziz ";color:white;opacity:.2;font-size:10px;position:fixed;bottom:25px;right:25px;z-index:2}
-  #bodyblur{opacity:0;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);transition:all 1s ease;} 
-  #wallpaper{width:100%;height:100%;transform: scale(2);transition:all 1.3s ease;}
-  #beneranblur{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);-webkit-backdrop-filter:blur(0px); backdrop-filter:blur(0px);transition:all 3s ease;}
-
-  @keyframes jj{0%  {transform: scale(1.1);} 50% {transform: scale(1.2);} 100% {transform: scale(1.1);} }
-  @keyframes rts{from {transform:scale(.1);} to {transform:scale(1);} }
-  @keyframes rto{from {transform:scale(1);} to {transform:scale(1.1);} }
-  @keyframes aniopa{0% {transform: scale(1);} 50% {transform: scale(.75);} 100% {transform: scale(1);} }
-  @keyframes rtf{from {transform: rotate(0deg);} to {transform: rotate(360deg);} } 
-  @keyframes rt{from {transform: scale(.9);} to {transform: scale(1);} }
-  @keyframes kont{0%  {left:-1px; top:-3px;} 50% {left:1px; top:3px;} 100% {left:-1px; top:-3px;} }
-
-  blockquote{position:absolute;opacity:0;visibility:hidden;margin-top:100px;background:var(--tombol-bg);box-shadow: rgba(255,255,255, 0.3) 0px 7px 29px 0px;transform: scale(.1);transition:all 1s ease;margin-top:120px;margin-left:0;margin-right:0;color:var(--tombol-teks);text-shadow: 0px 2px 2px rgba(0, 0, 0, .8);}
-  blockquote{width:400px;text-align:center;line-height:1.3em;margin:0 20px;padding:20px 25px 20px 25px;border: 1px solid #fff;border-radius:12px}
-  blockquote::before{content:attr(data-text);opacity:.7;font-family: sans-serif;position:absolute;left:8px;top:8px;min-width:15px;font-size:16px;text-align:center}
-  blockquote p{font-size:15px;font-weight:700;line-height:1.4em;transition:all .5s ease;}
-  blockquote > .sty2{font-family:var(--gaya-font2);font-size:17px;font-weight:400;}
-  blockquote > .left{text-align:left}
-  blockquote p:not(#opsL, #kalimat, #kalimatb, .sty2){display:none;}
-  blockquote > #opsL{text-align:right;font-size:10px;font-weight:400;line-height:0;margin-top:24px;color:white;opacity:0;transition:all .2s ease;}
-
-  .merahmuda{color:pink}
-  .kuning{color:yellow}
-
-  .animated {animation: shake 0.3s ease-in-out 3;}
-
-  #waktu{display:none}
-  #kado1, #kado2, #kado3{font-size:16px;font-weight:400;}
-  #kalimatAkhir{transform:scale(.1);}
-  #kado1{position:absolute;opacity:0}
-  #kalove{font-size:25px;line-height:0;}
-  .kolombar .inibar{position:absolute;opacity:0;visibility:hidden;background-color:#fff;height:5px;width:100%}
-
-  #Tombol{position:relative;opacity:0;margin:0;display:flex;align-items:left;list-style:none;transform: scale(.1);transition:all 1s ease;}
-  #Tombol a{cursor:pointer;display:inline-flex;align-items:center; margin:0;margin:12px 0 12px 0;transition:all .2s ease;padding:10px;outline:0;border: 1px solid #fff;border-radius:12px;line-height:15px;background:rgba(0,0,0,.5);color:var(--tombol-teks);font-size:12px;font-weight:700;white-space:nowrap;overflow:hidden;box-shadow: rgba(255,255,255, 0.3) 0px 7px 29px 0px;z-index:1} 
-  #Bn{margin:12px 0 12px 12px !important;}
-  #Bn2{position:absolute;opacity:0;width:0}
-
-  #Content{animation-name:none;animation-duration: 3s;animation-iteration-count: infinite;position:relative;opacity:0;margin-top:50px;width:100%;height:180px;transition:all .7s ease;}
-  #Content > *{display:flex;align-items:center;text-align:center;justify-content:center;margin-top:1px;}
-  .kumpulanstiker > img{display:none;background: rgba(255, 255, 255, 0.2);box-shadow: 0 4px 30px rgba(255,255,255, 0.3);backdrop-filter: blur(5px);-webkit-backdrop-filter: blur(5px);border: 1px solid rgba(255, 255, 255, 0.3);border-radius: 50%;padding:10px;width:85px;height:85px;margin:20px 0;}
-  #fotostiker{opacity:.1;transition:all 1.2s ease;transform: scale(.1);}
-  .halo{font-size:16px !important;position:relative;margin:15px 0 20px 0} 
-  .halo.sty2{font-family:var(--gaya-font2);font-size:24px !important;margin-top:20px !important;}
-  .halo.sty3{position:absolute !important;font-size:14px !important;font-weight:400 !important;margin:30px 20px !important;}
-  #kalimatbawah{position: absolute;opacity:0;transform: scale(.3);margin:50px 0;font-family:var(--gaya-font2);font-size:20px;font-weight:700;color:white;text-shadow: 0px 2px 2px rgba(0, 0, 0, .8);transition:all .5s ease;}
-  #tanggal{position: absolute;opacity:0;transform: scale(.3);transition:all .5s ease;}
-
-  #fotolove img{transition:all .5s ease;width:75px;height:75px;padding:0;background:none}
-  #kadoIn img{display:inline-flex;background:none;width:130px;height:130px;transition:all .3s ease;} 
-  #ket, .halo{text-shadow: 0px 2px 2px rgba(0, 0, 0, .8);font-size:17px;font-weight:700;color:white}
-  #ket{margin-top:25px !important;font-size:13px;font-weight:400;}
-  #kadoIn img:hover{transform:scale(.9);}
-
-  @keyframes leaves {0% {transform: scale(1.0);} 100% {transform: scale(.9);} }
-
-  .lovein{background:#fff;border-radius:50%;width:40px;height:40px;padding:10px;font-size:30px;display:flex;align-items:center;text-align:center;justify-content:center;transition:all .3s ease;}
-  .lovein:hover{transform: scale(.9);}
-
-  #kolombaru {
-    position: absolute;
-    opacity: 1;
-    display: flex;
-    transition: all 1s ease;
-    align-items: center;
-    text-align: center;
-    justify-content: center;
-    z-index: 1;
-  }
-  #kolombaru > li {
-    margin: 8px;
-    margin-bottom:0;
-    padding: 0;
-    list-style-type: none;
-  }
-  #kolombaru li {
-    opacity: 1;
-    display: flex;
-    font-size: 35px;
-    transform: scale(0);
-    transition: all 1s ease;
-  }
-  @keyframes shake-scale {
-    0%, 100% { transform: translateX(0) scale(var(--start-scale)); }
-    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px) scale(calc(var(--start-scale) + 0.5)); }
-    20%, 40%, 60%, 80% { transform: translateX(5px) scale(calc(var(--start-scale) + 0.5)); }
-  }
-
-  .sembunyi, #pesanditolak > *, #kado2, #kado3{display:none !important}
-
-</style>
-
 <body>
 
-  <!-- Change audio here -->
-  <audio src="" id="linkmp3" class="sembunyi"></audio>
-
-  <div id="bodyblur">
-    <!-- Wallpaper -->
-    <img src="./assets/pict.jpg" id="wallpaper" />
-  </div>
-
-  <div id='Content'>
-
-    <div id="loveIn">
-      <!-- LOVE Button -->
-      <label class="lovein">&#10084;</label>
-    </div>
-    <p id="ket">Touch the LOVE!</p>
-
-    <div class="kumpulanstiker">
-      <img src="./assets/pusn.gif" id="fotostiker" />
-      <img src="./assets/bunga.gif" id="fotostiker1" />
-      <img src="./assets/pandapanah.gif" id="fotostiker2" />
-      <img src="./assets/pandaterlope.gif" id="fotostiker3" />
-      <img src="./assets/g5.gif" id="fotostiker4" />
-      <img src="./assets/cilukba.gif" id="fotostiker5" />
-      <img src="./assets/emawh.gif" id="fotostiker6" />
+    <div class="sidebar">
+        <div class="menu-btn active" onclick="openTab('profile', this)"><i class="fas fa-user"></i></div>
+        <div class="menu-btn" onclick="openTab('cyber-protect', this)"><i class="fas fa-shield-virus"></i></div>
+        <div class="menu-btn" onclick="openTab('skills', this)"><i class="fas fa-code"></i></div>
+        <div class="menu-btn" onclick="openTab('experience', this)"><i class="fas fa-briefcase"></i></div>
+        <div class="menu-btn" onclick="openTab('accounts', this)"><i class="fas fa-share-nodes"></i></div>
+        <div class="menu-btn" onclick="openTab('achievements', this)"><i class="fas fa-trophy"></i></div>
     </div>
 
-    <p id="halo" class="halo"></p>
+    <div class="content-area">
 
-    <div>
-      <blockquote id='bq' data-text=''>
-        <p id="kalimat">I have something for you 😩🫀</p>
-        <p id="kalimatb"></p>
+        <div id="profile" class="tab-content active">
+            <div class="profile-header">
+                <img src="abdul_aziz.jpg" alt="Abdul Aziz" class="profile-img">
+                <div>
+                    <h1 class="gold-text">আব্দুল আজিজ</h1>
+                    <p style="color: var(--text-dim);">ডেভেলপার | উদ্যোক্তা | CEO, Cyber Protect</p>
+                    <p style="font-size: 14px; color: #888;">BBA গ্র্যাজুয়েট ২০২৪ | SSC Vocational RAC ২০২৩</p>
+                </div>
+            </div>
 
-        <p id="pesan1">Touch this <span style="color:pink">LOVE</span>! 🫣</p>
-        <div id="kolombaru">
-          <li id="lv1">🩷</li>
+            <div class="info-card">
+                <h3><i class="fas fa-user-circle gold-text"></i> ব্যক্তিগত তথ্য</h3>
+                <div class="personal-info-grid">
+                    <div class="info-item"><i class="fas fa-birthday-cake"></i><div><span class="info-label">বর্তমান বয়স</span><span class="info-value" id="autoAge">লোড হচ্ছে...</span></div></div>
+                    <div class="info-item"><i class="fas fa-map-marker-alt"></i><div><span class="info-label">জেলা</span><span class="info-value">চাঁদপুর (ফরিদগঞ্জ)</span></div></div>
+                    <div class="info-item"><i class="fas fa-kaaba"></i><div><span class="info-label">ধর্ম</span><span class="info-value">ইসলাম</span></div></div>
+                    <div class="info-item"><i class="fas fa-flag"></i><div><span class="info-label">জাতীয়তা</span><span class="info-value">বাংলাদেশি</span></div></div>
+                </div>
+            </div>
+
+            <div class="info-card">
+                <h3><i class="fas fa-info-circle gold-text"></i> আমার সম্পর্কে</h3>
+                <p>আসসালামু আলাইকুম! আমি <b>আব্দুল আজিজ</b>। আমি একজন গর্বিত বাংলাদেশি মুসলিম। চাঁদপুর জেলার ফরিদগঞ্জ থানায় আমার নিবাস। আমি "Elegant Family Outlet" এর প্রতিষ্ঠাতা এবং "Cyber Protect" এর প্রধান। প্রযুক্তি এবং সৃজনশীলতার সমন্বয়ে আমি এগিয়ে চলতে চাই।</p>
+            </div>
         </div>
 
-        <p id="pesan2">Wait a moment 😋</p>
-        <p id="pesan3">Now I want to say...</p>
-        <p id="pesan4" class="sty2">In <span class='kuning'><b id="hitungan">3</b> seconds</span>, I' <b> want to say..</b> 🫣</p>
-        <p id="pesan5" class="sty2"><b>lessss go...!!! 🥳</b></p>
-        <p id="pesan6" class="sty2"><b>Oh yeah</b>, <b> </b> 😆😋🩷</p>
-        <p id="pesan7" class="sty2 left">"Apnake ekhono samne dekhi ni 😔, tobuo amar mon bar-bar apnar dike jai 💭. Apnar kotha, apnar maya—shob kichu amar mon ke chhuyeche 💖. Mone hoy ami apnake bhalobese felechi 🥺. Jodi amar ei onuvhuti apnar hridoy chhuye, tahole ki apni amar hoben? 💌"❤️🙂✨</p>
-<p id="pesan8" class="sty2 left" style="font-style: italic;"><b>I love youuuu😚</b></p>
-
-        <!-- Continue Button -->
-        <p id="opsL">Click to Continue</p>
-      </blockquote>
+      <div id="cyber-protect" class="tab-content">
+    <h1 class="cyber-text"><i class="fas fa-shield-virus"></i> Cyber Protect</h1>
+    
+    <div class="info-card" style="border-left: 5px solid var(--cyber-blue); background: linear-gradient(90deg, rgba(0, 210, 255, 0.05), transparent);">
+        <p style="font-style: italic; color: #ccc;">"যেখানেই অশ্লীল কন্টেন্ট, নাস্তিক্যবাদী প্রচার বা ধর্মীয় অবমাননা, সেখানে Cyber Protect কঠোর অবস্থানে থাকে।"</p>
+        <div class="contact-box">
+            <a href="#" class="contact-link fb-page"><i class="fab fa-facebook"></i> Page</a>
+            <a href="#" class="contact-link fb-group"><i class="fas fa-users"></i> Group</a>
+            <a href="mailto:contact@cyberprotect.com" class="contact-link gmail"><i class="fas fa-envelope"></i> Email</a>
+        </div>
     </div>
 
-  </div>
-
-  <script>
-    const body = document.querySelector("body");
-    const audio = new Audio(linkmp3.src);
-    let ftganti = 0, fungsi = 0, fungsiAwal = 0;
-    const deffotostiker = fotostiker.src;
-
-    Content.style = "opacity:1;margin-top:35vh";
-
-    let sudahKlik = true;
-    document.getElementById("loveIn").onclick = function() {
-      if (sudahKlik) {
-        if (fungsiAwal == 0) {
-          audio.play();
-          fungsiAwal = 1;
-          loveIn.style = "transition:all .8s ease;transform:scale(15);opacity:0";
-          wallpaper.style = "transform: scale(1.5);";
-          ket.style = "display:none";
-          setTimeout(initMiddle, 300);
-          setTimeout(initMessage, 500);
+    <h3 class="cyber-text" style="margin-top: 30px;"><i class="fas fa-list-ul"></i> আমাদের বিশেষ সেবাসমূহ (৫০টি+)</h3>
+    
+    <style>
+        .service-grid-new {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 12px;
+            margin-top: 20px;
         }
-      } else {
-        sudahKlik = true; // Mark that the button has been clicked
-        document.getElementById('loveIn').innerHTML = '<a href="#" class="lovein">&#10084;</a>';
-      }
-    }
+        .service-box-new {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-soft);
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        .service-box-new i {
+            font-size: 22px;
+            color: var(--cyber-blue);
+            background: rgba(0, 210, 255, 0.1);
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+        .service-box-new span {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-dim);
+        }
+        .service-box-new:hover {
+            border-color: var(--cyber-blue);
+            transform: translateY(-5px);
+            background: rgba(0, 210, 255, 0.05);
+        }
+        .service-box-new:hover span {
+            color: white;
+        }
+    </style>
 
-    async function initMessage() {
-      vketikhalo = "Hey Ayesha ✨";
-      startName();
-    }
+    <div class="service-grid-new">
+        <div class="service-box-new"><i class="fas fa-unlock-alt"></i><span>ID Recovery</span></div>
+        <div class="service-box-new"><i class="fas fa-user-shield"></i><span>Hacked Account</span></div>
+        <div class="service-box-new"><i class="fas fa-key"></i><span>2-Step Bypass</span></div>
+        <div class="service-box-new"><i class="fas fa-user-lock"></i><span>Locked Unlock</span></div>
+        <div class="service-box-new"><i class="fas fa-shield-alt"></i><span>Profile Guard</span></div>
+        <div class="service-box-new"><i class="fas fa-ban"></i><span>Policy Fix</span></div>
+        <div class="service-box-new"><i class="fas fa-users-cog"></i><span>Group Security</span></div>
+        <div class="service-box-new"><i class="fas fa-comment-slash"></i><span>Spam Removal</span></div>
+        <div class="service-box-new"><i class="fas fa-user-times"></i><span>Fake Reporting</span></div>
+        <div class="service-box-new"><i class="fas fa-copyright"></i><span>Copyright Fix</span></div>
+        <div class="service-box-new"><i class="fas fa-hands-helping"></i><span>Cyber Bullying</span></div>
+        <div class="service-box-new"><i class="fas fa-user-secret"></i><span>Anti-Harassment</span></div>
+        <div class="service-box-new"><i class="fas fa-file-contract"></i><span>Data Encryption</span></div>
+        <div class="service-box-new"><i class="fas fa-mosque"></i><span>Religious Shield</span></div>
+        <div class="service-box-new"><i class="fas fa-eye-slash"></i><span>Propaganda Stop</span></div>
+        <div class="service-box-new"><i class="fas fa-robot"></i><span>Bot Security</span></div>
+        <div class="service-box-new"><i class="fas fa-fingerprint"></i><span>Security Audit</span></div>
+        <div class="service-box-new"><i class="fas fa-network-wired"></i><span>VPN Setup</span></div>
+        <div class="service-box-new"><i class="fas fa-laptop-code"></i><span>Safe Browsing</span></div>
+        <div class="service-box-new"><i class="fas fa-mobile"></i><span>App Permission</span></div>
+    </div>
 
-    function initMiddle() {
-      loveIn.style = "display:none";
-      ket.style = "display:none";
-      Content.style = "opacity:1;margin-top:30px";
-      bodyblur.style = "opacity:.1";
-      wallpaper.style = "transform: scale(1.5);";
-    }
+    <div class="info-card" style="margin-top: 20px;">
+        <h4 class="cyber-text">অন্যান্য টেকনিক্যাল সাপোর্টসমূহ:</h4>
+        <div class="cyber-grid">
+            <ul class="service-list">
+                <li><i class="fas fa-check"></i> Cloud Storage Security</li>
+                <li><i class="fas fa-check"></i> WhatsApp End-to-End Fix</li>
+                <li><i class="fas fa-check"></i> Vulnerability Scanning</li>
+                <li><i class="fas fa-check"></i> Secure OS Installation</li>
+                <li><i class="fas fa-check"></i> Parental Control Setup</li>
+            </ul>
+            <ul class="service-list">
+                <li><i class="fas fa-check"></i> Incident Response Plan</li>
+                <li><i class="fas fa-check"></i> Phishing Protection</li>
+                <li><i class="fas fa-check"></i> Malware Removal</li>
+                <li><i class="fas fa-check"></i> Social Engineering Help</li>
+                <li><i class="fas fa-check"></i> Multi-Factor Auth Setup</li>
+            </ul>
+        </div>
+        <p style="font-size: 11px; color: #555; margin-top: 15px; text-align: center;">এবং আরও অনেক বিশেষায়িত সাইবার নিরাপত্তা সেবা প্রদান করা হয়।</p>
+    </div>
+</div>
+        <div id="skills" class="tab-content">
+            <h1 class="gold-text">দক্ষতা ও নেতৃত্ব</h1>
+            <div class="info-card" style="border-left: 5px solid var(--cyber-blue);">
+                <h4 class="cyber-text"><i class="fas fa-user-shield"></i> Cyber Leadership</h4>
+                <ul class="service-list">
+                    <li><i class="fas fa-shield-alt"></i> <b>Team Cyber Warning:</b> Senior Admin</li>
+                    <li><i class="fas fa-user-secret"></i> <b>Gangster 71:</b> Admin Panel Member</li>
+                    <li><i class="fas fa-globe"></i> <b>United Cyber Nation:</b> Specialist</li>
+                </ul>
+            </div>
+            <div class="info-card">
+                <h4><i class="fas fa-code gold-text"></i> Web & Bot Development</h4>
+                <p>HTML, CSS, JS, GitHub এবং টেলিগ্রাম বট অ্যাডমিন প্যানেল তৈরিতে পারদর্শী।</p>
+            </div>
+            <div class="info-card" style="border-left: 5px solid var(--xiaomi-orange);">
+                <h4 class="xiaomi-text"><i class="fas fa-mobile-alt"></i> Xiaomi & HyperOS</h4>
+                <p>Redmi Note 12/13 FRP Bypass এবং SamFW টুল ব্যবহারে অভিজ্ঞ।</p>
+            </div>
+        </div>
 
-    async function startName() {
-      bodyblur.style = "opacity:.1";
-      wallpaper.style = "transform: scale(1);";
-      fotostiker.style = "display:inline-flex;";
-      setTimeout(showSticker, 200);
-      setTimeout(showHello, 500);
-    }
+        <div id="experience" class="tab-content">
+            <h1 class="gold-text">কাজের অভিজ্ঞতা</h1>
+            <div class="info-card">
+                <span class="gold-text">২০২৪ - বর্তমান</span>
+                <h4>Founder & CEO</h4>
+                <p><b>Elegant Family Outlet</b> - পোশাকের রিসেলিং ব্যবসা পরিচালনা।</p>
+            </div>
+            <div class="info-card">
+                <h4>Creative Author</h4>
+                <p>উপন্যাস <b>"Swapnochinho" (স্বপ্নচিহ্ন)</b> এর লেখক। (চরিত্র: <b>জায়ান</b>)</p>
+            </div>
+        </div>
 
-    function showSticker() {
-      if (ftganti == 0) fotostiker.src = deffotostiker;
-      else if (ftganti == 1) fotostiker.src = fotostiker1.src;
-      else if (ftganti == 2) fotostiker.src = fotostiker2.src;
-      else if (ftganti == 3) fotostiker.src = fotostiker3.src;
-      else if (ftganti == 4) fotostiker.src = fotostiker4.src;
-      else if (ftganti == 5) fotostiker.src = fotostiker5.src;
-      else if (ftganti == 6) fotostiker.src = fotostiker6.src;
-      fotostiker.style = "display:inline-flex;opacity:1;transform:scale(1)";
-    }
+        <div id="accounts" class="tab-content">
+            <h1 class="gold-text"><i class="fas fa-share-nodes"></i> সোশ্যাল মিডিয়া</h1>
+            <div class="account-grid-30">
+                <a href="#" class="acc-link"><i class="fab fa-facebook" style="color:#1877F2;"></i>Facebook</a>
+                <a href="#" class="acc-link"><i class="fab fa-messenger" style="color:#00B2FF;"></i>Messenger</a>
+                <a href="#" class="acc-link"><i class="fab fa-whatsapp" style="color:#25D366;"></i>WhatsApp</a>
+                <a href="#" class="acc-link"><i class="fab fa-telegram" style="color:#26A5E4;"></i>Telegram</a>
+                
+                <a href="#" class="acc-link"><i class="fab fa-instagram" style="color:#E4405F;"></i>Instagram</a>
+                <a href="#" class="acc-link"><i class="fab fa-github" style="color:#fff;"></i>GitHub</a>
+                <a href="#" class="acc-link"><i class="fab fa-linkedin" style="color:#0A66C2;"></i>LinkedIn</a>
+                <a href="#" class="acc-link"><i class="fab fa-twitter" style="color:#1DA1F2;"></i>Twitter</a>
+                
+                <a href="#" class="acc-link"><i class="fab fa-youtube" style="color:#FF0000;"></i>YouTube</a>
+                <a href="#" class="acc-link"><i class="fab fa-tiktok" style="color:#fff;"></i>TikTok</a>
+                <a href="#" class="acc-link"><i class="fab fa-discord" style="color:#5865F2;"></i>Discord</a>
+                <a href="#" class="acc-link"><i class="fab fa-reddit" style="color:#FF4500;"></i>Reddit</a>
+                
+                <a href="#" class="acc-link"><i class="fab fa-snapchat" style="color:#FFFC00;"></i>Snapchat</a>
+                <a href="#" class="acc-link"><i class="fab fa-pinterest" style="color:#BD081C;"></i>Pinterest</a>
+                <a href="#" class="acc-link"><i class="fab fa-spotify" style="color:#1DB954;"></i>Spotify</a>
+                <a href="#" class="acc-link"><i class="fab fa-soundcloud" style="color:#FF3300;"></i>SoundCloud</a>
+                
+                <a href="#" class="acc-link"><i class="fab fa-medium" style="color:#fff;"></i>Medium</a>
+                <a href="#" class="acc-link"><i class="fab fa-quora" style="color:#A82400;"></i>Quora</a>
+                <a href="#" class="acc-link"><i class="fab fa-skype" style="color:#00AFF0;"></i>Skype</a>
+                <a href="#" class="acc-link"><i class="fab fa-vimeo" style="color:#1AB7EA;"></i>Vimeo</a>
+                
+                <a href="#" class="acc-link"><i class="fab fa-behance" style="color:#1769FF;"></i>Behance</a>
+                <a href="#" class="acc-link"><i class="fab fa-dribbble" style="color:#EA4C89;"></i>Dribbble</a>
+                <a href="#" class="acc-link"><i class="fab fa-slack" style="color:#4A154B;"></i>Slack</a>
+                <a href="#" class="acc-link"><i class="fab fa-stack-overflow" style="color:#F48024;"></i>StackOverflow</a>
+                
+                <a href="#" class="acc-link"><i class="fab fa-twitch" style="color:#9146FF;"></i>Twitch</a>
+                <a href="#" class="acc-link"><i class="fab fa-steam" style="color:#fff;"></i>Steam</a>
+                <a href="#" class="acc-link"><i class="fab fa-tumblr" style="color:#35465C;"></i>Tumblr</a>
+                <a href="#" class="acc-link"><i class="fab fa-threads" style="color:#fff;"></i>Threads</a>
+                
+                <a href="mailto:aziz@example.com" class="acc-link"><i class="fas fa-envelope" style="color:#EA4335;"></i>Gmail</a>
+                <a href="#" class="acc-link"><i class="fas fa-globe" style="color:var(--cyber-blue);"></i>Website</a>
+            </div>
+        </div>
 
-    function hideSticker() {
-      fotostiker.style = "display:inline-flex;opacity:1;transition:all .7s ease;transform:scale(.1)";
-    }
+        <div id="achievements" class="tab-content">
+            <h1 class="gold-text">সাফল্য ও শিক্ষা</h1>
+            <div class="info-card">
+                <p><i class="fas fa-graduation-cap gold-text"></i> BBA Graduation - 2024</p>
+                <p><i class="fas fa-certificate gold-text"></i> SSC Vocational (RAC) - 2023</p>
+                <p><i class="fas fa-book gold-text"></i> উপন্যাস সমাপ্ত: <b>স্বপ্নচিহ্ন</b></p>
+            </div>
+        </div>
 
-    function showQuote() {
-      bq.style = "position:relative;opacity:1;visibility:visible;transform: scale(1);margin-top:0";
-      startTyping1();
-      fungsi = 1;
-    }
+    </div>
 
-    function showHello() {
-      new TypeIt("#halo", {
-        strings: ["" + vketikhalo],
-        startDelay: 50,
-        speed: 30,
-        waitUntilVisible: true,
-        afterComplete: function() {
-          halo.innerHTML = vketikhalo;
-          setTimeout(showQuote, 200);
-        },
-      }).go();
-    }
+    <script>
+        function openTab(tabId, btn) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            btn.classList.add('active');
+        }
 
-    async function goToWhatsApp() {
-      await swals.fire('OK!', 'Send your answer to my WhatsApp, okay!', 'success');
-      window.location = "https://api.whatsapp.com/send?phone=&text=" + pesanwhatsapp;
-    }
-
-    let vketik1 = kalimat.innerHTML;
-    kalimat.innerHTML = "";
-    kalimatb.innerHTML = "";
-
-    function startTyping1() {
-      new TypeIt("#kalimat", {
-        strings: ["" + vketik1],
-        startDelay: 300,
-        speed: 20,
-        cursor: false,
-        deleteSpeed: 20,
-        breakLines: false,
-        waitUntilVisible: true,
-        lifelike: true,
-        afterComplete: function() {
-          activateOpsL();
-        },
-      }).go();
-    }
-
-    let opsLclick = 0, opsLcheck = 0, defopsL = opsL.innerHTML;
-
-    document.getElementById("bq").onclick = function() {
-      if (opsLclick == 1) {
-        if (opsLcheck == 1) setTimeout(typeMessage1, 400);
-        if (opsLcheck == 2) startTyping2();
-        if (opsLcheck == 3) typeMessage4();
-        if (opsLcheck == 4) typeMessage5();
-        if (opsLcheck == 5) startTyping8();
-        opsL.style.opacity = "0";
-        opsLclick = 0;
-      }
-    }
-
-    function activateOpsL() {
-      opsL.innerHTML = defopsL;
-      opsL.style.opacity = ".8";
-      opsLclick = 1;
-      opsLcheck++;
-    }
-
-    function typeMessage1() {
-      kalimat.innerHTML = pesan1.innerHTML;
-      kolombaru.style = "position:relative;opacity:1;transform:scale(1)";
-      lv1.style = "transform:scale(1);transition:all .5s ease";
-    }
-
-    let vketik2 = pesan2.innerHTML, vketik3 = pesan3.innerHTML;
-    function startTyping2() {
-      wallpaper.style = "transform: scale(1.5);";
-      kolombaru.style = "";
-      kalimat.innerHTML = "";
-      new TypeIt("#kalimat", {
-        strings: ["" + vketik2, "" + vketik3],
-        startDelay: 20,
-        speed: 32,
-        cursor: true,
-        deleteSpeed: 20,
-        breakLines: false,
-        waitUntilVisible: true,
-        lifelike: true,
-        afterComplete: function() {
-          kalimat.innerHTML = vketik3;
-          setTimeout(typeMessage4, 440);
-        },
-      }).go();
-    }
-
-    let vketik4 = pesan4.innerHTML; pesan4.innerHTML = "";
-    function typeMessage4() {
-      kalimat.style = "display:none";
-      wallpaper.style = "transform: scale(1);";
-      hideSticker();
-      ftganti = 2;
-      setTimeout(showSticker, 300);
-      new TypeIt("#pesan4", {
-        strings: ["" + vketik4],
-        startDelay: 1,
-        speed: 34,
-        cursor: true,
-        waitUntilVisible: true,
-        lifelike: true,
-        afterComplete: function() {
-          pesan4.innerHTML = vketik4;
-          const countdownElem = document.getElementById("hitungan");
-          let countdownNum = parseInt(countdownElem.textContent);
-          const countdown = setInterval(() => {
-            countdownNum--;
-            countdownElem.textContent = countdownNum;
-            if (countdownNum <= 0) {
-              clearInterval(countdown);
-              setTimeout(typeMessage5, 800);
-            }
-          }, 1000);
-        },
-      }).go();
-    }
-
-    let vketik5 = pesan5.innerHTML; pesan5.innerHTML = "";
-    function typeMessage5() {
-      pesan4.style = "display:none";
-      wallpaper.style = "transform: scale(1.5);";
-      hideSticker();
-      ftganti = 3;
-      setTimeout(showSticker, 300);
-      new TypeIt("#pesan5", {
-        strings: ["" + vketik5],
-        startDelay: 1,
-        speed: 34,
-        cursor: true,
-        waitUntilVisible: true,
-        lifelike: true,
-        afterComplete: function() {
-          pesan5.innerHTML = vketik5;
-          pesan5.style = "transform:scale(1.3);transition:all .5s ease";
-          setTimeout(typeMessage6, 1200);
-        },
-      }).go();
-    }
-
-    let vketik6 = pesan6.innerHTML; pesan6.innerHTML = "";
-    function typeMessage6() {
-      pesan5.style = "display:none";
-      wallpaper.style = "transform: scale(1);";
-      hideSticker();
-      ftganti = 4;
-      setTimeout(showSticker, 300);
-      new TypeIt("#pesan6", {
-        strings: ["" + vketik6],
-        startDelay: 1,
-        speed: 34,
-        cursor: true,
-        waitUntilVisible: true,
-        lifelike: true,
-        afterComplete: function() {
-          pesan6.innerHTML = vketik6;
-          setTimeout(typeMessage7, 1200);
-        },
-      }).go();
-    }
-
-    let vketik7 = pesan7.innerHTML; pesan7.innerHTML = "";
-    function typeMessage7() {
-      pesan6.style = "display:none";
-      wallpaper.style = "transform: scale(1.5);";
-      hideSticker();
-      ftganti = 5;
-      setTimeout(showSticker, 300);
-      new TypeIt("#pesan7", {
-        strings: ["" + vketik7],
-        startDelay: 1,
-        speed: 34,
-        cursor: true,
-        waitUntilVisible: true,
-        lifelike: true,
-        afterComplete: function() {
-          pesan7.innerHTML = vketik7;
-          setTimeout(typeMessage8, 700);
-        },
-      }).go();
-    }
-
-    let vketik8 = pesan8.innerHTML; pesan8.innerHTML = "";
-    function typeMessage8() {
-      wallpaper.style = "transform: scale(1);";
-      hideSticker();
-      ftganti = 6;
-      setTimeout(showSticker, 300);
-      new TypeIt("#pesan8", {
-        strings: ["" + vketik8],
-        startDelay: 1,
-        speed: 34,
-        cursor: true,
-        waitUntilVisible: true,
-        lifelike: true,
-        afterComplete: function() {
-          pesan8.innerHTML = vketik8;
-          setInterval(fallHearts, 200);
-        },
-      }).go();
-    }
-
-    const loveElement = document.getElementById("lv1");
-    let clickCount = 0, currentScale = 1;
-    loveElement.addEventListener("click", function() {
-      clickCount++;
-      loveElement.style.setProperty('--start-scale', currentScale);
-      loveElement.style.animation = "shake-scale 1s ease-in-out";
-      currentScale += 0.5;
-      loveElement.style.transform = `scale(${currentScale})`;
-      setTimeout(() => loveElement.style.animation = "", 700);
-      if (clickCount === 3) {
-        kolombaru.style = "position:relative;transform:scale(1)";
-        hideSticker();
-        ftganti = 1;
-        setTimeout(showSticker, 300);
-        startTyping2();
-        pesan1.style = "opacity:0;transform:scale(0);transition:all .5s ease";
-        lv1.style = "opacity:0;transform:scale(0);transition:all .5s ease";
-      }
-    });
-
-    // Final question variables
-    const questionText = 'Do you miss me? 😶❤️';
-    const questionPrompt = 'Come on, answer 😆';
-    const positiveText = 'Miss';
-    const negativeText = 'No';
-
-    async function askQuestion() {
-      const { isConfirmed } = await swals.fire({
-        title: nama + ' ' + questionText,
-        text: questionPrompt,
-        imageUrl: fotostiker5.src,
-        showCancelButton: true,
-        confirmButtonText: positiveText,
-        cancelButtonText: negativeText,
-      });
-      if (isConfirmed) {
-        pesanwhatsapp = "Yes " + nama + ", I miss you too! ><";
-      } else {
-        pesanwhatsapp = nama + " doesn't miss you at all! :p";
-      }
-      goToWhatsApp();
-    }
-
-    function fallHearts() {
-      const heart = document.createElement("div");
-      heart.innerHTML = "<svg class='line spin' style='opacity:.5;z-index:100' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><g transform='translate(2.550170, 3.550158)'><path d='M0.371729633,8.89614246 C-0.701270367,5.54614246 0.553729633,1.38114246 4.07072963,0.249142462 C5.92072963,-0.347857538 8.20372963,0.150142462 9.50072963,1.93914246 C10.7237296,0.0841424625 13.0727296,-0.343857538 14.9207296,0.249142462 C18.4367296,1.38114246 19.6987296,5.54614246 18.6267296,8.89614246 C16.9567296,14.2061425 11.1297296,16.9721425 9.50072963,16.9721425 C7.87272963,16.9721425 2.09772963,14.2681425 0.371729633,8.89614246 Z'></path><path d='M13.23843,4.013842 C14.44543,4.137842 15.20043,5.094842 15.15543,6.435842'></path></g></svg>";
-      heart.className = "heart-icon";
-      heart.style.left = (Math.random() * 95) + "vw";
-      heart.style.animationDuration = (Math.random() * 3 + 2) + "s";
-      document.body.appendChild(heart);
-    }
-
-    setInterval(() => {
-      const hearts = document.querySelectorAll(".heart-icon");
-      if (hearts.length > 100) hearts[0].remove();
-    }, 100);
-  </script>
+        function updateAge() {
+            const birthDate = new Date("2005-04-07");
+            const today = new Date();
+            let age = today.getFullYear() - birthDate.getFullYear();
+            const monthDiff = today.getMonth() - birthDate.getMonth();
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) { age--; }
+            document.getElementById("autoAge").innerText = age + " বছর";
+        }
+        window.onload = updateAge;
+    </script>
 </body>
 </html>
