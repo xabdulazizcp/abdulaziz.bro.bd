@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>আব্দুল আজিজ | CEO - Cyber Protect</title>
+    <title>আব্দুল আজিজ | Personal Portfolio</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
@@ -14,6 +14,7 @@
             --border-soft: #222;
             --cyber-blue: #00d2ff;
             --xiaomi-orange: #ff6700;
+            --korean-red: #ff3e3e;
         }
 
         body {
@@ -25,6 +26,7 @@
             overflow: hidden;
         }
 
+        /* Sidebar Navigation */
         .sidebar {
             width: 80px;
             height: 100vh;
@@ -66,9 +68,11 @@
             height: 100vh;
             overflow-y: auto;
             scroll-behavior: smooth;
+            display: flex;
+            flex-direction: column;
         }
 
-        .tab-content { display: none; animation: fadeIn 0.5s ease-in-out; }
+        .tab-content { display: none; animation: fadeIn 0.5s ease-in-out; flex-grow: 1; }
         .tab-content.active { display: block; }
 
         @keyframes fadeIn {
@@ -76,6 +80,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* Profile Header */
         .profile-header {
             display: flex;
             align-items: center;
@@ -106,317 +111,301 @@
 
         .info-card:hover { border-color: var(--accent-gold); }
 
-        .personal-info-grid, .cyber-grid {
+        /* Personal Info Grid */
+        .personal-info-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: 1fr 1fr;
             gap: 15px;
-            margin-top: 20px;
+            margin-bottom: 20px;
         }
 
-        .info-item {
-            background: rgba(255, 255, 255, 0.03);
-            padding: 12px;
-            border-radius: 10px;
+        .p-info-item {
+            background: var(--card-bg);
             border: 1px solid var(--border-soft);
+            padding: 15px 20px;
+            border-radius: 15px;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 15px;
+            transition: 0.3s;
         }
 
-        .info-item i { color: var(--accent-gold); width: 20px; text-align: center; }
-        .info-label { font-size: 11px; color: var(--text-dim); display: block; }
-        .info-value { font-size: 14px; font-weight: 500; }
+        .p-info-item:hover { border-color: var(--cyber-blue); }
 
-        /* Social Media Grid (1 1 1 1) */
-        .account-grid-30 {
+        .p-info-label { font-size: 11px; color: var(--cyber-blue); margin: 0; text-transform: uppercase; }
+        .p-info-value { font-size: 15px; font-weight: bold; margin: 0; color: white; }
+
+        /* Social Grid */
+        .account-grid-8 {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
+            gap: 15px;
+            margin-top: 20px;
         }
 
         .acc-link {
             text-decoration: none;
             color: white;
             background: rgba(255, 255, 255, 0.03);
-            padding: 15px 5px;
-            border-radius: 12px;
+            padding: 20px 10px;
+            border-radius: 15px;
             border: 1px solid var(--border-soft);
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 8px;
-            font-size: 12px;
+            gap: 10px;
             transition: 0.3s;
-            text-align: center;
         }
 
-        .acc-link i { font-size: 22px; }
+        .acc-link i { font-size: 28px; }
+        .acc-link span { font-size: 13px; font-weight: 500; }
+
         .acc-link:hover {
             border-color: var(--accent-gold);
-            transform: translateY(-3px);
+            transform: translateY(-5px);
             background: rgba(255, 204, 0, 0.05);
         }
 
-        .service-list { list-style: none; padding: 0; margin: 0; }
-        .service-list li {
-            font-size: 13px;
-            padding: 6px 0;
-            color: var(--text-dim);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            border-bottom: 1px solid #1a1a1a;
+        .gold-text { color: var(--accent-gold); }
+        .dim-text { color: var(--text-dim); }
+
+        footer {
+            margin-top: auto;
+            padding: 30px 0;
+            border-top: 1px solid var(--border-soft);
+            text-align: center;
         }
 
-        .service-list li i { color: var(--cyber-blue); font-size: 10px; }
-
-        .contact-box { display: flex; gap: 15px; margin-top: 20px; flex-wrap: wrap; }
-        .contact-link { padding: 10px 20px; border-radius: 8px; text-decoration: none; color: white; font-size: 14px; display: flex; align-items: center; gap: 10px; }
-        .fb-page { background: #1877F2; }
-        .fb-group { background: #00A400; }
-        .gmail { background: #EA4335; }
-
-        .gold-text { color: var(--accent-gold); }
-        .cyber-text { color: var(--cyber-blue); }
-        .xiaomi-text { color: var(--xiaomi-orange); }
-
         @media (max-width: 900px) {
-            .personal-info-grid, .cyber-grid { grid-template-columns: 1fr; }
             .profile-header { flex-direction: column; text-align: center; }
-            .account-grid-30 { grid-template-columns: repeat(2, 1fr); }
+            .account-grid-8 { grid-template-columns: repeat(2, 1fr); }
+            .personal-info-grid { grid-template-columns: 1fr; }
+            .content-area { padding: 20px; margin-left: 75px; }
         }
     </style>
 </head>
 <body>
 
     <div class="sidebar">
-        <div class="menu-btn active" onclick="openTab('profile', this)"><i class="fas fa-user"></i></div>
-        <div class="menu-btn" onclick="openTab('cyber-protect', this)"><i class="fas fa-shield-virus"></i></div>
-        <div class="menu-btn" onclick="openTab('skills', this)"><i class="fas fa-code"></i></div>
-        <div class="menu-btn" onclick="openTab('experience', this)"><i class="fas fa-briefcase"></i></div>
-        <div class="menu-btn" onclick="openTab('accounts', this)"><i class="fas fa-share-nodes"></i></div>
-        <div class="menu-btn" onclick="openTab('achievements', this)"><i class="fas fa-trophy"></i></div>
+        <div class="menu-btn active" onclick="openTab('home', this)" title="প্রোফাইল"><i class="fas fa-user"></i></div>
+        <div class="menu-btn" onclick="openTab('edu', this)" title="শিক্ষা"><i class="fas fa-graduation-cap"></i></div>
+        <div class="menu-btn" onclick="openTab('skills', this)" title="সাফল্য ও শিক্ষা"><i class="fas fa-trophy"></i></div>
+        <div class="menu-btn" onclick="openTab('works', this)" title="উপন্যাস"><i class="fas fa-book"></i></div>
+        <div class="menu-btn" onclick="openTab('accounts', this)" title="যোগাযোগ"><i class="fas fa-share-nodes"></i></div>
     </div>
 
     <div class="content-area">
 
-        <div id="profile" class="tab-content active">
+        <div id="home" class="tab-content active">
             <div class="profile-header">
                 <img src="abdul_aziz.jpg" alt="Abdul Aziz" class="profile-img">
                 <div>
-                    <h1 class="gold-text">আব্দুল আজিজ</h1>
-                    <p style="color: var(--text-dim);">ডেভেলপার | উদ্যোক্তা | CEO, Cyber Protect</p>
-                    <p style="font-size: 14px; color: #888;">২০২৪ | SSC Vocational RAC ২০২৩</p>
+                    <h1 class="gold-text" style="margin: 0;">আব্দুল আজিজ</h1>
+                    <p style="color: var(--text-dim); font-size: 14px; margin: 5px 0;">ডেভেলপার | উদ্যোক্তা | CEO, Cyber Protect</p>
+                    <p style="color: var(--text-dim); font-size: 12px; margin: 0;">BBA ২০২৪ | SSC Vocational RAC ২০২৩</p>
                 </div>
             </div>
 
-            <div class="info-card">
-                <h3><i class="fas fa-user-circle gold-text"></i> ব্যক্তিগত তথ্য</h3>
-                <div class="personal-info-grid">
-                    <div class="info-item"><i class="fas fa-birthday-cake"></i><div><span class="info-label">বর্তমান বয়স</span><span class="info-value" id="autoAge">লোড হচ্ছে...</span></div></div>
-                    <div class="info-item"><i class="fas fa-map-marker-alt"></i><div><span class="info-label">জেলা</span><span class="info-value">চাঁদপুর (ফরিদগঞ্জ)</span></div></div>
-                    <div class="info-item"><i class="fas fa-kaaba"></i><div><span class="info-label">ধর্ম</span><span class="info-value">ইসলাম</span></div></div>
-                    <div class="info-item"><i class="fas fa-flag"></i><div><span class="info-label">জাতীয়তা</span><span class="info-value">বাংলাদেশি</span></div></div>
+            <h3 style="margin-bottom: 15px;"><i class="fas fa-user-circle gold-text"></i> ব্যক্তিগত তথ্য</h3>
+            <div class="personal-info-grid">
+                <div class="p-info-item">
+                    <i class="fas fa-birthday-cake gold-text"></i>
+                    <div>
+                        <p class="p-info-label">বর্তমান বয়স</p>
+                        <p class="p-info-value">২০ বছর</p>
+                    </div>
+                </div>
+                <div class="p-info-item">
+                    <i class="fas fa-map-marker-alt gold-text"></i>
+                    <div>
+                        <p class="p-info-label">জেলা</p>
+                        <p class="p-info-value">চাঁদপুর (ফরিদগঞ্জ)</p>
+                    </div>
+                </div>
+                <div class="p-info-item">
+                    <i class="fas fa-mosque gold-text"></i>
+                    <div>
+                        <p class="p-info-label">ধর্ম</p>
+                        <p class="p-info-value">ইসলাম</p>
+                    </div>
+                </div>
+                <div class="p-info-item">
+                    <i class="fas fa-flag gold-text"></i>
+                    <div>
+                        <p class="p-info-label">জাতীয়তা</p>
+                        <p class="p-info-value">বাংলাদেশি</p>
+                    </div>
                 </div>
             </div>
 
             <div class="info-card">
                 <h3><i class="fas fa-info-circle gold-text"></i> আমার সম্পর্কে</h3>
-                <p>আসসালামু আলাইকুম! আমি <b>আব্দুল আজিজ</b>। আমি একজন গর্বিত বাংলাদেশি মুসলিম। চাঁদপুর জেলার ফরিদগঞ্জ থানায় আমার নিবাস। আমি "Elegant Family Outlet" এর প্রতিষ্ঠাতা এবং "Cyber Protect" এর প্রধান। প্রযুক্তি এবং সৃজনশীলতার সমন্বয়ে আমি এগিয়ে চলতে চাই।</p>
+                <p class="dim-text">
+                    আসসালামু আলাইকুম! আমি <b>আব্দুল আজিজ</b>। আমি একজন গর্বিত বাংলাদেশি মুসলিম। চাঁদপুর জেলার ফরিদগঞ্জ থানায় আমার নিবাস। "Cyber Protect" এর প্রধান। প্রযুক্তি এবং সৃজনশীলতার সমন্বয়ে আমি এগিয়ে চলতে চাই।
+                </p>
             </div>
         </div>
 
-      <div id="cyber-protect" class="tab-content">
-    <h1 class="cyber-text"><i class="fas fa-shield-virus"></i> Cyber Protect</h1>
-    
-    <div class="info-card" style="border-left: 5px solid var(--cyber-blue); background: linear-gradient(90deg, rgba(0, 210, 255, 0.05), transparent);">
-        <p style="font-style: italic; color: #ccc;">"যেখানেই অশ্লীল কন্টেন্ট, নাস্তিক্যবাদী প্রচার বা ধর্মীয় অবমাননা, সেখানে Cyber Protect কঠোর অবস্থানে থাকে।"</p>
-        <div class="contact-box">
-            <a href="#" class="contact-link fb-page"><i class="fab fa-facebook"></i> Page</a>
-            <a href="#" class="contact-link fb-group"><i class="fas fa-users"></i> Group</a>
-            <a href="mailto:contact@cyberprotect.com" class="contact-link gmail"><i class="fas fa-envelope"></i> Email</a>
+       <div id="edu" class="tab-content">
+            <h1 class="gold-text"><i class="fas fa-graduation-cap"></i> শিক্ষাগত যোগ্যতা</h1>
+            
+            <div class="info-card" style="border-left: 5px solid var(--accent-gold);">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <h4 style="margin:0;">HSC in BMET</h4>
+                    <span class="p-info-label" style="color: var(--accent-gold);">অধ্যয়নরত (২০২৬)</span>
+                </div>
+                <p class="dim-text">Business Management & Technology | স্পেশালাইজেশন: <b>HRD</b></p>
+            </div>
+
+            <div class="info-card" style="border-left: 5px solid #ff6700;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <h4 style="margin:0;">SSC Vocational (RAC)</h4>
+                    <span class="p-info-label" style="color: #ff6700;">পাসিং: ২০২৩</span>
+                </div>
+                <p class="dim-text">ট্রেড: Refrigeration and Air Conditioning</p>
+            </div>
+
+            <div class="info-card" style="border-left: 5px solid #00d2ff;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <h4 style="margin:0;">JDC (Junior Dakhil Certificate)</h4>
+                    <span class="p-info-label" style="color: #00d2ff;">পাসিং: ২০২০</span>
+                </div>
+                <p class="dim-text">মাদ্রাসা বোর্ড থেকে সফলভাবে সম্পন্ন।</p>
+            </div>
+
+            <h3 class="gold-text" style="margin-top:30px;"><i class="fas fa-certificate"></i> কারিগরি দক্ষতা</h3>
+            <div class="personal-info-grid">
+                
+                <div class="p-info-item">
+                    <i class="fas fa-database gold-text"></i>
+                    <div>
+                        <p class="p-info-label">Data Restoration</p>
+                        <p class="p-info-value">Media Recovery Expert</p>
+                    </div>
+                </div>
+
+                <div class="p-info-item">
+                    <i class="fas fa-shield-alt gold-text"></i>
+                    <div>
+                        <p class="p-info-label">Cyber Security</p>
+                        <p class="p-info-value">CEO, Cyber Protect</p>
+                    </div>
+                </div>
+
+                <div class="p-info-item">
+                    <i class="fas fa-language gold-text"></i>
+                    <div>
+                        <p class="p-info-label">Korean Language</p>
+                        <p class="p-info-value">হাঙ্গুল ও কথোপকথন</p>
+                    </div>
+                </div>
+
+                <div class="p-info-item">
+                    <i class="fas fa-tools gold-text"></i>
+                    <div>
+                        <p class="p-info-label">Technical Skill</p>
+                        <p class="p-info-value">RAC Specialist</p>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
 
-    <h3 class="cyber-text" style="margin-top: 30px;"><i class="fas fa-list-ul"></i> আমাদের বিশেষ সেবাসমূহ (৫০টি+)</h3>
-    
-    <style>
-        .service-grid-new {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 12px;
-            margin-top: 20px;
-        }
-        .service-box-new {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid var(--border-soft);
-            padding: 15px;
-            border-radius: 12px;
-            text-align: center;
-            transition: 0.3s;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-        }
-        .service-box-new i {
-            font-size: 22px;
-            color: var(--cyber-blue);
-            background: rgba(0, 210, 255, 0.1);
-            width: 45px;
-            height: 45px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-        }
-        .service-box-new span {
-            font-size: 13px;
-            font-weight: 500;
-            color: var(--text-dim);
-        }
-        .service-box-new:hover {
-            border-color: var(--cyber-blue);
-            transform: translateY(-5px);
-            background: rgba(0, 210, 255, 0.05);
-        }
-        .service-box-new:hover span {
-            color: white;
-        }
-    </style>
-
-    <div class="service-grid-new">
-        <div class="service-box-new"><i class="fas fa-unlock-alt"></i><span>ID Recovery</span></div>
-        <div class="service-box-new"><i class="fas fa-user-shield"></i><span>Hacked Account</span></div>
-        <div class="service-box-new"><i class="fas fa-key"></i><span>2-Step Bypass</span></div>
-        <div class="service-box-new"><i class="fas fa-user-lock"></i><span>Locked Unlock</span></div>
-        <div class="service-box-new"><i class="fas fa-shield-alt"></i><span>Profile Guard</span></div>
-        <div class="service-box-new"><i class="fas fa-ban"></i><span>Policy Fix</span></div>
-        <div class="service-box-new"><i class="fas fa-users-cog"></i><span>Group Security</span></div>
-        <div class="service-box-new"><i class="fas fa-comment-slash"></i><span>Spam Removal</span></div>
-        <div class="service-box-new"><i class="fas fa-user-times"></i><span>Fake Reporting</span></div>
-        <div class="service-box-new"><i class="fas fa-copyright"></i><span>Copyright Fix</span></div>
-        <div class="service-box-new"><i class="fas fa-hands-helping"></i><span>Cyber Bullying</span></div>
-        <div class="service-box-new"><i class="fas fa-user-secret"></i><span>Anti-Harassment</span></div>
-        <div class="service-box-new"><i class="fas fa-file-contract"></i><span>Data Encryption</span></div>
-        <div class="service-box-new"><i class="fas fa-mosque"></i><span>Religious Shield</span></div>
-        <div class="service-box-new"><i class="fas fa-eye-slash"></i><span>Propaganda Stop</span></div>
-        <div class="service-box-new"><i class="fas fa-robot"></i><span>Bot Security</span></div>
-        <div class="service-box-new"><i class="fas fa-fingerprint"></i><span>Security Audit</span></div>
-        <div class="service-box-new"><i class="fas fa-network-wired"></i><span>VPN Setup</span></div>
-        <div class="service-box-new"><i class="fas fa-laptop-code"></i><span>Safe Browsing</span></div>
-        <div class="service-box-new"><i class="fas fa-mobile"></i><span>App Permission</span></div>
-    </div>
-
-    <div class="info-card" style="margin-top: 20px;">
-        <h4 class="cyber-text">অন্যান্য টেকনিক্যাল সাপোর্টসমূহ:</h4>
-        <div class="cyber-grid">
-            <ul class="service-list">
-                <li><i class="fas fa-check"></i> Cloud Storage Security</li>
-                <li><i class="fas fa-check"></i> WhatsApp End-to-End Fix</li>
-                <li><i class="fas fa-check"></i> Vulnerability Scanning</li>
-                <li><i class="fas fa-check"></i> Secure OS Installation</li>
-                <li><i class="fas fa-check"></i> Parental Control Setup</li>
-            </ul>
-            <ul class="service-list">
-                <li><i class="fas fa-check"></i> Incident Response Plan</li>
-                <li><i class="fas fa-check"></i> Phishing Protection</li>
-                <li><i class="fas fa-check"></i> Malware Removal</li>
-                <li><i class="fas fa-check"></i> Social Engineering Help</li>
-                <li><i class="fas fa-check"></i> Multi-Factor Auth Setup</li>
-            </ul>
-        </div>
-        <p style="font-size: 11px; color: #555; margin-top: 15px; text-align: center;">এবং আরও অনেক বিশেষায়িত সাইবার নিরাপত্তা সেবা প্রদান করা হয়।</p>
-    </div>
-</div>
         <div id="skills" class="tab-content">
-            <h1 class="gold-text">দক্ষতা ও নেতৃত্ব</h1>
-            <div class="info-card" style="border-left: 5px solid var(--cyber-blue);">
-                <h4 class="cyber-text"><i class="fas fa-user-shield"></i> Cyber Leadership</h4>
-                <ul class="service-list">
-                    <li><i class="fas fa-shield-alt"></i> <b>Team Cyber Warning:</b> Senior Admin</li>
-                    <li><i class="fas fa-user-secret"></i> <b>Gangster 71:</b> Admin Panel Member</li>
-                    <li><i class="fas fa-globe"></i> <b>United Cyber Nation:</b> Specialist</li>
-                </ul>
-            </div>
-            <div class="info-card">
-                <h4><i class="fas fa-code gold-text"></i> Web & Bot Development</h4>
-                <p>HTML, CSS, JS, GitHub এবং টেলিগ্রাম বট অ্যাডমিন প্যানেল তৈরিতে পারদর্শী।</p>
-            </div>
-            <div class="info-card" style="border-left: 5px solid var(--xiaomi-orange);">
-                <h4 class="xiaomi-text"><i class="fas fa-mobile-alt"></i> Xiaomi & HyperOS</h4>
-                <p>Redmi Note 12/13 FRP Bypass এবং SamFW টুল ব্যবহারে অভিজ্ঞ।</p>
+            <h1 class="gold-text"><i class="fas fa-trophy"></i> সাফল্য ও শিক্ষা</h1>
+            <div class="personal-info-grid">
+                
+                <div class="p-info-item">
+                    <i class="fas fa-graduation-cap gold-text"></i>
+                    <div>
+                        <p class="p-info-label">Academic</p>
+                        <p class="p-info-value">BBA Graduation - 2024</p>
+                    </div>
+                </div>
+
+                <div class="p-info-item">
+                    <i class="fas fa-certificate gold-text"></i>
+                    <div>
+                        <p class="p-info-label">Vocational</p>
+                        <p class="p-info-value">SSC (RAC) - 2023</p>
+                    </div>
+                </div>
+
+                <div class="p-info-item" style="border-left: 4px solid var(--accent-gold);">
+                    <i class="fas fa-book gold-text"></i>
+                    <div>
+                        <p class="p-info-label">Creative Work</p>
+                        <p class="p-info-value">উপন্যাস সমাপ্ত: <b>স্বপ্নচিহ্ন</b></p>
+                    </div>
+                </div>
+
             </div>
         </div>
 
-        <div id="experience" class="tab-content">
-            <h1 class="gold-text">কাজের অভিজ্ঞতা</h1>
-            <div class="info-card">
-                <span class="gold-text">২০২৪ - বর্তমান</span>
-                <h4>Founder & CEO</h4>
-                <p><b>Elegant Family Outlet</b> - পোশাকের রিসেলিং ব্যবসা পরিচালনা।</p>
-            </div>
-            <div class="info-card">
-                <h4>Creative Author</h4>
-                <p>উপন্যাস <b>"Swapnochinho" (স্বপ্নচিহ্ন)</b> এর লেখক। (চরিত্র: <b>জায়ান</b>)</p>
+        <div id="works" class="tab-content">
+            <h1 class="gold-text"><i class="fas fa-quote-left"></i> অনুপ্রেরণা ও বাণী</h1>
+            <div style="max-height: 600px; overflow-y: auto; padding-right: 10px; scrollbar-width: thin;">
+                <div class="info-card" style="border-left: 5px solid #00d2ff;">
+                    <h4 class="gold-text">আল-হাদিস (Hadith)</h4>
+                    <p style="font-size: 18px; color: #00ff88; margin-bottom: 10px;">إِنَّ مَعَ الْعُسْرِ يُسْرًا</p>
+                    <p class="dim-text">"নিশ্চয়ই কষ্টের সাথেই স্বস্তি রয়েছে।"</p>
+                </div>
+                <div class="info-card" style="border-left: 5px solid #ff3e3e;">
+                    <h4 style="color: #ff3e3e;">কোরিয়ান প্রবাদ</h4>
+                    <p style="font-size: 18px; color: #fff; margin-bottom: 10px;">시작이 반이다</p>
+                    <p class="dim-text">"শুরু করা মানেই অর্ধেক কাজ শেষ হওয়া।"</p>
+                </div>
             </div>
         </div>
 
         <div id="accounts" class="tab-content">
-            <h1 class="gold-text"><i class="fas fa-share-nodes"></i> সোশ্যাল মিডিয়া</h1>
-            <div class="account-grid-30">
-                <a href="#" class="acc-link"><i class="fab fa-facebook" style="color:#1877F2;"></i>Facebook</a>
-                <a href="#" class="acc-link"><i class="fab fa-messenger" style="color:#00B2FF;"></i>Messenger</a>
-                <a href="#" class="acc-link"><i class="fab fa-whatsapp" style="color:#25D366;"></i>WhatsApp</a>
-                <a href="#" class="acc-link"><i class="fab fa-telegram" style="color:#26A5E4;"></i>Telegram</a>
-                
-                <a href="#" class="acc-link"><i class="fab fa-instagram" style="color:#E4405F;"></i>Instagram</a>
-                <a href="#" class="acc-link"><i class="fab fa-github" style="color:#fff;"></i>GitHub</a>
-                <a href="#" class="acc-link"><i class="fab fa-linkedin" style="color:#0A66C2;"></i>LinkedIn</a>
-                <a href="#" class="acc-link"><i class="fab fa-twitter" style="color:#1DA1F2;"></i>Twitter</a>
-                
-                <a href="#" class="acc-link"><i class="fab fa-youtube" style="color:#FF0000;"></i>YouTube</a>
-                <a href="#" class="acc-link"><i class="fab fa-tiktok" style="color:#fff;"></i>TikTok</a>
-                <a href="#" class="acc-link"><i class="fab fa-discord" style="color:#5865F2;"></i>Discord</a>
-                <a href="#" class="acc-link"><i class="fab fa-reddit" style="color:#FF4500;"></i>Reddit</a>
-                
-                <a href="#" class="acc-link"><i class="fab fa-snapchat" style="color:#FFFC00;"></i>Snapchat</a>
-                <a href="#" class="acc-link"><i class="fab fa-pinterest" style="color:#BD081C;"></i>Pinterest</a>
-                <a href="#" class="acc-link"><i class="fab fa-spotify" style="color:#1DB954;"></i>Spotify</a>
-                <a href="#" class="acc-link"><i class="fab fa-soundcloud" style="color:#FF3300;"></i>SoundCloud</a>
-                
-                <a href="#" class="acc-link"><i class="fab fa-medium" style="color:#fff;"></i>Medium</a>
-                <a href="#" class="acc-link"><i class="fab fa-quora" style="color:#A82400;"></i>Quora</a>
-                <a href="#" class="acc-link"><i class="fab fa-skype" style="color:#00AFF0;"></i>Skype</a>
-                <a href="#" class="acc-link"><i class="fab fa-vimeo" style="color:#1AB7EA;"></i>Vimeo</a>
-                
-                <a href="#" class="acc-link"><i class="fab fa-behance" style="color:#1769FF;"></i>Behance</a>
-                <a href="#" class="acc-link"><i class="fab fa-dribbble" style="color:#EA4C89;"></i>Dribbble</a>
-                <a href="#" class="acc-link"><i class="fab fa-slack" style="color:#4A154B;"></i>Slack</a>
-                <a href="#" class="acc-link"><i class="fab fa-stack-overflow" style="color:#F48024;"></i>StackOverflow</a>
-                
-                <a href="#" class="acc-link"><i class="fab fa-twitch" style="color:#9146FF;"></i>Twitch</a>
-                <a href="#" class="acc-link"><i class="fab fa-steam" style="color:#fff;"></i>Steam</a>
-                <a href="#" class="acc-link"><i class="fab fa-tumblr" style="color:#35465C;"></i>Tumblr</a>
-                <a href="#" class="acc-link"><i class="fab fa-threads" style="color:#fff;"></i>Threads</a>
-                
-                <a href="mailto:aziz@example.com" class="acc-link"><i class="fas fa-envelope" style="color:#EA4335;"></i>Gmail</a>
-                <a href="#" class="acc-link"><i class="fas fa-globe" style="color:var(--cyber-blue);"></i>Website</a>
+            <h1 class="gold-text"><i class="fas fa-share-nodes"></i> যোগাযোগ</h1>
+            <div class="account-grid-8">
+                <a id="link-fb" href="#" target="_blank" class="acc-link"><i class="fab fa-facebook" style="color:#1877F2;"></i><span>Facebook</span></a>
+                <a id="link-wa" href="#" target="_blank" class="acc-link"><i class="fab fa-whatsapp" style="color:#25D366;"></i><span>WhatsApp</span></a>
+                <a id="link-tg" href="#" target="_blank" class="acc-link"><i class="fab fa-telegram" style="color:#26A5E4;"></i><span>Telegram</span></a>
+                <a id="link-ig" href="#" target="_blank" class="acc-link"><i class="fab fa-instagram" style="color:#E4405F;"></i><span>Instagram</span></a>
+                <a id="link-gm" href="#" target="_blank" class="acc-link"><i class="fas fa-envelope" style="color:#EA4335;"></i><span>Gmail</span></a>
+                <a id="link-tw" href="#" target="_blank" class="acc-link"><i class="fab fa-twitter" style="color:#1DA1F2;"></i><span>Twitter</span></a>
+                <a id="link-yt" href="#" target="_blank" class="acc-link"><i class="fab fa-youtube" style="color:#FF0000;"></i><span>YouTube</span></a>
+                <a id="link-gh" href="#" target="_blank" class="acc-link"><i class="fab fa-github" style="color:#fff;"></i><span>GitHub</span></a>
             </div>
         </div>
 
-        <div id="achievements" class="tab-content">
-            <h1 class="gold-text">সাফল্য ও শিক্ষা</h1>
-            <div class="info-card">
-                <p><i class="fas fa-graduation-cap gold-text"></i> BBA Graduation - 2024</p>
-                <p><i class="fas fa-certificate gold-text"></i> SSC Vocational (RAC) - 2023</p>
-                <p><i class="fas fa-book gold-text"></i> উপন্যাস সমাপ্ত: <b>স্বপ্নচিহ্ন</b></p>
-            </div>
-        </div>
+        <footer>
+            <p style="font-size: 13px; color: #555; margin: 0;">
+                &copy; <span id="year"></span> <b>আব্দুল আজিজ</b>। সর্বস্বত্ব সংরক্ষিত।
+            </p>
+            <p style="font-size: 11px; color: #444; margin-top: 5px;">
+                Designed & Developed by <span class="gold-text">Abdul Aziz</span>
+            </p>
+        </footer>
 
     </div>
 
     <script>
+        const myLinks = {
+            facebook: "https://facebook.com/yourid", 
+            whatsapp: "https://wa.me/8801xxxxxxxxx",
+            telegram: "https://t.me/yourusername",
+            instagram: "https://instagram.com/yourid",
+            gmail: "mailto:your-email@gmail.com",
+            twitter: "https://twitter.com/yourid",
+            youtube: "https://youtube.com/@yourchannel",
+            github: "https://github.com/yourid"
+        };
+
+        function initPage() {
+            document.getElementById('link-fb').href = myLinks.facebook;
+            document.getElementById('link-wa').href = myLinks.whatsapp;
+            document.getElementById('link-tg').href = myLinks.telegram;
+            document.getElementById('link-ig').href = myLinks.instagram;
+            document.getElementById('link-gm').href = myLinks.gmail;
+            document.getElementById('link-tw').href = myLinks.twitter;
+            document.getElementById('link-yt').href = myLinks.youtube;
+            document.getElementById('link-gh').href = myLinks.github;
+            document.getElementById("year").innerText = new Date().getFullYear();
+        }
+
         function openTab(tabId, btn) {
             document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
             document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
@@ -424,15 +413,7 @@
             btn.classList.add('active');
         }
 
-        function updateAge() {
-            const birthDate = new Date("2005-04-07");
-            const today = new Date();
-            let age = today.getFullYear() - birthDate.getFullYear();
-            const monthDiff = today.getMonth() - birthDate.getMonth();
-            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) { age--; }
-            document.getElementById("autoAge").innerText = age + " বছর";
-        }
-        window.onload = updateAge;
+        window.onload = initPage;
     </script>
 </body>
 </html>
