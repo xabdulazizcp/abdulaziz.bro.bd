@@ -1,370 +1,98 @@
--<!DOCTYPE html>
-<html lang="bn">
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Abdul Aziz | Personal Portfolio</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>X-Msg | Fast Sender</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        :root {
-            --bg-main: #050505;
-            --card-bg: #121212;
-            --accent-gold: #ffcc00;
-            --text-dim: #b3b3b3;
-            --border-soft: #222;
-            --cyber-blue: #00d2ff;
-            --xiaomi-orange: #ff6700;
-            --korean-red: #ff3e3e;
-        }
-
         body {
-            background-color: var(--bg-main);
-            color: white;
-            font-family: 'Segoe UI', Tahoma, sans-serif;
-            margin: 0;
-            display: flex;
-            overflow: hidden;
+            background-color: #0f172a;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        /* Sidebar Navigation */
-        .sidebar {
-            width: 80px;
-            height: 100vh;
-            background: var(--card-bg);
-            border-right: 1px solid var(--border-soft);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding-top: 30px;
-            gap: 20px;
+        /* Right Side Small Notification */
+        #notification {
             position: fixed;
-            z-index: 100;
-        }
-
-        .menu-btn {
-            width: 50px;
-            height: 50px;
-            background: #1a1a1a;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-dim);
-            cursor: pointer;
-            transition: 0.3s;
-            font-size: 20px;
-        }
-
-        .menu-btn:hover, .menu-btn.active {
-            background: var(--accent-gold);
-            color: black;
-            box-shadow: 0 0 15px rgba(255, 204, 0, 0.4);
-        }
-
-        .content-area {
-            margin-left: 80px;
-            padding: 40px;
-            width: calc(100% - 80px);
-            height: 100vh;
-            overflow-y: auto;
-            scroll-behavior: smooth;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .tab-content { display: none; animation: fadeIn 0.5s ease-in-out; flex-grow: 1; }
-        .tab-content.active { display: block; }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Profile Header */
-        .profile-header {
-            display: flex;
-            align-items: center;
-            gap: 30px;
-            margin-bottom: 40px;
-            background: var(--card-bg);
-            padding: 30px;
-            border-radius: 20px;
-            border: 1px solid var(--border-soft);
-        }
-
-        .profile-img {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            border: 4px solid var(--accent-gold);
-            object-fit: cover;
-        }
-
-        .info-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-soft);
-            padding: 25px;
-            border-radius: 15px;
-            margin-bottom: 20px;
-            transition: 0.3s;
-        }
-
-        .info-card:hover { border-color: var(--accent-gold); }
-
-        /* Personal Info Grid */
-        .personal-info-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .p-info-item {
-            background: var(--card-bg);
-            border: 1px solid var(--border-soft);
-            padding: 15px 20px;
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            transition: 0.3s;
-        }
-
-        .p-info-item:hover { border-color: var(--cyber-blue); }
-
-        .p-info-label { font-size: 11px; color: var(--cyber-blue); margin: 0; text-transform: uppercase; }
-        .p-info-value { font-size: 15px; font-weight: bold; margin: 0; color: white; }
-
-        /* Social Grid */
-        .account-grid-8 {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .acc-link {
-            text-decoration: none;
+            top: 20px;
+            right: -300px; /* শুরুতে স্ক্রিনের বাইরে থাকবে */
+            background-color: #22c55e;
             color: white;
-            background: rgba(255, 255, 255, 0.03);
-            padding: 20px 10px;
-            border-radius: 15px;
-            border: 1px solid var(--border-soft);
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: right 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            z-index: 9999;
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-            transition: 0.3s;
+            items-center: center;
+            gap: 8px;
+            font-weight: 500;
+            font-size: 14px;
         }
 
-        .acc-link i { font-size: 28px; }
-        .acc-link span { font-size: 13px; font-weight: 500; }
-
-        .acc-link:hover {
-            border-color: var(--accent-gold);
-            transform: translateY(-5px);
-            background: rgba(255, 204, 0, 0.05);
+        #notification.show {
+            right: 20px; /* স্ক্রিনে চলে আসবে */
         }
 
-        .gold-text { color: var(--accent-gold); }
-        .dim-text { color: var(--text-dim); }
-
-        footer {
-            margin-top: auto;
-            padding: 30px 0;
-            border-top: 1px solid var(--border-soft);
-            text-align: center;
-        }
-
-        @media (max-width: 900px) {
-            .profile-header { flex-direction: column; text-align: center; }
-            .account-grid-8 { grid-template-columns: repeat(2, 1fr); }
-            .personal-info-grid { grid-template-columns: 1fr; }
-            .content-area { padding: 20px; margin-left: 75px; }
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
     </style>
 </head>
-<body>
+<body class="flex items-center justify-center h-screen m-0">
 
-    <div class="sidebar">
-        <div class="menu-btn active" onclick="openTab('home', this)" title="প্রোফাইল"><i class="fas fa-user"></i></div>
-        <div class="menu-btn" onclick="openTab('edu', this)" title="শিক্ষা"><i class="fas fa-graduation-cap"></i></div>
-        <div class="menu-btn" onclick="openTab('achievements', this)" title="সাফল্য ও শিক্ষা"><i class="fas fa-trophy"></i></div>
-        <div class="menu-btn" onclick="openTab('works', this)" title="উপন্যাস ও বাণী"><i class="fas fa-book"></i></div>
-        <div class="menu-btn" onclick="openTab('accounts', this)" title="যোগাযোগ"><i class="fas fa-share-nodes"></i></div>
+    <!-- Small Notification -->
+    <div id="notification">
+        <span>✅</span> Message send successfully
     </div>
 
-    <div class="content-area">
-
-        <div id="home" class="tab-content active">
-            <div class="profile-header">
-                <img src="abdul_aziz.jpg" alt="Abdul Aziz" class="profile-img">
-                <div>
-                    <h1 class="gold-text" style="margin: 0;">ABDUL AZIZ </h1>
-                    <p style="color: var(--text-dim); font-size: 14px; margin: 5px 0;">ডেভেলপার | উদ্যোক্তা | CEO, Cyber Protect</p>
-                    <p style="color: var(--text-dim); font-size: 12px; margin: 0;">HSC 2026 | SSC Vocational RAC 2023</p>
-                </div>
-            </div>
-
-            <h3 style="margin-bottom: 15px;"><i class="fas fa-user-circle gold-text"></i> ব্যক্তিগত তথ্য</h3>
-            <div class="personal-info-grid">
-                <div class="p-info-item">
-                    <i class="fas fa-birthday-cake gold-text"></i>
-                    <div><p class="p-info-label">বর্তমান বয়স</p><p class="p-info-value">২০ বছর</p></div>
-                </div>
-                <div class="p-info-item">
-                    <i class="fas fa-map-marker-alt gold-text"></i>
-                    <div><p class="p-info-label">জেলা</p><p class="p-info-value">চাঁদপুর (ফরিদগঞ্জ)</p></div>
-                </div>
-                <div class="p-info-item">
-                    <i class="fas fa-mosque gold-text"></i>
-                    <div><p class="p-info-label">ধর্ম</p><p class="p-info-value">ইসলাম</p></div>
-                </div>
-                <div class="p-info-item">
-                    <i class="fas fa-flag gold-text"></i>
-                    <div><p class="p-info-label">জাতীয়তা</p><p class="p-info-value">বাংলাদেশি</p></div>
-                </div>
-            </div>
-
-            <div class="info-card">
-                <h3><i class="fas fa-info-circle gold-text"></i> আমার সম্পর্কে</h3>
-                <p class="dim-text">
-                    আসসালামু আলাইকুম! আমি <b>আব্দুল আজিজ</b>। আমি একজন গর্বিত বাংলাদেশি মুসলিম। চাঁদপুর জেলার ফরিদগঞ্জ থানায় আমার নিবাস। "Cyber Protect" এর প্রধান। প্রযুক্তি এবং সৃজনশীলতার সমন্বয়ে আমি এগিয়ে চলতে চাই।
-                </p>
-            </div>
-        </div>
-
-        <div id="edu" class="tab-content">
-            <h1 class="gold-text"><i class="fas fa-graduation-cap"></i> শিক্ষাগত যোগ্যতা</h1>
+    <!-- Main Card -->
+    <div class="glass p-8 rounded-2xl w-full max-w-sm shadow-2xl">
+        <h2 class="text-white text-2xl font-bold mb-6 text-center tracking-tight">X-MESSAGE</h2>
+        
+        <div class="space-y-4">
+            <input type="text" id="name" placeholder="Name" 
+                class="w-full bg-gray-800 border border-gray-700 p-3 rounded-lg text-white outline-none focus:border-green-500 transition">
             
-            <div class="info-card" style="border-left: 5px solid var(--accent-gold);">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <h4 style="margin:0;">HSC in BMET</h4>
-                    <span class="p-info-label" style="color: var(--accent-gold);">অধ্যয়নরত (২০২৬)</span>
-                </div>
-                <p class="dim-text">Business Management & Technology | স্পেশালাইজেশন: <b>HRD</b></p>
-            </div>
+            <input type="number" id="number" placeholder="Phone Number" 
+                class="w-full bg-gray-800 border border-gray-700 p-3 rounded-lg text-white outline-none focus:border-green-500 transition">
 
-            <div class="info-card" style="border-left: 5px solid var(--xiaomi-orange);">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <h4 style="margin:0;">SSC Vocational (RAC)</h4>
-                    <span class="p-info-label" style="color: var(--xiaomi-orange);">পাসিং: ২০২৩</span>
-                </div>
-                <p class="dim-text">ট্রেড: Refrigeration and Air Conditioning</p>
-            </div>
+            <textarea id="message" placeholder="Your Message" rows="3"
+                class="w-full bg-gray-800 border border-gray-700 p-3 rounded-lg text-white outline-none focus:border-green-500 transition resize-none"></textarea>
 
-            <h3 class="gold-text" style="margin-top:30px;"><i class="fas fa-star"></i> কারিগরি দক্ষতা</h3>
-            <div class="personal-info-grid">
-                <div class="p-info-item">
-                    <i class="fas fa-database gold-text"></i>
-                    <div><p class="p-info-label">DATA RESTORATION</p><p class="p-info-value">Media Recovery Expert</p></div>
-                </div>
-                <div class="p-info-item">
-                    <i class="fas fa-shield-alt gold-text"></i>
-                    <div><p class="p-info-label">Cyber Security (Basic)</p><p class="p-info-value">CEO, Cyber Protect</p></div>
-                </div>
-                <div class="p-info-item">
-                    <i class="fas fa-language gold-text"></i>
-                    <div><p class="p-info-label">KOREAN LANGUAGE</p><p class="p-info-value">হাঙ্গুল ও কথোপকথন</p></div>
-                </div>
-                <div class="p-info-item">
-                    <i class="fas fa-code gold-text"></i>
-                    <div><p class="p-info-label">WEB DEV</p><p class="p-info-value">HTML, CSS, JS</p></div>
-                </div>
-            </div>
+            <button onclick="send()" 
+                class="w-full bg-green-600 hover:bg-green-500 text-white font-bold py-3 rounded-lg transition transform active:scale-95">
+                Send Now
+            </button>
         </div>
-
-        <div id="achievements" class="tab-content">
-            <h1 class="gold-text"><i class="fas fa-trophy"></i> সাফল্য ও শিক্ষা</h1>
-            <div class="personal-info-grid">
-                <div class="p-info-item">
-                    <i class="fas fa-graduation-cap gold-text" style="font-size: 22px;"></i>
-                    <div>
-                        <p class="p-info-label" style="color: var(--accent-gold);">Academic</p>
-                        <p class="p-info-value">HSC in BMET - 2026</p>
-                    </div>
-                </div>
-
-                <div class="p-info-item">
-                    <i class="fas fa-certificate gold-text" style="font-size: 22px;"></i>
-                    <div>
-                        <p class="p-info-label" style="color: var(--cyber-blue);">Vocational</p>
-                        <p class="p-info-value">SSC (RAC) - 2023</p>
-                    </div>
-                </div>
-
-                <div class="p-info-item" style="border-left: 4px solid var(--accent-gold);">
-                    <i class="fas fa-book gold-text" style="font-size: 22px;"></i>
-                    <div>
-                        <p class="p-info-label" style="color: var(--text-dim);">Creative Work</p>
-                        <p class="p-info-value">উপন্যাস : <b> Coming Soon</b></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div id="works" class="tab-content">
-            <h1 class="gold-text"><i class="fas fa-quote-left"></i> অনুপ্রেরণা ও বাণী</h1>
-            <div style="max-height: 500px; overflow-y: auto; padding-right: 10px;">
-                <div class="info-card" style="border-left: 5px solid #00d2ff;">
-                    <h4 class="gold-text">আল-হাদিস</h4>
-                    <p style="font-size: 18px; color: #00ff88;">إِنَّ مَعَ الْعُسْرِ يُسْرًا</p>
-                    <p class="dim-text">"নিশ্চয়ই কষ্টের সাথেই স্বস্তি রয়েছে।"</p>
-                </div>
-                <div class="info-card" style="border-left: 5px solid #ff3e3e;">
-                    <h4 style="color: #ff3e3e;">কোরিয়ান প্রবাদ</h4>
-                    <p style="font-size: 18px; color: #fff;">시작이 반이다</p>
-                    <p class="dim-text">"শুরু করা মানেই অর্ধেক কাজ শেষ হওয়া।"</p>
-                </div>
-            </div>
-        </div>
-
-        <div id="accounts" class="tab-content">
-            <h1 class="gold-text"><i class="fas fa-share-nodes"></i> যোগাযোগ</h1>
-            <div class="account-grid-8">
-                <a id="link-fb" href="#" target="_blank" class="acc-link"><i class="fab fa-facebook" style="color:#1877F2;"></i><span>Facebook</span></a>
-                <a id="link-wa" href="#" target="_blank" class="acc-link"><i class="fab fa-whatsapp" style="color:#25D366;"></i><span>WhatsApp</span></a>
-                <a id="link-tg" href="#" target="_blank" class="acc-link"><i class="fab fa-telegram" style="color:#26A5E4;"></i><span>Telegram</span></a>
-                <a id="link-gh" href="#" target="_blank" class="acc-link"><i class="fab fa-github" style="color:#fff;"></i><span>GitHub</span></a>
-                <a id="link-ig" href="#" target="_blank" class="acc-link"><i class="fab fa-instagram" style="color:#E4405F;"></i><span>Instagram</span></a>
-                <a id="link-gm" href="#" target="_blank" class="acc-link"><i class="fas fa-envelope" style="color:#EA4335;"></i><span>Gmail</span></a>
-            </div>
-        </div>
-
-        <footer>
-            <p style="font-size: 13px; color: #555; margin: 0;">&copy; <span id="year"></span> <b>Abdul Aziz.</b> All rights reserved.</p>
-            <p style="font-size: 11px; color: #444; margin-top: 5px;">Designed & Developed by <span class="gold-text">Abdul Aziz</span></p>
-        </footer>
     </div>
 
     <script>
-        const myLinks = {
-            facebook: "https://www.facebook.com/is.abdul.aziz", 
-            whatsapp: "https://wa.me/8801xxxxxxxxx",
-            telegram: "https://t.me",
-            github: "https://github.com/",
-            instagram: "https://www.instagram.com/xjabdul",
-            gmail: "mailto:hmabdulaziz32@gmail.com"
-        };
+        function send() {
+            const name = document.getElementById('name').value;
+            const number = document.getElementById('number').value;
+            const message = document.getElementById('message').value;
+            const notif = document.getElementById('notification');
 
-        function initPage() {
-            document.getElementById('link-fb').href = myLinks.facebook;
-            document.getElementById('link-wa').href = myLinks.whatsapp;
-            document.getElementById('link-tg').href = myLinks.telegram;
-            document.getElementById('link-gh').href = myLinks.github;
-            document.getElementById('link-ig').href = myLinks.instagram;
-            document.getElementById('link-gm').href = myLinks.gmail;
-            document.getElementById("year").innerText = new Date().getFullYear();
+            if (name && number && message) {
+                // নোটিফিকেশন দেখানো
+                notif.classList.add('show');
+
+                // ইনপুট বক্স রিসেট করা
+                document.getElementById('name').value = '';
+                document.getElementById('number').value = '';
+                document.getElementById('message').value = '';
+
+                // ৩ সেকেন্ড পর নোটিফিকেশন সরিয়ে ফেলা
+                setTimeout(() => {
+                    notif.classList.remove('show');
+                }, 3000);
+            } else {
+                alert("Please fill all boxes!");
+            }
         }
-
-        function openTab(tabId, btn) {
-            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-            document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
-            btn.classList.add('active');
-        }
-
-        window.onload = initPage;
     </script>
 </body>
 </html>
