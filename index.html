@@ -3,95 +3,209 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>X-Msg | Fast Sender</title>
+    <title>X-EXTRACTOR | SECURE PRO</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary: #ff0055;
+            --bg: #05070a;
+            --card: #0d1117;
+        }
+
         body {
-            background-color: #0f172a;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        /* Right Side Small Notification */
-        #notification {
-            position: fixed;
-            top: 20px;
-            right: -300px; /* শুরুতে স্ক্রিনের বাইরে থাকবে */
-            background-color: #22c55e;
-            color: white;
-            padding: 12px 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            transition: right 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-            z-index: 9999;
+            background-color: var(--bg);
+            font-family: 'Space Grotesk', sans-serif;
             display: flex;
-            items-center: center;
-            gap: 8px;
-            font-weight: 500;
-            font-size: 14px;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow: hidden;
         }
 
-        #notification.show {
-            right: 20px; /* স্ক্রিনে চলে আসবে */
+        /* --- Password Overlay Style --- */
+        #lock-screen {
+            position: fixed;
+            inset: 0;
+            background: var(--bg);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(20px);
         }
 
-        .glass {
+        .lock-card {
+            background: var(--card);
+            padding: 40px;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 0, 85, 0.2);
+            text-align: center;
+            box-shadow: 0 0 50px rgba(255, 0, 85, 0.1);
+        }
+
+        .pass-input {
             background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 12px;
+            border-radius: 12px;
+            width: 100%;
+            text-align: center;
+            margin-top: 20px;
+            outline: none;
+            font-size: 18px;
+            letter-spacing: 5px;
         }
+
+        .pass-input:focus { border-color: var(--primary); }
+
+        /* --- Content Area (Initially Hidden) --- */
+        #main-content { display: none; }
+
+        /* Animated Background & Cards (Same as before) */
+        .bg-glow {
+            position: absolute; width: 300px; height: 300px;
+            background: radial-gradient(circle, rgba(255, 0, 85, 0.15) 0%, transparent 70%);
+            top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: -1;
+        }
+
+        .main-card {
+            position: relative; background: var(--card); border-radius: 30px;
+            padding: 2px; overflow: hidden;
+        }
+
+        .main-card::before {
+            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: conic-gradient(transparent, transparent, transparent, var(--primary));
+            animation: rotate 4s linear infinite;
+        }
+
+        @keyframes rotate { 100% { transform: rotate(360deg); } }
+
+        .inner-content { background: var(--card); border-radius: 28px; padding: 35px; position: relative; z-index: 1; }
+
+        .method-list { display: none; background: rgba(20, 25, 35, 0.9); border: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(20px); }
+        .shimmer { background: linear-gradient(90deg, transparent, rgba(255, 0, 85, 0.1), transparent); background-size: 200% 100%; animation: shimmer 1.5s infinite; }
+        @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+
+        .trx-box { display: none; border: 1px dashed rgba(255, 0, 85, 0.3); background: rgba(255, 0, 85, 0.05); }
     </style>
 </head>
-<body class="flex items-center justify-center h-screen m-0">
+<body>
 
-    <!-- Small Notification -->
-    <div id="notification">
-        <span>✅</span> Message send successfully
+    <!-- 1. Password Lock Screen -->
+    <div id="lock-screen">
+        <div class="lock-card w-[320px]">
+            <div class="flex justify-center mb-4 text-[#ff0055]">
+                <svg width="40" height="40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+            </div>
+            <h2 class="text-white font-bold uppercase tracking-widest text-sm">Access Restricted</h2>
+            <input type="password" id="access-key" class="pass-input" placeholder="••••••••••">
+            <button onclick="checkKey()" class="w-full bg-[#ff0055] text-white py-3 rounded-xl mt-4 font-bold text-xs uppercase tracking-widest active:scale-95 transition-all">Verify Now</button>
+            <p id="err-msg" class="text-[10px] text-red-500 mt-3 opacity-0">Incorrect Key!</p>
+        </div>
     </div>
 
-    <!-- Main Card -->
-    <div class="glass p-8 rounded-2xl w-full max-w-sm shadow-2xl">
-        <h2 class="text-white text-2xl font-bold mb-6 text-center tracking-tight">X-MESSAGE</h2>
-        
-        <div class="space-y-4">
-            <input type="text" id="name" placeholder="Name" 
-                class="w-full bg-gray-800 border border-gray-700 p-3 rounded-lg text-white outline-none focus:border-green-500 transition">
-            
-            <input type="number" id="number" placeholder="Phone Number" 
-                class="w-full bg-gray-800 border border-gray-700 p-3 rounded-lg text-white outline-none focus:border-green-500 transition">
+    <!-- 2. Main Site Content -->
+    <div id="main-content">
+        <div class="bg-glow"></div>
+        <div class="main-card w-[380px]">
+            <div class="inner-content">
+                <div class="flex items-center justify-between mb-8">
+                    <div>
+                        <h1 class="text-white text-xl font-bold tracking-tight"> FUCK YOUR SYSTEM <span class="text-[#ff0055]">.</span></h1>
+                        <p class="text-gray-500 text-[10px] uppercase tracking-widest font-medium">Version 1. 4.0</p>
+                    </div>
+                    <div class="h-10 w-10 rounded-2xl bg-[#ff0055] flex items-center justify-center shadow-lg shadow-rose-900/40">
+                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                    </div>
+                </div>
 
-            <textarea id="message" placeholder="Your Message" rows="3"
-                class="w-full bg-gray-800 border border-gray-700 p-3 rounded-lg text-white outline-none focus:border-green-500 transition resize-none"></textarea>
+                <div class="space-y-5">
+                    <!-- Dropdown, Inputs, Buttons (Same as before) -->
+                    <div class="relative">
+                        <div onclick="toggleDrop()" id="drop-head" class="w-full bg-[#0d1117] p-4 rounded-2xl text-white flex items-center justify-between cursor-pointer border border-white/5">
+                            <div class="flex items-center gap-3">
+                                <img id="head-img" src="https://www.logo.wine/a/logo/BKash/BKash-Logo.wine.svg" class="w-6 h-6 object-contain">
+                                <span id="head-text" class="text-sm font-medium">bKash</span>
+                            </div>
+                            <svg id="drop-icon" class="w-4 h-4 text-[#ff0055]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"/></svg>
+                        </div>
+                        <div id="drop-body" class="method-list absolute w-full mt-2 rounded-2xl overflow-hidden z-50">
+                            <div onclick="setMethod('bKash', 'https://www.logo.wine/a/logo/BKash/BKash-Logo.wine.svg')" class="p-4 hover:bg-white/5 flex items-center gap-3 cursor-pointer text-white text-sm">bKash</div>
+                            <div onclick="setMethod('Nagad', 'https://download.logo.wine/logo/Nagad/Nagad-Logo.wine.png')" class="p-4 hover:bg-white/5 flex items-center gap-3 cursor-pointer text-white text-sm">Nagad</div>
+                        
+                        </div>
+                    </div>
 
-            <button onclick="send()" 
-                class="w-full bg-green-600 hover:bg-green-500 text-white font-bold py-3 rounded-lg transition transform active:scale-95">
-                Send Now
-            </button>
+                    <input type="number" id="num" placeholder="Receiver Number" class="w-full p-4 rounded-2xl bg-[#0d1117] text-white text-sm outline-none border border-white/5">
+                    <textarea id="msg" placeholder="Paste full success message here..." rows="4" class="w-full p-4 rounded-2xl bg-[#0d1117] text-white text-[12px] outline-none border border-white/5 resize-none"></textarea>
+                    
+                    <button onclick="startExtraction()" id="main-btn" class="w-full bg-[#ff0055] text-white font-bold py-4 rounded-2xl shadow-lg active:scale-95 text-[11px] uppercase tracking-[0.2em]">Send Now</button>
+
+                    <div id="result-container" class="trx-box rounded-2xl p-5 text-center">
+                        <div id="loader" class="hidden"><div class="shimmer h-4 w-32 bg-white/5 mx-auto rounded-full mb-2"></div></div>
+                        <div id="content-area" class="hidden">
+                            <h3 id="final-id" class="text-white text-2xl font-bold tracking-widest font-mono">--------</h3>
+                            <button onclick="copyId()" id="copy-text" class="text-[#ff0055] text-[10px] font-bold uppercase mt-2">Copy ID</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
-        function send() {
-            const name = document.getElementById('name').value;
-            const number = document.getElementById('number').value;
-            const message = document.getElementById('message').value;
-            const notif = document.getElementById('notification');
-
-            if (name && number && message) {
-                // নোটিফিকেশন দেখানো
-                notif.classList.add('show');
-
-                // ইনপুট বক্স রিসেট করা
-                document.getElementById('name').value = '';
-                document.getElementById('number').value = '';
-                document.getElementById('message').value = '';
-
-                // ৩ সেকেন্ড পর নোটিফিকেশন সরিয়ে ফেলা
-                setTimeout(() => {
-                    notif.classList.remove('show');
-                }, 3000);
+        // --- Password Function ---
+        function checkKey() {
+            const key = document.getElementById('access-key').value;
+            const error = document.getElementById('err-msg');
+            
+            if (key === "XJZA-YAN-FARIS") {
+                document.getElementById('lock-screen').style.display = 'none';
+                document.getElementById('main-content').style.display = 'flex';
             } else {
-                alert("Please fill all boxes!");
+                error.style.opacity = '1';
+                setTimeout(() => { error.style.opacity = '0'; }, 2000);
             }
+        }
+
+        // --- Rest of functions (Dropdown & Extraction) ---
+        function toggleDrop() {
+            const body = document.getElementById('drop-body');
+            body.style.display = body.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function setMethod(name, img) {
+            document.getElementById('head-text').innerText = name;
+            document.getElementById('head-img').src = img;
+            toggleDrop();
+        }
+
+        function startExtraction() {
+            const msg = document.getElementById('msg').value;
+            const match = msg.match(/TrxID\s+([A-Z0-9]+)/i);
+
+            if(match) {
+                document.getElementById('result-container').style.display = 'block';
+                document.getElementById('loader').classList.remove('hidden');
+                document.getElementById('content-area').classList.add('hidden');
+
+                setTimeout(() => {
+                    document.getElementById('loader').classList.add('hidden');
+                    document.getElementById('content-area').classList.remove('hidden');
+                    document.getElementById('final-id').innerText = match[1];
+                }, 2000);
+            } else { alert("Invalid SMS Format!"); }
+        }
+
+        function copyId() {
+            const id = document.getElementById('final-id').innerText;
+            navigator.clipboard.writeText(id).then(() => {
+                alert("ID Copied!");
+            });
         }
     </script>
 </body>
