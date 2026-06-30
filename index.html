@@ -3,239 +3,235 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S-Y-S-T-E-M ERROR | SECURE PRO</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #ff0055;
-            --bg: #05070a;
-            --card: #0d1117;
-        }
-
-        body {
-            background-color: var(--bg);
-            font-family: 'Space Grotesk', sans-serif;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            margin: 0;
-            overflow: hidden;
-        }
-
-        /* --- Password Overlay Style --- */
-        #lock-screen {
-            position: fixed;
-            inset: 0;
-            background: var(--bg);
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            backdrop-filter: blur(20px);
-        }
-
-        .lock-card {
-            background: var(--card);
-            padding: 40px;
-            border-radius: 30px;
-            border: 1px solid rgba(255, 0, 85, 0.2);
-            text-align: center;
-            box-shadow: 0 0 50px rgba(255, 0, 85, 0.1);
-        }
-
-        .pass-input {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: white;
-            padding: 12px;
-            border-radius: 12px;
-            width: 100%;
-            text-align: center;
-            margin-top: 20px;
-            outline: none;
-            font-size: 18px;
-            letter-spacing: 5px;
-        }
-
-        .pass-input:focus { border-color: var(--primary); }
-
-        /* --- Content Area --- */
-        #main-content { display: none; }
-
-        .bg-glow {
-            position: absolute; width: 300px; height: 300px;
-            background: radial-gradient(circle, rgba(255, 0, 85, 0.15) 0%, transparent 70%);
-            top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: -1;
-        }
-
-        .main-card {
-            position: relative; background: var(--card); border-radius: 30px;
-            padding: 2px; overflow: hidden;
-        }
-
-        .main-card::before {
-            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
-            background: conic-gradient(transparent, transparent, transparent, var(--primary));
-            animation: rotate 4s linear infinite;
-        }
-
-        @keyframes rotate { 100% { transform: rotate(360deg); } }
-
-        .inner-content { background: var(--card); border-radius: 28px; padding: 35px; position: relative; z-index: 1; }
-
-        .method-list { display: none; background: rgba(20, 25, 35, 0.95); border: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(20px); }
-        .shimmer { background: linear-gradient(90deg, transparent, rgba(255, 0, 85, 0.1), transparent); background-size: 200% 100%; animation: shimmer 1.5s infinite; }
-        @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
-
-        .trx-box { display: none; border: 1px dashed rgba(255, 0, 85, 0.3); background: rgba(255, 0, 85, 0.05); }
-
-        /* --- Compact Neon Notification --- */
-        #toast {
-            position: fixed; top: 20px; right: 20px; z-index: 2000;
-            transform: translateX(180%); transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            background: #0d1117; color: white; 
-            padding: 10px 18px; border-radius: 12px;
-            font-size: 11px; font-weight: 700;
-            display: flex; align-items: center; gap: 8px;
-            /* Neon Border & Glow */
-            border: 1px solid var(--primary);
-            box-shadow: 0 0 10px rgba(255, 0, 85, 0.2), inset 0 0 5px rgba(255, 0, 85, 0.1);
-            letter-spacing: 1px;
-        }
-        #toast.show { transform: translateX(0); }
-    </style>
+    <meta name="title" content="Happy birthday v2 | Minhaj Dev">
+    <title>Happy Birthday V2 | Minhaj.Dev</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 </head>
 <body>
-
-    <!-- Small Neon Toast Notification -->
-    <div id="toast">
-        <div class="h-2 w-2 rounded-full bg-[#ff0055] animate-pulse"></div>
-        <span>SENT SUCCESSFULLY!</span>
-    </div>
-
-    <!-- 1. Password Lock Screen -->
-    <div id="lock-screen">
-        <div class="lock-card w-[320px]">
-            <div class="flex justify-center mb-4 text-[#ff0055]">
-                <svg width="40" height="40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
-            </div>
-            <h2 class="text-white font-bold uppercase tracking-widest text-sm">Access Restricted</h2>
-            <input type="password" id="access-key" class="pass-input" placeholder="••••••••••">
-            <button onclick="checkKey()" class="w-full bg-[#ff0055] text-white py-3 rounded-xl mt-4 font-bold text-xs uppercase tracking-widest active:scale-95 transition-all">Verify Now</button>
-            <p id="err-msg" class="text-[10px] text-red-500 mt-3 opacity-0">Incorrect Key!</p>
+    <div id="wrapper">
+        <div class="flag__birthday">
+            <img src="./images/1.png" alt="" width="350" class="flag__left">
+            <img src="./images/1.png" alt="" width="350" class="flag__right">
         </div>
-    </div>
-
-    <!-- 2. Main Site Content -->
-    <div id="main-content">
-        <div class="bg-glow"></div>
-        <div class="main-card w-[380px]">
-            <div class="inner-content">
-                <div class="flex items-center justify-between mb-8">
-                    <div>
-                        <h1 class="text-white text-xl font-bold tracking-tight"> FUCK YOUR SYSTEM <span class="text-[#ff0055]">.</span></h1>
-                        <p class="text-gray-500 text-[10px] uppercase tracking-widest font-medium">Version 4.0</p>
-                    </div>
-                    <div class="h-10 w-10 rounded-2xl bg-[#ff0055] flex items-center justify-center shadow-lg shadow-rose-900/40">
-                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        <div class="content">
+            <div class="left">
+                <div class="title">
+                    <h1 class="happy">
+                        <span style="--t: 4s;">H</span>
+                        <span style="--t: 4.2s;">a</span>
+                        <span style="--t: 4.4s;">p</span>
+                        <span style="--t: 4.6s;">p</span>
+                        <span style="--t: 4.8s;">y</span>
+                    </h1>
+                    <h1 class="birthday">
+                        <span style="--t: 5s;">B</span>
+                        <span style="--t: 5.2s;">i</span>
+                        <span style="--t: 5.4s;">r</span>
+                        <span style="--t: 5.6s;">t</span>
+                        <span style="--t: 5.8s;">h</span>
+                        <span style="--t: 6s;">d</span>
+                        <span style="--t: 6.2s;">a</span>
+                        <span style="--t: 6.4s;">y</span>
+                    </h1>
+                    <div class="hat">
+                        <img src="./images/hat.png" alt="" width="130">
                     </div>
                 </div>
+                <div class="date__of__birth">
+                    <span></span>
+                </div>
+                <div class="btn">
+                    <button id="btn__letter">
+                        Click here Minhaj
+                        <i class="fa-regular fa-envelope"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="right">
+                <div class="box__account">
+                    <div class="image">
+                        <img src="./images/minhaj.jpg" alt="">
+                    </div>
+                    <div class="name">
+                        <i class="fa-solid fa-heart"></i>
+                        <span>Dev Minhaj</span>
+                        <i class="fa-solid fa-heart"></i>
+                    </div>
+                    <div class="balloon_one">
+                        <img width="100px" src="./images/balloon1.png" alt="">
+                    </div>
+                    <div class="balloon_two">
+                        <img width="100px" src="./images/balloon2.png" alt="">
+                    </div>
+                </div>
+                <div class="cricle">
+                    <div class="text__cricle">
+                        <span style="--i: 1;">h</span>
+                        <span style="--i: 2;">a</span>
+                        <span style="--i: 3;">p</span>
+                        <span style="--i: 4;">p</span>
+                        <span style="--i: 5;">y</span>
+                        <span style="--i: 6;">-</span>
+                        <span style="--i: 7;">b</span>
+                        <span style="--i: 8;">i</span>
+                        <span style="--i: 9;">r</span>
+                        <span style="--i: 10;">t</span>
+                        <span style="--i: 11;">h</span>
+                        <span style="--i: 12;">d</span>
+                        <span style="--i: 13;">a</span>
+                        <span style="--i: 14;">y</span>
+                        <span style="--i: 15;">-</span>
+                    </div>
+                    <i class="fa-solid fa-heart"></i>
+                </div>
+            </div>
+        </div>
+        <div class="decorate_star star1" style="--t: 15s;"></div>
+        <div class="decorate_star star2" style="--t: 15.2s;"></div>
+        <div class="decorate_star star3" style="--t: 15.4s;"></div>
+        <div class="decorate_star star4" style="--t: 15.6s;"></div>
+        <div class="decorate_star star5" style="--t: 15.8s;"></div>
+        <div class="decorate_flower--one" style="--t: 15s;">
+            <img width="20" src="./images/decorate_flower.png" alt="">
+        </div>
+        <div class="decorate_flower--two" style="--t: 15.3s;">
+            <img width="20" src="./images/decorate_flower.png" alt="">
+        </div>
+        <div class="decorate_flower--three" style="--t: 15.6s;">
+            <img width="20" src="./images/decorate_flower.png" alt="">
+        </div>
+        <div class="decorate_bottom">
+            <img src="./images/decorate.png" alt="" width="100">
+        </div>
+        <div class="smiley__icon">
+            <img src="./images/smiley_icon.png" alt="" width="100">
+        </div>
 
-                <div class="space-y-5">
-                    <div class="relative">
-                        <div onclick="toggleDrop()" id="drop-head" class="w-full bg-[#0d1117] p-4 rounded-2xl text-white flex items-center justify-between cursor-pointer border border-white/5">
-                            <div class="flex items-center gap-3">
-                                <img id="head-img" src="https://www.logo.wine/a/logo/BKash/BKash-Logo.wine.svg" class="w-6 h-6 object-contain">
-                                <span id="head-text" class="text-sm font-medium">bKash</span>
+        
+
+        <div class="box__letter">
+            <div class="letter__border">
+                <div class="letter">
+                    <div class="title__letter">
+                    </div>
+                    <div class="content__letter">
+                        <div class="left">
+                            <img id="heart__letter" src="https://media.giphy.com/media/YKUvclrGYmDKXwtphf/giphy.gif" alt="">
+                            <img class="heart heart_1" style="--t: 0.2s" width="20" src="./images/heart.png" alt="">
+                            <img class="heart heart_2" style="--t: 0.4s" width="20" src="./images/heart.png" alt="">
+                            <img class="heart heart_3" style="--t: 0.6s" width="20" src="./images/heart.png" alt="">
+                            <img class="heart heart_4" style="--t: 0.8s" width="20" src="./images/heart.png" alt="">
+                        </div>
+                        <div class="right">
+                            <div class="love__img">
+                                <img src="https://media.giphy.com/media/m85llaN7ZkFIHtURiC/giphy.gif" alt="" width="220">
                             </div>
-                            <svg id="drop-icon" class="w-4 h-4 text-[#ff0055] transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"/></svg>
-                        </div>
-                        <div id="drop-body" class="method-list absolute w-full mt-2 rounded-2xl overflow-hidden z-50">
-                            <div onclick="setMethod('bKash', 'https://www.logo.wine/a/logo/BKash/BKash-Logo.wine.svg')" class="p-4 hover:bg-white/5 flex items-center gap-3 cursor-pointer text-white text-sm">bKash</div>
-                            <div onclick="setMethod('Nagad', 'https://download.logo.wine/logo/Nagad/Nagad-Logo.wine.png')" class="p-4 hover:bg-white/5 flex items-center gap-3 cursor-pointer text-white text-sm border-t border-white/10">Nagad</div>
-                            <div onclick="setMethod('Rocket', 'https://upload.wikimedia.org/wikipedia/en/thumb/8/8b/Dutch_Bangla_Bank_Logo.svg/1200px-Dutch_Bangla_Bank_Logo.svg.png')" class="p-4 hover:bg-white/5 flex items-center gap-3 cursor-pointer text-white text-sm border-t border-white/10">Rocket</div>
+                            <div class="text__letter">
+                                 <p></p>
+                            </div>
+                            <img id="mewmew" width="80" src="./images/mewmew.gif" alt="">
                         </div>
                     </div>
-
-                    <input type="number" id="num" placeholder="Receiver Number" class="w-full p-4 rounded-2xl bg-[#0d1117] text-white text-sm outline-none border border-white/5">
-                    <textarea id="msg" placeholder="Paste full success message here..." rows="4" class="w-full p-4 rounded-2xl bg-[#0d1117] text-white text-[12px] outline-none border border-white/5 resize-none"></textarea>
-                    
-                    <button onclick="startExtraction()" id="main-btn" class="w-full bg-[#ff0055] text-white font-bold py-4 rounded-2xl shadow-lg active:scale-95 text-[11px] uppercase tracking-[0.2em]">Send Now</button>
-
-                    <div id="result-container" class="trx-box rounded-2xl p-5 text-center">
-                        <div id="loader" class="hidden"><div class="shimmer h-4 w-32 bg-white/5 mx-auto rounded-full mb-2"></div></div>
-                        <div id="content-area" class="hidden">
-                            <p class="text-[9px] text-gray-500 uppercase tracking-widest mb-1">Extracted Transaction ID</p>
-                            <h3 id="final-id" class="text-white text-2xl font-bold tracking-widest font-mono">--------</h3>
-                            <button onclick="copyId()" id="copy-text" class="text-[#ff0055] text-[10px] font-bold uppercase mt-2">Copy ID</button>
-                        </div>
-                    </div>
+                </div>
+                <div class="close">
+                    <i class="fa-solid fa-xmark"></i>
                 </div>
             </div>
         </div>
     </div>
 
-    <script>
-        function checkKey() {
-            const key = document.getElementById('access-key').value;
-            const error = document.getElementById('err-msg');
-            
-            if (key === "XJZA-YAN-FARIS") {
-                document.getElementById('lock-screen').style.display = 'none';
-                document.getElementById('main-content').style.display = 'flex';
-            } else {
-                error.style.opacity = '1';
-                setTimeout(() => { error.style.opacity = '0'; }, 2000);
-            }
-        }
-
-        function toggleDrop() {
-            const body = document.getElementById('drop-body');
-            const icon = document.getElementById('drop-icon');
-            const isOpen = body.style.display === 'block';
-            body.style.display = isOpen ? 'none' : 'block';
-            icon.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
-        }
-
-        function setMethod(name, img) {
-            document.getElementById('head-text').innerText = name;
-            document.getElementById('head-img').src = img;
-            toggleDrop();
-        }
-
-        function startExtraction() {
-            const msg = document.getElementById('msg').value;
-            const match = msg.match(/TrxID\s+([A-Z0-9]+)/i);
-
-            if(match) {
-                document.getElementById('result-container').style.display = 'block';
-                document.getElementById('loader').classList.remove('hidden');
-                document.getElementById('content-area').classList.add('hidden');
-
-                setTimeout(() => {
-                    document.getElementById('loader').classList.add('hidden');
-                    document.getElementById('content-area').classList.remove('hidden');
-                    document.getElementById('final-id').innerText = match[1];
-
-                    // --- Show Compact Neon Toast ---
-                    const toast = document.getElementById('toast');
-                    toast.classList.add('show');
-                    setTimeout(() => { toast.classList.remove('show'); }, 3000);
-
-                }, 2000);
-            } else { alert("Invalid SMS Format! System cannot find TrxID."); }
-        }
-
-        function copyId() {
-            const id = document.getElementById('final-id').innerText;
-            navigator.clipboard.writeText(id).then(() => {
-                const btn = document.getElementById('copy-text');
-                btn.innerText = "COPIED!";
-                setTimeout(() => { btn.innerText = "COPY ID"; }, 2000);
-            });
-        }
-    </script>
+    <div id="copy">
+		<p class="text-center text-white text-sm">Dev <a
+			href="https://t.me/developerminhaj#">@Minhaj.dev</a></p>
+	  </div>
 </body>
+<script>
+    let datetxt = "18 August 2006";
+    let datatxtletter = "My love. You are a very special girl. I always silently thank you for coming into my life. Today, I wish you all the best, lots of health, and lots of joy. I always hope we will celebrate many more birthdays like this together. Happy birthday to you.💕";
+    let titleLetter = "To you";
+    let charArrDate = datetxt.split('');
+    let charArrDateLetter = datatxtletter.split('');
+    let charArrTitle = titleLetter.split('');
+    let currentIndex = 0;
+    let currentIndexLetter = 0;
+    let currentIndexTitle = 0;
+    let date__of__birth = document.querySelector(".date__of__birth span");
+    let text__letter = document.querySelector(".text__letter p");
+    setTimeout(function(){
+        timeDatetxt = setInterval(function(){
+            if(currentIndex < charArrDate.length){
+                date__of__birth.textContent += charArrDate[currentIndex];
+                currentIndex++;
+            }
+            else{
+                let i = document.createElement("i");
+                i.className = "fa-solid fa-star"
+                document.querySelector(".date__of__birth").prepend(i)
+                document.querySelector(".date__of__birth").appendChild(i.cloneNode(true))
+                clearInterval(timeDatetxt)
+            }
+        },100)
+    },12000)
+
+    var intervalContent;
+    var intervalTitle;
+    $("#btn__letter").on("click", function(){
+        $(".box__letter").slideDown()
+        setTimeout(function(){
+            $(".letter__border").slideDown();
+        },1000)
+        setTimeout(function(){
+            intervalTitle = setInterval(function(){
+                if(currentIndexTitle < charArrTitle.length){
+                    document.querySelector(".title__letter").textContent += charArrTitle[currentIndexTitle];
+                    let i = document.createElement("i");
+                    i.className = "fa-solid fa-heart"
+                    document.querySelector(".title__letter").appendChild(i)
+                    currentIndexTitle++;
+                }
+                else{
+                    clearInterval(intervalTitle)
+                }
+            },100)
+        },2000)
+        setTimeout(function(){
+            document.querySelector("#heart__letter").classList.add("animationOp");
+            document.querySelector(".love__img").classList.add("animationOp");
+            document.querySelector("#mewmew").classList.add("animationOp");
+        },2800)
+        setTimeout(function(){
+            document.querySelectorAll(".heart").forEach((item)=>{
+                item.classList.add("animation")
+            })
+        },3500)
+        setTimeout(function(){
+            intervalContent = setInterval(function(){
+                if(currentIndexLetter < charArrDateLetter.length){
+                    text__letter.textContent += charArrDateLetter[currentIndexLetter];
+                    currentIndexLetter++;
+                }
+                else{
+                    clearInterval(intervalContent)
+                }
+            },50)
+        },6000)
+    })
+    $(".close").on("click", function(){
+        clearInterval(intervalContent)
+        document.querySelector(".title__letter").textContent = "";
+        text__letter.textContent = "";
+        currentIndexLetter = 0
+        currentIndexTitle = 0
+        document.querySelector("#heart__letter").classList.remove("animationOp");
+        document.querySelector(".love__img").classList.remove("animationOp");
+        document.querySelector("#mewmew").classList.remove("animationOp");
+        document.querySelectorAll(".heart").forEach((item)=>{
+                item.classList.remove("animation")
+            })
+        $(".box__letter").slideUp();
+        $(".letter__border").slideUp();
+    })
+</script>
 </html>
